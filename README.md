@@ -1,59 +1,102 @@
-# UmlTrainer
+<div align="center">
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.7.
+# UML Trainer
 
-## Development server
+### AP2 Prüfungsvorbereitung für Fachinformatiker Anwendungsentwicklung
 
-To start a local development server, run:
+Lerne und übe UML-Diagramme interaktiv - mit ausführlichen Erklärungen,
+SVG-Diagrammen und über 50 Übungsaufgaben.
+
+[![Angular](https://img.shields.io/badge/Angular-21-dd0031?style=flat-square&logo=angular)](https://angular.dev/)
+[![PrimeNG](https://img.shields.io/badge/PrimeNG-21-4fc08d?style=flat-square)](https://primeng.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06b6d4?style=flat-square&logo=tailwindcss)](https://tailwindcss.com/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
+
+</div>
+
+---
+
+## Features
+
+**Theorie** - Ausführliche Erklärungen zu jedem Diagrammtyp mit interaktiven SVG-Diagrammen und Prüfungstipps
+
+**Quiz-Engine** - 4 verschiedene Aufgabentypen mit sofortigem Feedback und Erklärungen
+
+**Fortschritt** - Dein Lernfortschritt wird automatisch im Browser gespeichert
+
+**Kein Backend** - Läuft komplett im Browser, keine Registrierung nötig
+
+## UML-Diagrammtypen
+
+| Diagramm | Beschreibung | Übungen |
+|----------|-------------|---------|
+| Klassendiagramm | Klassen, Attribute, Methoden, Beziehungen (Assoziation, Aggregation, Komposition, Vererbung) | 10 |
+| Anwendungsfalldiagramm | Akteure, Use Cases, Systemgrenzen, include/extend | 10 |
+| Sequenzdiagramm | Objekte, Lebenslinien, Nachrichten, Fragmente (alt, loop, opt) | 10 |
+| Aktivitätsdiagramm | Start/Ende, Aktionen, Entscheidungen, Parallelisierung, Swimlanes | 10 |
+| Zustandsdiagramm | Zustände, Transitionen, Entry/Exit/Do, zusammengesetzte Zustände | 10 |
+
+## Aufgabentypen
+
+- **Multiple Choice** - Wähle die richtige Antwort aus 4 Optionen
+- **Wahr/Falsch** - Bewerte Aussagen zu UML-Konzepten
+- **Lückentext** - Setze den fehlenden Begriff ein
+- **Zuordnung** - Ordne Begriffe den passenden Definitionen zu
+
+Jede Aufgabe enthält eine ausführliche Erklärung, die nach dem Beantworten angezeigt wird.
+
+## Schnellstart
 
 ```bash
+# Repository klonen
+git clone <repo-url>
+cd uml-trainer
+
+# Abhängigkeiten installieren
+npm install
+
+# Entwicklungsserver starten
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Dann http://localhost:4200 im Browser öffnen.
 
-## Code scaffolding
+## Tech Stack
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+| Technologie | Version | Verwendung |
+|------------|---------|------------|
+| [Angular](https://angular.dev/) | 21 | Frontend-Framework |
+| [PrimeNG](https://primeng.org/) | 21 | UI-Komponenten (Accordion, ProgressBar, Button) |
+| [PrimeIcons](https://primeng.org/icons) | - | Icon-Bibliothek |
+| [Tailwind CSS](https://tailwindcss.com/) | 4 | Utility-first CSS |
 
-```bash
-ng generate component component-name
+## Projektstruktur
+
+```
+src/app/
+├── components/          # Quiz-Komponenten (Multiple Choice, Wahr/Falsch, etc.)
+├── data/                # Theorie-Inhalte, Übungen, Diagramm-Infos
+├── models/              # TypeScript Interfaces
+├── pages/
+│   ├── dashboard/       # Startseite mit Übersicht
+│   ├── lernen/          # Theorie-Seiten pro Diagrammtyp
+│   └── ueben/           # Quiz-Engine & Ergebnis-Seite
+└── services/            # Fortschrittsspeicherung (localStorage)
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Scripts
 
 ```bash
-ng generate --help
+ng serve          # Entwicklungsserver (http://localhost:4200)
+ng build          # Produktions-Build (dist/)
+ng test           # Unit Tests
 ```
 
-## Building
+---
 
-To build the project run:
+<div align="center">
 
-```bash
-ng build
-```
+Erstellt zur Vorbereitung auf die **IHK Abschlussprüfung Teil 2** (AP2)<br>
+Fachinformatiker Anwendungsentwicklung
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+</div>
