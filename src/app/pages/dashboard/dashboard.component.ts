@@ -1,9 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ProgressBar } from 'primeng/progressbar';
-import { DIAGRAM_INFOS } from '../../data/diagram-info';
+import { THEMENBEREICHE } from '../../data/themenbereiche';
 import { ProgressService } from '../../services/progress.service';
-import { DiagramInfo } from '../../models/uml.models';
+import { Themenbereich } from '../../models/app.models';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,8 +11,8 @@ import { DiagramInfo } from '../../models/uml.models';
   imports: [RouterLink, ProgressBar],
   template: `
     <div class="mb-8">
-      <h1 class="text-3xl font-bold text-slate-800 mb-2">UML Diagramme lernen</h1>
-      <p class="text-slate-600 text-lg">Bereite dich auf die AP2 Prüfung vor – Schritt für Schritt.</p>
+      <h1 class="text-3xl font-bold text-slate-800 mb-2">AP2 Trainer</h1>
+      <p class="text-slate-600 text-lg">Lerne alle Themen der Abschlussprüfung Teil 2 – fachlich und WiSo.</p>
     </div>
 
     <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-8">
@@ -24,50 +24,93 @@ import { DiagramInfo } from '../../models/uml.models';
       <p class="text-sm text-slate-500 mt-2">Lies die Theorie und löse die Quizze, um Fortschritt zu machen.</p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      @for (diagram of diagrams; track diagram.id) {
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-shadow">
-          <div class="p-1.5" [style.background-color]="diagram.farbe + '15'">
-            <div class="flex items-center gap-3 p-4">
-              <div class="w-12 h-12 rounded-xl flex items-center justify-center" [style.background-color]="diagram.farbe + '20'">
-                <i [class]="diagram.icon + ' text-xl'" [style.color]="diagram.farbe"></i>
-              </div>
-              <div class="flex-1">
-                <h3 class="font-semibold text-slate-800">{{ diagram.name }}</h3>
-                <p class="text-sm text-slate-500 mt-0.5">{{ diagram.beschreibung }}</p>
-              </div>
-            </div>
-          </div>
-          <div class="p-4">
-            <div class="flex items-center justify-between mb-2">
-              <span class="text-xs text-slate-500">Fortschritt</span>
-              <span class="text-xs font-medium" [style.color]="diagram.farbe">
-                {{ progress.getDiagrammFortschrittProzent(diagram.id) }}%
-              </span>
-            </div>
-            <p-progressBar
-              [value]="progress.getDiagrammFortschrittProzent(diagram.id)"
-              [showValue]="false"
-              styleClass="h-2 mb-4" />
-            <div class="flex gap-2">
-              <a [routerLink]="['/lernen', diagram.id]"
-                 class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium no-underline transition-colors"
-                 [style.background-color]="diagram.farbe + '15'"
-                 [style.color]="diagram.farbe">
-                <i class="pi pi-book"></i> Lernen
-              </a>
-              <a [routerLink]="['/ueben', diagram.id]"
-                 class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium no-underline transition-colors bg-slate-100 text-slate-700 hover:bg-slate-200">
-                <i class="pi pi-pencil"></i> Üben
-              </a>
-            </div>
-          </div>
+    <section class="mb-10">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
+          <i class="pi pi-code text-blue-600 text-lg"></i>
         </div>
-      }
-    </div>
+        <div>
+          <h2 class="text-2xl font-bold text-slate-800">Fachlicher Teil</h2>
+          <p class="text-sm text-slate-500">Teil 1 &amp; Teil 2 der AP2 – Planen, Entwickeln, Testen</p>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        @for (bereich of fachlich; track bereich.id) {
+          <a [routerLink]="['/bereich', bereich.id]"
+             class="group bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all no-underline">
+            <div class="h-1.5" [style.background-color]="bereich.farbe"></div>
+            <div class="p-5">
+              <div class="flex items-start gap-3 mb-3">
+                <div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
+                     [style.background-color]="bereich.farbe + '20'">
+                  <i [class]="bereich.icon + ' text-xl'" [style.color]="bereich.farbe"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <h3 class="font-semibold text-slate-800 group-hover:text-slate-900">{{ bereich.name }}</h3>
+                  <p class="text-xs text-slate-500 mt-0.5">{{ bereich.themenIds.length }} Themen</p>
+                </div>
+              </div>
+              <p class="text-sm text-slate-600 mb-4">{{ bereich.beschreibung }}</p>
+              <div class="flex items-center gap-2">
+                <p-progressBar
+                  [value]="progress.getBereichFortschrittProzent(bereich.id)"
+                  [showValue]="false"
+                  styleClass="h-1.5 flex-1" />
+                <span class="text-xs font-medium" [style.color]="bereich.farbe">
+                  {{ progress.getBereichFortschrittProzent(bereich.id) }}%
+                </span>
+              </div>
+            </div>
+          </a>
+        }
+      </div>
+    </section>
+
+    <section>
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-lg bg-slate-200 flex items-center justify-center">
+          <i class="pi pi-building text-slate-600 text-lg"></i>
+        </div>
+        <div>
+          <h2 class="text-2xl font-bold text-slate-800">WiSo</h2>
+          <p class="text-sm text-slate-500">Wirtschafts- und Sozialkunde (Teil 3, 60 Min., 30 Aufgaben)</p>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        @for (bereich of wiso; track bereich.id) {
+          <a [routerLink]="['/bereich', bereich.id]"
+             class="group bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all no-underline">
+            <div class="h-1.5" [style.background-color]="bereich.farbe"></div>
+            <div class="p-5">
+              <div class="flex items-start gap-3 mb-3">
+                <div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
+                     [style.background-color]="bereich.farbe + '20'">
+                  <i [class]="bereich.icon + ' text-xl'" [style.color]="bereich.farbe"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <h3 class="font-semibold text-slate-800 group-hover:text-slate-900">{{ bereich.name }}</h3>
+                  <p class="text-xs text-slate-500 mt-0.5">{{ bereich.themenIds.length }} Themen · Karteikarten</p>
+                </div>
+              </div>
+              <p class="text-sm text-slate-600 mb-4">{{ bereich.beschreibung }}</p>
+              <div class="flex items-center gap-2">
+                <p-progressBar
+                  [value]="progress.getBereichFortschrittProzent(bereich.id)"
+                  [showValue]="false"
+                  styleClass="h-1.5 flex-1" />
+                <span class="text-xs font-medium" [style.color]="bereich.farbe">
+                  {{ progress.getBereichFortschrittProzent(bereich.id) }}%
+                </span>
+              </div>
+            </div>
+          </a>
+        }
+      </div>
+    </section>
   `
 })
 export class DashboardComponent {
   protected readonly progress = inject(ProgressService);
-  protected readonly diagrams: DiagramInfo[] = DIAGRAM_INFOS;
+  protected readonly fachlich: Themenbereich[] = THEMENBEREICHE.filter(b => b.kategorie === 'fachlich');
+  protected readonly wiso: Themenbereich[] = THEMENBEREICHE.filter(b => b.kategorie === 'wiso');
 }

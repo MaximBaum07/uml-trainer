@@ -1,15 +1,15 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Button } from 'primeng/button';
-import { DIAGRAM_INFOS } from '../../data/diagram-info';
-import { DiagramType, DiagramInfo, QuizErgebnis } from '../../models/uml.models';
+import { THEMEN } from '../../data/themen';
+import { ThemaId, ThemaInfo, QuizErgebnis } from '../../models/app.models';
 
 @Component({
   selector: 'app-ergebnis',
   standalone: true,
   imports: [RouterLink, Button],
   template: `
-    @if (diagramm && ergebnis) {
+    @if (thema && ergebnis) {
       <div class="max-w-lg mx-auto mt-8">
         <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-8 text-center">
           <div class="w-20 h-20 rounded-full mx-auto flex items-center justify-center mb-4"
@@ -18,7 +18,7 @@ import { DiagramType, DiagramInfo, QuizErgebnis } from '../../models/uml.models'
           </div>
 
           <h1 class="text-2xl font-bold text-slate-800 mb-2">Quiz beendet!</h1>
-          <p class="text-slate-500 mb-6">{{ diagramm.name }}</p>
+          <p class="text-slate-500 mb-6">{{ thema.name }}</p>
 
           <div class="text-5xl font-bold mb-2" [class]="getResultTextClass()">
             {{ ergebnis.richtig }} / {{ ergebnis.gesamt }}
@@ -52,14 +52,14 @@ export class ErgebnisComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
-  typ!: DiagramType;
-  diagramm?: DiagramInfo;
+  typ!: ThemaId;
+  thema?: ThemaInfo;
   ergebnis?: QuizErgebnis;
   prozent = 0;
 
   ngOnInit(): void {
-    this.typ = this.route.snapshot.paramMap.get('typ') as DiagramType;
-    this.diagramm = DIAGRAM_INFOS.find(d => d.id === this.typ);
+    this.typ = this.route.snapshot.paramMap.get('typ') as ThemaId;
+    this.thema = THEMEN.find(d => d.id === this.typ);
     const nav = this.router.getCurrentNavigation();
     this.ergebnis = history.state?.['ergebnis'] as QuizErgebnis | undefined;
     if (!this.ergebnis) {

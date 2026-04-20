@@ -1,7 +1,7 @@
 import { Component, input, output } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { inject } from '@angular/core';
-import { MultipleChoiceUebung } from '../models/uml.models';
+import { MultipleChoiceUebung } from '../models/app.models';
 
 @Component({
   selector: 'app-quiz-multiple-choice',

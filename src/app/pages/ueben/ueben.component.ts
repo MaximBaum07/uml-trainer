@@ -6,20 +6,37 @@ import { QuizMultipleChoiceComponent } from '../../components/quiz-multiple-choi
 import { QuizWahrFalschComponent } from '../../components/quiz-wahr-falsch.component';
 import { QuizLueckentextComponent } from '../../components/quiz-lueckentext.component';
 import { QuizZuordnungComponent } from '../../components/quiz-zuordnung.component';
-import { UEBUNGS_SETS } from '../../data/uml-exercises';
-import { DIAGRAM_INFOS } from '../../data/diagram-info';
+import { QuizFreitextComponent } from '../../components/quiz-freitext.component';
+import { ALLE_UEBUNGS_SETS } from '../../data/alle-uebungen';
+import { THEMEN } from '../../data/themen';
 import { ProgressService } from '../../services/progress.service';
-import { DiagramType, Uebung, DiagramInfo, QuizErgebnis,
-  MultipleChoiceUebung, WahrFalschUebung, LueckentextUebung, ZuordnungUebung } from '../../models/uml.models';
+import { ThemaId, Uebung, ThemaInfo, QuizErgebnis,
+  MultipleChoiceUebung, WahrFalschUebung, LueckentextUebung, ZuordnungUebung,
+  FreitextUebung } from '../../models/app.models';
 
 @Component({
   selector: 'app-ueben',
   standalone: true,
   imports: [RouterLink, Button, ProgressBar,
     QuizMultipleChoiceComponent, QuizWahrFalschComponent,
-    QuizLueckentextComponent, QuizZuordnungComponent],
+    QuizLueckentextComponent, QuizZuordnungComponent, QuizFreitextComponent],
   template: `
-    @if (diagramm && uebungen.length > 0) {
+    @if (thema && uebungen.length === 0) {
+      <div class="bg-white rounded-xl border border-slate-200 p-10 text-center">
+        <i class="pi pi-clock text-4xl text-slate-300 mb-3 block"></i>
+        <h2 class="text-xl font-semibold text-slate-700 mb-2">Übungen kommen bald</h2>
+        <p class="text-slate-500 mb-4">Für "{{ thema.name }}" sind die Übungsaufgaben noch in Vorbereitung.</p>
+        @if (thema.hatTheorie) {
+          <a [routerLink]="['/lernen', thema.id]" class="text-blue-600 no-underline mr-3">
+            <i class="pi pi-book mr-1"></i>Theorie lesen
+          </a>
+        }
+        <a [routerLink]="['/bereich', thema.bereichId]" class="text-slate-600 no-underline">
+          <i class="pi pi-arrow-left mr-1"></i>Zurück zum Bereich
+        </a>
+      </div>
+    }
+    @if (thema && uebungen.length > 0) {
       <div class="mb-6">
         <a routerLink="/" class="text-sm text-slate-500 hover:text-slate-700 no-underline">
           <i class="pi pi-arrow-left mr-1"></i> Zurück zum Dashboard
@@ -29,11 +46,11 @@ import { DiagramType, Uebung, DiagramInfo, QuizErgebnis,
       <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-6">
         <div class="flex items-center justify-between mb-4">
           <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-lg flex items-center justify-center" [style.background-color]="diagramm.farbe + '20'">
-              <i [class]="diagramm.icon" [style.color]="diagramm.farbe"></i>
+            <div class="w-10 h-10 rounded-lg flex items-center justify-center" [style.background-color]="thema.farbe + '20'">
+              <i [class]="thema.icon" [style.color]="thema.farbe"></i>
             </div>
             <div>
-              <h1 class="text-xl font-bold text-slate-800">{{ diagramm.name }} - Quiz</h1>
+              <h1 class="text-xl font-bold text-slate-800">{{ thema.name }} - Quiz</h1>
             </div>
           </div>
           <div class="text-right">
@@ -77,6 +94,11 @@ import { DiagramType, Uebung, DiagramInfo, QuizErgebnis,
                 [uebung]="asZuordnung(aktuelleUebung)"
                 (beantwortetEvent)="onBeantwortet($event)" />
             }
+            @case ('freitext') {
+              <app-quiz-freitext
+                [uebung]="asFreitext(aktuelleUebung)"
+                (beantwortetEvent)="onBeantwortet($event)" />
+            }
           }
         </div>
       }
@@ -101,8 +123,8 @@ export class UebenComponent implements OnInit, OnDestroy {
   private progressService = inject(ProgressService);
   private cdr = inject(ChangeDetectorRef);
 
-  typ!: DiagramType;
-  diagramm?: DiagramInfo;
+  typ!: ThemaId;
+  thema?: ThemaInfo;
   uebungen: Uebung[] = [];
   aktuelleFrageIndex = 0;
   aktuelleFrageBeantwortet = false;
@@ -116,9 +138,9 @@ export class UebenComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.typ = this.route.snapshot.paramMap.get('typ') as DiagramType;
-    this.diagramm = DIAGRAM_INFOS.find(d => d.id === this.typ);
-    const set = UEBUNGS_SETS.find(s => s.diagrammTyp === this.typ);
+    this.typ = this.route.snapshot.paramMap.get('typ') as ThemaId;
+    this.thema = THEMEN.find(d => d.id === this.typ);
+    const set = ALLE_UEBUNGS_SETS.find(s => s.themaId === this.typ);
     this.uebungen = set ? [...set.uebungen] : [];
   }
 
@@ -171,13 +193,15 @@ export class UebenComponent implements OnInit, OnDestroy {
   asWahrFalsch(u: Uebung): WahrFalschUebung { return u as WahrFalschUebung; }
   asLueckentext(u: Uebung): LueckentextUebung { return u as LueckentextUebung; }
   asZuordnung(u: Uebung): ZuordnungUebung { return u as ZuordnungUebung; }
+  asFreitext(u: Uebung): FreitextUebung { return u as FreitextUebung; }
 
   getTypLabel(typ: string): string {
     const labels: Record<string, string> = {
       'multiple-choice': 'Multiple Choice',
       'wahr-falsch': 'Wahr oder Falsch',
       'lueckentext': 'Lückentext',
-      'zuordnung': 'Zuordnung'
+      'zuordnung': 'Zuordnung',
+      'freitext': 'Freitext'
     };
     return labels[typ] ?? typ;
   }
@@ -187,7 +211,8 @@ export class UebenComponent implements OnInit, OnDestroy {
       'multiple-choice': 'bg-blue-100 text-blue-800',
       'wahr-falsch': 'bg-purple-100 text-purple-800',
       'lueckentext': 'bg-amber-100 text-amber-800',
-      'zuordnung': 'bg-green-100 text-green-800'
+      'zuordnung': 'bg-green-100 text-green-800',
+      'freitext': 'bg-cyan-100 text-cyan-800'
     };
     return classes[typ] ?? 'bg-slate-100 text-slate-800';
   }

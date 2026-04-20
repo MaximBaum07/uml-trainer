@@ -1,11 +1,11 @@
-import { UebungsSet } from '../models/uml.models';
+import { UebungsSet } from '../models/app.models';
 
 export const UEBUNGS_SETS: UebungsSet[] = [
   // =========================================================================
   // KLASSENDIAGRAMM
   // =========================================================================
   {
-    diagrammTyp: 'klassendiagramm',
+    themaId: 'uml-klassendiagramm',
     uebungen: [
       // MC 1 - Leicht
       {
@@ -152,7 +152,7 @@ export const UEBUNGS_SETS: UebungsSet[] = [
   // ANWENDUNGSFALLDIAGRAMM (USE CASE)
   // =========================================================================
   {
-    diagrammTyp: 'anwendungsfall',
+    themaId: 'uml-anwendungsfall',
     uebungen: [
       // MC 1 - Leicht
       {
@@ -295,7 +295,7 @@ export const UEBUNGS_SETS: UebungsSet[] = [
   // SEQUENZDIAGRAMM
   // =========================================================================
   {
-    diagrammTyp: 'sequenzdiagramm',
+    themaId: 'uml-sequenzdiagramm',
     uebungen: [
       // MC 1 - Leicht
       {
@@ -442,7 +442,7 @@ export const UEBUNGS_SETS: UebungsSet[] = [
   // AKTIVITAETSDIAGRAMM
   // =========================================================================
   {
-    diagrammTyp: 'aktivitaetsdiagramm',
+    themaId: 'uml-aktivitaetsdiagramm',
     uebungen: [
       // MC 1 - Leicht
       {
@@ -600,7 +600,7 @@ export const UEBUNGS_SETS: UebungsSet[] = [
   // ZUSTANDSDIAGRAMM
   // =========================================================================
   {
-    diagrammTyp: 'zustandsdiagramm',
+    themaId: 'uml-zustandsdiagramm',
     uebungen: [
       // MC 1 - Leicht
       {

@@ -3,17 +3,27 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Accordion, AccordionContent, AccordionHeader, AccordionPanel } from 'primeng/accordion';
 import { Button } from 'primeng/button';
-import { THEORIE_INHALTE } from '../../data/uml-content';
-import { DIAGRAM_INFOS } from '../../data/diagram-info';
+import { ALLE_THEORIE_INHALTE } from '../../data/alle-theorie';
+import { THEMEN } from '../../data/themen';
 import { ProgressService } from '../../services/progress.service';
-import { DiagramType, TheorieInhalt, DiagramInfo } from '../../models/uml.models';
+import { ThemaId, TheorieInhalt, ThemaInfo } from '../../models/app.models';
 
 @Component({
   selector: 'app-lernen',
   standalone: true,
   imports: [RouterLink, Accordion, AccordionContent, AccordionHeader, AccordionPanel, Button],
   template: `
-    @if (inhalt && diagramm) {
+    @if (!inhalt && thema) {
+      <div class="bg-white rounded-xl border border-slate-200 p-10 text-center">
+        <i class="pi pi-clock text-4xl text-slate-300 mb-3 block"></i>
+        <h2 class="text-xl font-semibold text-slate-700 mb-2">Theorie kommt bald</h2>
+        <p class="text-slate-500 mb-4">Für "{{ thema.name }}" ist die Theorie noch in Vorbereitung.</p>
+        <a [routerLink]="['/bereich', thema.bereichId]" class="text-blue-600 no-underline">
+          <i class="pi pi-arrow-left mr-1"></i>Zurück zum Bereich
+        </a>
+      </div>
+    }
+    @if (inhalt && thema) {
       <div class="mb-6">
         <a routerLink="/" class="text-sm text-slate-500 hover:text-slate-700 no-underline">
           <i class="pi pi-arrow-left mr-1"></i> Zurück zum Dashboard
@@ -22,12 +32,12 @@ import { DiagramType, TheorieInhalt, DiagramInfo } from '../../models/uml.models
 
       <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-6">
         <div class="flex items-center gap-4 mb-4">
-          <div class="w-14 h-14 rounded-xl flex items-center justify-center" [style.background-color]="diagramm.farbe + '20'">
-            <i [class]="diagramm.icon + ' text-2xl'" [style.color]="diagramm.farbe"></i>
+          <div class="w-14 h-14 rounded-xl flex items-center justify-center" [style.background-color]="thema.farbe + '20'">
+            <i [class]="thema.icon + ' text-2xl'" [style.color]="thema.farbe"></i>
           </div>
           <div>
             <h1 class="text-2xl font-bold text-slate-800">{{ inhalt.titel }}</h1>
-            <p class="text-slate-500">{{ diagramm.beschreibung }}</p>
+            <p class="text-slate-500">{{ thema.beschreibung }}</p>
           </div>
         </div>
         <p class="text-slate-700 leading-relaxed text-lg">{{ inhalt.einleitung }}</p>
@@ -97,16 +107,16 @@ export class LernenComponent implements OnInit {
   private sanitizer = inject(DomSanitizer);
   private progressService = inject(ProgressService);
 
-  typ!: DiagramType;
+  typ!: ThemaId;
   inhalt?: TheorieInhalt;
-  diagramm?: DiagramInfo;
+  thema?: ThemaInfo;
   theorieGelesen = false;
   geoeffneteAbschnitte: string[] = [];
 
   ngOnInit(): void {
-    this.typ = this.route.snapshot.paramMap.get('typ') as DiagramType;
-    this.inhalt = THEORIE_INHALTE.find(t => t.diagrammTyp === this.typ);
-    this.diagramm = DIAGRAM_INFOS.find(d => d.id === this.typ);
+    this.typ = this.route.snapshot.paramMap.get('typ') as ThemaId;
+    this.inhalt = ALLE_THEORIE_INHALTE.find(t => t.themaId === this.typ);
+    this.thema = THEMEN.find(d => d.id === this.typ);
     this.theorieGelesen = this.progressService.getFortschritt(this.typ).theorieGelesen;
     if (this.inhalt) {
       this.geoeffneteAbschnitte = this.inhalt.abschnitte.map((_, i) => 'panel-' + i);

@@ -1,6 +1,6 @@
 import { Component, input, output } from '@angular/core';
 import { Button } from 'primeng/button';
-import { ZuordnungUebung, ZuordnungPaar } from '../models/uml.models';
+import { ZuordnungUebung, ZuordnungPaar } from '../models/app.models';
 
 @Component({
   selector: 'app-quiz-zuordnung',

@@ -1,6 +1,6 @@
 import { Component, input, output, inject } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { WahrFalschUebung } from '../models/uml.models';
+import { WahrFalschUebung } from '../models/app.models';
 
 @Component({
   selector: 'app-quiz-wahr-falsch',

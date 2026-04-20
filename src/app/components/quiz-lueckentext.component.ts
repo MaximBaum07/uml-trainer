@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { InputText } from 'primeng/inputtext';
 import { Button } from 'primeng/button';
-import { LueckentextUebung } from '../models/uml.models';
+import { LueckentextUebung } from '../models/app.models';
 
 @Component({
   selector: 'app-quiz-lueckentext',

@@ -1,11 +1,11 @@
-import { TheorieInhalt } from '../models/uml.models';
+import { TheorieInhalt } from '../models/app.models';
 
 export const THEORIE_INHALTE: TheorieInhalt[] = [
   // ============================================================
   // KLASSENDIAGRAMM
   // ============================================================
   {
-    diagrammTyp: 'klassendiagramm',
+    themaId: 'uml-klassendiagramm',
     titel: 'Klassendiagramm',
     einleitung: 'Das Klassendiagramm ist das wichtigste und am häufigsten verwendete UML-Diagramm. Es beschreibt die statische Struktur eines Systems, indem es Klassen, ihre Attribute, Methoden und die Beziehungen zwischen ihnen darstellt. In der AP2-Prüfung für Fachinformatiker Anwendungsentwicklung ist das Klassendiagramm ein zentrales Thema, das fast immer abgefragt wird.',
     abschnitte: [
@@ -474,7 +474,7 @@ export const THEORIE_INHALTE: TheorieInhalt[] = [
   // ANWENDUNGSFALLDIAGRAMM (USE CASE)
   // ============================================================
   {
-    diagrammTyp: 'anwendungsfall',
+    themaId: 'uml-anwendungsfall',
     titel: 'Anwendungsfalldiagramm (Use-Case-Diagramm)',
     einleitung: 'Das Anwendungsfalldiagramm (englisch: Use-Case-Diagramm) beschreibt die Funktionalität eines Systems aus der Sicht der Benutzer. Es zeigt, WAS ein System tut, aber nicht WIE es das tut. Es ist eines der einfachsten UML-Diagramme und wird häufig in der Anforderungsanalyse eingesetzt.',
     abschnitte: [
@@ -717,7 +717,7 @@ export const THEORIE_INHALTE: TheorieInhalt[] = [
   // SEQUENZDIAGRAMM
   // ============================================================
   {
-    diagrammTyp: 'sequenzdiagramm',
+    themaId: 'uml-sequenzdiagramm',
     titel: 'Sequenzdiagramm',
     einleitung: 'Das Sequenzdiagramm ist ein Verhaltensdiagramm, das den zeitlichen Ablauf von Nachrichten zwischen Objekten darstellt. Es zeigt, in welcher Reihenfolge Objekte miteinander kommunizieren, um eine bestimmte Funktion zu erfüllen. In der AP2-Prüfung wird häufig verlangt, Sequenzdiagramme zu lesen oder zu erstellen.',
     abschnitte: [
@@ -981,7 +981,7 @@ export const THEORIE_INHALTE: TheorieInhalt[] = [
   // AKTIVITAETSDIAGRAMM
   // ============================================================
   {
-    diagrammTyp: 'aktivitaetsdiagramm',
+    themaId: 'uml-aktivitaetsdiagramm',
     titel: 'Aktivitätsdiagramm',
     einleitung: 'Das Aktivitätsdiagramm modelliert Abläufe und Prozesse. Es zeigt den Kontrollfluss von einer Aktivität zur nächsten, ähnlich einem Flussdiagramm, aber mit erweiterten Möglichkeiten wie Parallelisierung und Swimlanes. Es eignet sich hervorragend, um Geschäftsprozesse und Algorithmen darzustellen.',
     abschnitte: [
@@ -1326,7 +1326,7 @@ export const THEORIE_INHALTE: TheorieInhalt[] = [
   // ZUSTANDSDIAGRAMM
   // ============================================================
   {
-    diagrammTyp: 'zustandsdiagramm',
+    themaId: 'uml-zustandsdiagramm',
     titel: 'Zustandsdiagramm (Zustandsautomat)',
     einleitung: 'Das Zustandsdiagramm modelliert die verschiedenen Zustände, die ein Objekt während seiner Lebensdauer einnehmen kann, und die Übergänge (Transitionen) zwischen diesen Zuständen. Es beantwortet die Frage: "In welchen Zuständen kann sich ein Objekt befinden und wie wechselt es zwischen ihnen?"',
     abschnitte: [
