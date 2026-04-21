@@ -77,6 +77,36 @@ WHERE ort IN ('München', 'Berlin');`,
           { begriff: 'IS NULL', definition: 'Prüft auf fehlenden Wert' }
         ],
         erklaerung: 'Diese vier Operatoren tauchen in fast jeder AP2-SQL-Aufgabe auf.'
+      },
+      {
+        typ: 'freitext',
+        frage: 'Tabelle bestellung(id, kunden_id, datum, betrag). Gib alle Bestellungen aus dem Jahr 2024 aus, sortiert nach Datum (neueste zuerst).',
+        musterloesung: `SELECT *
+FROM bestellung
+WHERE datum >= '2024-01-01' AND datum <= '2024-12-31'
+ORDER BY datum DESC;`,
+        erklaerung: 'Alternative: WHERE YEAR(datum) = 2024 (MySQL). Die explizite Grenze ist meist schneller, weil sie einen Index auf datum nutzen kann.',
+        stichwoerter: ['SELECT', 'WHERE', 'datum', 'ORDER BY', 'DESC']
+      },
+      {
+        typ: 'freitext',
+        frage: 'Tabelle produkt(id, bezeichnung, preis, bestand). Finde alle Produkte, deren Bezeichnung "Schrau" enthält (an beliebiger Position) und deren Bestand 0 ist.',
+        musterloesung: `SELECT *
+FROM produkt
+WHERE bezeichnung LIKE '%Schrau%'
+  AND bestand = 0;`,
+        erklaerung: '%Schrau% findet "Schraube", "Metallschraube", "Schrauben-Set" usw. Ohne Platzhalter sucht LIKE exakt wie =.',
+        stichwoerter: ['SELECT', 'WHERE', 'LIKE', '%']
+      },
+      {
+        typ: 'freitext',
+        frage: 'Tabelle mitarbeiter(id, name, vorgesetzter_id, abteilung_id). Liste die Namen aller Mitarbeiter OHNE Vorgesetzten, alphabetisch sortiert.',
+        musterloesung: `SELECT name
+FROM mitarbeiter
+WHERE vorgesetzter_id IS NULL
+ORDER BY name;`,
+        erklaerung: 'NULL bedeutet "nicht gesetzt". Niemals vorgesetzter_id = NULL schreiben – der Vergleich ist immer unknown. Immer IS NULL / IS NOT NULL.',
+        stichwoerter: ['SELECT', 'WHERE', 'IS NULL', 'ORDER BY']
       }
     ]
   },
@@ -149,6 +179,36 @@ LEFT JOIN bestellung b ON k.id = b.kunde_id;`,
           { begriff: 'FULL JOIN', definition: 'Alle Zeilen beider Seiten' }
         ],
         erklaerung: 'Faustregel: LEFT und RIGHT sind äquivalent wenn man die Tabellen vertauscht.'
+      },
+      {
+        typ: 'freitext',
+        frage: 'Tabellen: kunde(id, name), bestellung(id, kunde_id, datum), position(bestell_id, artikel_id, menge), artikel(id, bezeichnung, preis). Liste Name des Kunden, Bestelldatum und Bezeichnung des Artikels für alle Bestellpositionen.',
+        musterloesung: `SELECT k.name, b.datum, a.bezeichnung
+FROM kunde k
+INNER JOIN bestellung b ON k.id = b.kunde_id
+INNER JOIN position p ON b.id = p.bestell_id
+INNER JOIN artikel a ON p.artikel_id = a.id;`,
+        erklaerung: 'Mehrere JOINs werden einfach hintereinander geschrieben. Tabellen-Aliase (k, b, p, a) halten die Abfrage lesbar. Typische AP2-Aufgabe mit 3-4 Tabellen.',
+        stichwoerter: ['INNER JOIN', 'ON', 'kunde', 'bestellung', 'position', 'artikel']
+      },
+      {
+        typ: 'freitext',
+        frage: 'Tabellen: kunde(id, name), bestellung(id, kunde_id, datum). Finde alle Kunden, die NOCH NIE eine Bestellung aufgegeben haben.',
+        musterloesung: `SELECT k.name
+FROM kunde k
+LEFT JOIN bestellung b ON k.id = b.kunde_id
+WHERE b.id IS NULL;`,
+        erklaerung: 'Klassischer "Anti-Join"-Trick: LEFT JOIN + IS NULL auf der rechten Seite. Alternativen: NOT EXISTS (moderner) oder NOT IN (Vorsicht bei NULLs).',
+        stichwoerter: ['LEFT JOIN', 'IS NULL', 'name']
+      },
+      {
+        typ: 'freitext',
+        frage: 'Tabelle mitarbeiter(id, name, vorgesetzter_id). Liste jeden Mitarbeiter zusammen mit dem Namen seines Vorgesetzten; Mitarbeiter ohne Vorgesetzten sollen trotzdem erscheinen.',
+        musterloesung: `SELECT m.name AS mitarbeiter, v.name AS vorgesetzter
+FROM mitarbeiter m
+LEFT JOIN mitarbeiter v ON m.vorgesetzter_id = v.id;`,
+        erklaerung: 'Self-Join: dieselbe Tabelle zweimal unter verschiedenen Aliasen (m, v). LEFT JOIN, damit Top-Ebenen-Mitarbeiter nicht aus dem Ergebnis fliegen.',
+        stichwoerter: ['LEFT JOIN', 'AS', 'mitarbeiter', 'vorgesetzter_id']
       }
     ]
   },
@@ -220,6 +280,36 @@ FROM artikel
 GROUP BY kategorie;`,
         erklaerung: 'MAX pro Gruppe. Wenn man auch den Artikelnamen braucht, ist ein Subquery oder Window Function nötig.',
         stichwoerter: ['GROUP BY', 'MAX']
+      },
+      {
+        typ: 'freitext',
+        frage: 'Tabelle bestellung(id, kunde_id, datum, betrag). Zeige pro Kunde die Gesamtsumme seiner Bestellungen – aber nur für Kunden mit einer Gesamtsumme über 1000 €, absteigend sortiert.',
+        musterloesung: `SELECT kunde_id, SUM(betrag) AS gesamt
+FROM bestellung
+GROUP BY kunde_id
+HAVING SUM(betrag) > 1000
+ORDER BY gesamt DESC;`,
+        erklaerung: 'HAVING filtert GRUPPEN (nach Aggregation), WHERE filtert einzelne Zeilen (vor Aggregation). Wichtigste AP2-Unterscheidung in diesem Themenbereich.',
+        stichwoerter: ['SUM', 'GROUP BY', 'HAVING', 'ORDER BY']
+      },
+      {
+        typ: 'freitext',
+        frage: 'Tabelle artikel(id, kategorie, preis). Ermittle die Anzahl der unterschiedlichen Kategorien.',
+        musterloesung: `SELECT COUNT(DISTINCT kategorie) AS anzahl_kategorien
+FROM artikel;`,
+        erklaerung: 'DISTINCT innerhalb von COUNT zählt eindeutige Werte. COUNT(*) oder COUNT(kategorie) zählt dagegen alle (bzw. nicht-NULL-) Zeilen.',
+        stichwoerter: ['COUNT', 'DISTINCT', 'kategorie']
+      },
+      {
+        typ: 'freitext',
+        frage: 'Tabellen: abteilung(id, name), mitarbeiter(id, name, abteilung_id, gehalt). Gib pro Abteilung den Abteilungsnamen und das Durchschnittsgehalt aus, absteigend sortiert.',
+        musterloesung: `SELECT a.name, AVG(m.gehalt) AS durchschnitt
+FROM abteilung a
+INNER JOIN mitarbeiter m ON a.id = m.abteilung_id
+GROUP BY a.id, a.name
+ORDER BY durchschnitt DESC;`,
+        erklaerung: 'Im GROUP BY alle Nicht-Aggregat-Spalten aufführen. Strikte DBMS (PostgreSQL, Oracle) verlangen das; MySQL ist toleranter, aber das ist schlechter Stil.',
+        stichwoerter: ['AVG', 'GROUP BY', 'INNER JOIN', 'ORDER BY', 'DESC']
       }
     ]
   },
@@ -289,6 +379,28 @@ WHERE abteilung_id = 3;`,
 VALUES ('Anna Müller', 'anna@test.de');`,
         erklaerung: 'Spaltenliste sollte angegeben werden – sonst muss die Reihenfolge exakt der Tabellendefinition entsprechen. Für Mehrfach-Insert: VALUES (...), (...), (...).',
         stichwoerter: ['INSERT INTO', 'VALUES']
+      },
+      {
+        typ: 'freitext',
+        frage: 'Erstelle die Tabelle "bestellung" mit: id (PK, auto), kunde_id (Fremdschlüssel zu kunde.id), datum (Datum, Default = heute), status (Text max. 20, Default = "offen").',
+        musterloesung: `CREATE TABLE bestellung (
+  id       INT PRIMARY KEY AUTO_INCREMENT,
+  kunde_id INT NOT NULL,
+  datum    DATE DEFAULT CURRENT_DATE,
+  status   VARCHAR(20) DEFAULT 'offen',
+  FOREIGN KEY (kunde_id) REFERENCES kunde(id)
+);`,
+        erklaerung: 'FOREIGN KEY deklariert die Referenz. Ohne ON DELETE/ON UPDATE greift die Default-Regel RESTRICT: Löschen eines Kunden, zu dem Bestellungen existieren, wird abgelehnt.',
+        stichwoerter: ['CREATE TABLE', 'FOREIGN KEY', 'REFERENCES', 'DEFAULT', 'VARCHAR']
+      },
+      {
+        typ: 'freitext',
+        frage: 'Tabelle bestellung(id, status, datum). Lösche alle Bestellungen mit Status "storniert", die älter als ein Jahr sind.',
+        musterloesung: `DELETE FROM bestellung
+WHERE status = 'storniert'
+  AND datum < CURRENT_DATE - INTERVAL 1 YEAR;`,
+        erklaerung: 'Datums-Arithmetik ist DB-spezifisch (MySQL: DATE_SUB(NOW(), INTERVAL 1 YEAR); PostgreSQL: NOW() - INTERVAL \'1 year\'). Prinzip in AP2: WHERE-Bedingung genau prüfen – ein DELETE ohne WHERE löscht alles.',
+        stichwoerter: ['DELETE', 'FROM', 'WHERE', 'status', 'datum']
       }
     ]
   },
@@ -350,6 +462,44 @@ Zusätzliche Beziehungsattribute (z.B. note, datum) kommen in die Verknüpfungst
         frage: 'Ein Attribut, das eine Entität eindeutig identifiziert, nennt man _______.',
         antwort: 'Primärschlüssel',
         erklaerung: 'Auch "Primary Key" oder kurz PK. Er muss eindeutig und nicht leer (NOT NULL) sein. Ein zusammengesetzter Primärschlüssel besteht aus mehreren Spalten.'
+      },
+      {
+        typ: 'freitext',
+        frage: 'Setze folgende 1:n-Beziehung als CREATE TABLE um: Eine Abteilung hat mehrere Mitarbeiter. Jeder Mitarbeiter gehört zu genau einer Abteilung und hat ein Gehalt.',
+        musterloesung: `CREATE TABLE abteilung (
+  id          INT PRIMARY KEY AUTO_INCREMENT,
+  bezeichnung VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE mitarbeiter (
+  id           INT PRIMARY KEY AUTO_INCREMENT,
+  name         VARCHAR(100) NOT NULL,
+  gehalt       DECIMAL(10,2),
+  abteilung_id INT NOT NULL,
+  FOREIGN KEY (abteilung_id) REFERENCES abteilung(id)
+);`,
+        erklaerung: '1:n wird durch EINEN Fremdschlüssel auf der n-Seite umgesetzt (hier abteilung_id in mitarbeiter). Keine Zwischentabelle nötig – nur bei n:m.',
+        stichwoerter: ['CREATE TABLE', 'FOREIGN KEY', 'REFERENCES', 'abteilung_id']
+      },
+      {
+        typ: 'freitext',
+        frage: 'Skizziere das ER-Modell für eine Bibliothek: Leser können Bücher ausleihen (mit Ausleih- und Rückgabedatum). Welche Entitäten, welche Beziehungen, welche Kardinalitäten?',
+        musterloesung: `Entitäten:
+- Buch (buch_id, titel, autor, isbn)
+- Leser (leser_id, name, adresse)
+
+Beziehung "Ausleihe" zwischen Buch und Leser: n:m
+  (ein Buch kann im Lauf der Zeit mehrfach ausgeliehen werden,
+   ein Leser kann mehrere Bücher ausleihen)
+
+Relationale Umsetzung:
+  Ausleihe(leser_id FK, buch_id FK, ausleihdatum, rueckgabedatum,
+           PRIMARY KEY(leser_id, buch_id, ausleihdatum))
+
+Die Beziehungsattribute (ausleihdatum, rueckgabedatum) gehören in die Zwischentabelle.
+ausleihdatum muss in den PK, damit derselbe Leser dasselbe Buch später erneut ausleihen darf.`,
+        erklaerung: 'Klassische AP2-Aufgabe. Wer ausleihdatum nicht in den PK aufnimmt, erzeugt einen Fehler bei wiederholter Ausleihe.',
+        stichwoerter: ['Entität', 'Beziehung', 'n:m', 'Ausleihe', 'FK', 'PRIMARY KEY']
       }
     ]
   },
@@ -448,6 +598,38 @@ Folgen:
 Lösung: Normalisierung – Kundendaten in eine eigene Tabelle auslagern, nur Kunden-ID referenzieren.`,
         erklaerung: 'Wortwörtlich AP2 Winter 2025, Aufgabe 4a. Redundanz ist das Grundproblem, das Normalisierung löst.',
         stichwoerter: ['mehrfach', 'Information', 'Normalisierung', 'Inkonsistenz']
+      },
+      {
+        typ: 'freitext',
+        frage: 'Gegeben: rechnung(rechnung_nr, kunde_id, kunde_name, kunde_plz, kunde_ort, datum, betrag). Welche Normalform liegt vor, welche Regel wird verletzt, und wie korrigierst du die Struktur (3NF)?',
+        musterloesung: `Liegt in 2NF vor (einspaltiger PK rechnung_nr, 1NF erfüllt).
+
+3NF ist verletzt – transitive Abhängigkeiten:
+  rechnung_nr → kunde_id → kunde_name, kunde_plz
+  kunde_plz → kunde_ort
+
+Korrektur (3NF):
+  Rechnung(rechnung_nr PK, kunde_id FK, datum, betrag)
+  Kunde(kunde_id PK, kunde_name, kunde_plz FK)
+  Ort(kunde_plz PK, kunde_ort)`,
+        erklaerung: 'plz → ort ist der klassische AP2-Stolperstein. Zwei Auslagerungen nötig: Kunde und Ort als eigenständige Tabellen.',
+        stichwoerter: ['3NF', 'transitiv', 'kunde', 'plz', 'ort', 'Rechnung']
+      },
+      {
+        typ: 'freitext',
+        frage: 'Erkläre den Begriff "Denormalisierung" und nenne einen Grund, warum sie trotz Normalformen sinnvoll sein kann.',
+        musterloesung: `Denormalisierung = bewusste Rückkehr von einer höheren Normalform zu einer niedrigeren (z.B. 3NF → 2NF).
+
+Konkret: Redundanz wird absichtlich wieder eingeführt, meist um Lese-Performance zu verbessern (weniger JOINs nötig).
+
+Gründe:
+- Komplexe JOINs werden bei sehr großen Tabellen langsam
+- Analyse-/Reporting-Datenbanken (Data Warehouse) brauchen schnelle Lesezugriffe
+- Caching von berechneten Werten (z.B. Gesamtbetrag in der Bestellung)
+
+Nachteil: Inkonsistenz-Risiko steigt, Updates werden aufwendiger (dieselbe Information muss an mehreren Stellen gepflegt werden).`,
+        erklaerung: 'Normalisierung optimiert auf Konsistenz, Denormalisierung auf Lese-Performance. In OLTP (tägliches Geschäft) wird normalisiert, in OLAP (Analyse/Reporting) oft denormalisiert.',
+        stichwoerter: ['Redundanz', 'Performance', 'JOIN', 'Lese', 'Inkonsistenz', 'Data Warehouse']
       }
     ]
   }

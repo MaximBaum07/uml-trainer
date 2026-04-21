@@ -1,4 +1,4 @@
-import { Component, input, output, inject } from '@angular/core';
+import { Component, input, output, effect, untracked, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { InputText } from 'primeng/inputtext';
@@ -22,13 +22,13 @@ import { LueckentextUebung, ExamAntwortDetail } from '../models/app.models';
       <div class="flex items-center gap-3">
         <input pInputText
                [(ngModel)]="eingabe"
-               [disabled]="beantwortet"
+               [disabled]="beantwortet && !examModus()"
                placeholder="Deine Antwort..."
                class="flex-1"
                (keydown.enter)="pruefen()" />
-        <p-button [label]="examModus() ? 'Weiter' : 'Prüfen'"
+        <p-button [label]="examModus() ? 'Speichern' : 'Prüfen'"
                 icon="pi pi-check"
-                [disabled]="beantwortet || !eingabe.trim()"
+                [disabled]="(beantwortet && !examModus()) || !eingabe.trim()"
                 (click)="pruefen()" />
       </div>
 
@@ -47,8 +47,11 @@ import { LueckentextUebung, ExamAntwortDetail } from '../models/app.models';
       }
 
       @if (beantwortet && examModus()) {
-        <div class="p-3 rounded-lg bg-slate-50 border border-slate-200">
-          <p class="text-slate-500 text-sm"><i class="pi pi-lock mr-1"></i>Antwort gespeichert – Auswertung nach der Prüfung.</p>
+        <div class="p-3 rounded-lg bg-blue-50 border border-blue-200">
+          <p class="text-blue-800 text-sm">
+            <i class="pi pi-check-circle mr-1"></i>
+            Antwort gespeichert – du kannst sie bis zur Abgabe noch ändern.
+          </p>
         </div>
       }
     </div>
@@ -59,6 +62,7 @@ export class QuizLueckentextComponent {
 
   uebung = input.required<LueckentextUebung>();
   examModus = input(false);
+  vorherigeAntwort = input<ExamAntwortDetail | undefined>(undefined);
   beantwortetEvent = output<boolean>();
   examAntwortEvent = output<ExamAntwortDetail>();
 
@@ -66,12 +70,29 @@ export class QuizLueckentextComponent {
   beantwortet = false;
   istRichtig = false;
 
+  constructor() {
+    effect(() => {
+      this.uebung();
+      const prev = untracked(() => this.vorherigeAntwort());
+      if (prev?.typ === 'lueckentext' && prev.lueckentextEingabe) {
+        this.eingabe = prev.lueckentextEingabe;
+        this.beantwortet = true;
+        this.istRichtig = this.eingabe.trim().toLowerCase() === untracked(() => this.uebung()).antwort.toLowerCase();
+      } else {
+        this.eingabe = '';
+        this.beantwortet = false;
+        this.istRichtig = false;
+      }
+    });
+  }
+
   sanitize(html: string): SafeHtml {
     return this.sanitizer.bypassSecurityTrustHtml(html);
   }
 
   pruefen(): void {
-    if (this.beantwortet || !this.eingabe.trim()) return;
+    if (!this.eingabe.trim()) return;
+    if (this.beantwortet && !this.examModus()) return;
     this.istRichtig = this.eingabe.trim().toLowerCase() === this.uebung().antwort.toLowerCase();
     this.beantwortet = true;
     this.examAntwortEvent.emit({ typ: 'lueckentext', lueckentextEingabe: this.eingabe.trim() });

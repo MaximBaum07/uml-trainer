@@ -1,4 +1,4 @@
-import { Component, input, output, inject } from '@angular/core';
+import { Component, input, output, effect, untracked, inject } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { WahrFalschUebung, ExamAntwortDetail } from '../models/app.models';
 
@@ -20,17 +20,17 @@ import { WahrFalschUebung, ExamAntwortDetail } from '../models/app.models';
       </div>
 
       <div class="flex gap-4">
-        <button
+        <button type="button"
           class="flex-1 p-4 rounded-lg border-2 font-semibold text-lg transition-all"
           [class]="getButtonClass(true)"
-          [disabled]="beantwortet"
+          [disabled]="beantwortet && !examModus()"
           (click)="antworten(true)">
           <i class="pi pi-check mr-2"></i> Wahr
         </button>
-        <button
+        <button type="button"
           class="flex-1 p-4 rounded-lg border-2 font-semibold text-lg transition-all"
           [class]="getButtonClass(false)"
-          [disabled]="beantwortet"
+          [disabled]="beantwortet && !examModus()"
           (click)="antworten(false)">
           <i class="pi pi-times mr-2"></i> Falsch
         </button>
@@ -47,8 +47,11 @@ import { WahrFalschUebung, ExamAntwortDetail } from '../models/app.models';
       }
 
       @if (beantwortet && examModus()) {
-        <div class="p-3 rounded-lg bg-slate-50 border border-slate-200">
-          <p class="text-slate-500 text-sm"><i class="pi pi-lock mr-1"></i>Antwort gespeichert – Auswertung nach der Prüfung.</p>
+        <div class="p-3 rounded-lg bg-blue-50 border border-blue-200">
+          <p class="text-blue-800 text-sm">
+            <i class="pi pi-check-circle mr-1"></i>
+            Antwort gespeichert – du kannst bis zur Abgabe noch wechseln.
+          </p>
         </div>
       }
     </div>
@@ -59,6 +62,7 @@ export class QuizWahrFalschComponent {
 
   uebung = input.required<WahrFalschUebung>();
   examModus = input(false);
+  vorherigeAntwort = input<ExamAntwortDetail | undefined>(undefined);
   beantwortetEvent = output<boolean>();
   examAntwortEvent = output<ExamAntwortDetail>();
 
@@ -66,12 +70,29 @@ export class QuizWahrFalschComponent {
   gewaehlteAntwort?: boolean;
   istRichtig = false;
 
+  constructor() {
+    effect(() => {
+      // Re-seed on question change
+      this.uebung();
+      const prev = untracked(() => this.vorherigeAntwort());
+      if (prev?.typ === 'wahr-falsch' && prev.wfGewaehlterWert !== undefined) {
+        this.gewaehlteAntwort = prev.wfGewaehlterWert;
+        this.beantwortet = true;
+        this.istRichtig = prev.wfGewaehlterWert === untracked(() => this.uebung()).korrekt;
+      } else {
+        this.beantwortet = false;
+        this.gewaehlteAntwort = undefined;
+        this.istRichtig = false;
+      }
+    });
+  }
+
   sanitize(html: string): SafeHtml {
     return this.sanitizer.bypassSecurityTrustHtml(html);
   }
 
   antworten(antwort: boolean): void {
-    if (this.beantwortet) return;
+    if (this.beantwortet && !this.examModus()) return;
     this.gewaehlteAntwort = antwort;
     this.istRichtig = antwort === this.uebung().korrekt;
     this.beantwortet = true;
@@ -80,13 +101,14 @@ export class QuizWahrFalschComponent {
   }
 
   getButtonClass(wert: boolean): string {
-    if (!this.beantwortet) {
+    if (this.examModus()) {
+      if (wert === this.gewaehlteAntwort) {
+        return 'border-blue-500 bg-blue-50 text-blue-800 cursor-pointer';
+      }
       return 'border-slate-200 hover:border-blue-400 hover:bg-blue-50 cursor-pointer text-slate-700';
     }
-    if (this.examModus()) {
-      return wert === this.gewaehlteAntwort
-        ? 'border-blue-400 bg-blue-50 text-blue-800'
-        : 'border-slate-200 opacity-50 text-slate-400';
+    if (!this.beantwortet) {
+      return 'border-slate-200 hover:border-blue-400 hover:bg-blue-50 cursor-pointer text-slate-700';
     }
     if (wert === this.uebung().korrekt) return 'border-green-500 bg-green-50 text-green-800';
     if (wert === this.gewaehlteAntwort) return 'border-red-500 bg-red-50 text-red-800';
