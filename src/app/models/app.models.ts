@@ -143,10 +143,65 @@ export interface KarteikartenFortschritt {
   status: Record<string, 'gewusst' | 'unsicher' | 'nichtgewusst'>;
 }
 
+export interface LaufenderVersuch {
+  /** Index der Frage, bei der der User aktuell steht (noch nicht beantwortet). */
+  aktuelleFrageIndex: number;
+  /** Richtig/falsch pro bereits beantworteter Frage (Länge = Anzahl bereits beantwortet). */
+  antworten: boolean[];
+  /** Anzahl richtig beantworteter Fragen (entspricht Anzahl true in antworten). */
+  richtig: number;
+  gespeichertAm: number;
+}
+
 export interface Fortschritt {
   themaId: ThemaId;
   theorieGelesen: boolean;
   quizErgebnisse: QuizErgebnis[];
   besteNote: number;                  // 0..1
   karteikarten?: KarteikartenFortschritt;
+  /** Indizes in uebungen[] die zuletzt falsch beantwortet wurden.
+   *  Werden bei späterer richtiger Antwort automatisch wieder entfernt. */
+  falscheIndices?: number[];
+  /** Vom User explizit gemerkte Fragen. Bleiben bis manuell entfernt. */
+  gemerkteIndices?: number[];
+  /** Unterbrochener Quiz-Versuch, um ihn später fortzusetzen. */
+  laufenderVersuch?: LaufenderVersuch;
+}
+
+// ------- Testprüfung -------
+
+export interface ExamAntwortDetail {
+  typ: UebungTyp;
+  mcGewaehlterText?: string;
+  wfGewaehlterWert?: boolean;
+  lueckentextEingabe?: string;
+  zuordnungen?: { begriff: string; definition: string }[];
+  freitextEingabe?: string;
+}
+
+export interface PruefungsConfig {
+  id: string;
+  name: string;
+  beschreibung: string;
+  fragenAnzahl: number;
+  zeitlimitMinuten: number;
+  icon: string;
+  farbe: string;
+  kategorie?: Kategorie;
+}
+
+export interface PruefungsFrage {
+  uebung: Uebung;
+  themaId: ThemaId;
+  themaName: string;
+  bereichName: string;
+}
+
+export interface PruefungsErgebnisState {
+  configName: string;
+  fragen: PruefungsFrage[];
+  antwortDetails: (ExamAntwortDetail | null)[];
+  richtig: boolean[];
+  zeitGebrauchtSek: number;
+  zeitlimitSek: number;
 }

@@ -53,15 +53,36 @@ import { ThemaId, Uebung, ThemaInfo, QuizErgebnis,
               <h1 class="text-xl font-bold text-slate-800">{{ thema.name }} - Quiz</h1>
             </div>
           </div>
-          <div class="text-right">
-            <p class="text-lg font-bold text-slate-800">Frage {{ aktuelleFrageIndex + 1 }}/{{ uebungen.length }}</p>
-            <p class="text-sm text-green-600"><i class="pi pi-check-circle mr-1"></i>{{ richtigeAntworten }} richtig</p>
+          <div class="flex items-center gap-3">
+            <button type="button"
+                    (click)="toggleMerken()"
+                    [attr.title]="progressService.istGemerkt(typ, aktuelleFrageIndex) ? 'Nicht mehr merken' : 'Frage merken'"
+                    class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors">
+              <i [class]="progressService.istGemerkt(typ, aktuelleFrageIndex) ? 'pi pi-bookmark-fill text-amber-500 text-xl' : 'pi pi-bookmark text-slate-400 text-xl'"></i>
+            </button>
+            <div class="text-right">
+              <p class="text-lg font-bold text-slate-800">Frage {{ aktuelleFrageIndex + 1 }}/{{ uebungen.length }}</p>
+              <p class="text-sm text-green-600"><i class="pi pi-check-circle mr-1"></i>{{ richtigeAntworten }} richtig</p>
+            </div>
           </div>
         </div>
         <p-progressBar
           [value]="((aktuelleFrageIndex + 1) / uebungen.length) * 100"
           [showValue]="false"
           styleClass="h-2" />
+        @if (fortgesetzt) {
+          <div class="mt-3 flex items-center justify-between gap-3 px-3 py-2 rounded-lg bg-blue-50 border border-blue-200">
+            <span class="text-sm text-blue-800">
+              <i class="pi pi-history mr-1"></i>
+              Fortgesetzt bei Frage {{ aktuelleFrageIndex + 1 }} – {{ beantworteteFragen }} bereits beantwortet.
+            </span>
+            <button type="button"
+                    (click)="neuBeginnen()"
+                    class="text-sm font-medium text-blue-700 hover:text-blue-900 whitespace-nowrap">
+              <i class="pi pi-refresh mr-1"></i>Neu beginnen
+            </button>
+          </div>
+        }
       </div>
 
       @if (quizSichtbar) {
@@ -120,7 +141,7 @@ import { ThemaId, Uebung, ThemaInfo, QuizErgebnis,
 export class UebenComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
-  private progressService = inject(ProgressService);
+  protected progressService = inject(ProgressService);
   private cdr = inject(ChangeDetectorRef);
 
   typ!: ThemaId;
@@ -132,6 +153,7 @@ export class UebenComponent implements OnInit, OnDestroy {
   beantworteteFragen = 0;
   antworten: boolean[] = [];
   quizSichtbar = true;
+  fortgesetzt = false;
 
   get aktuelleUebung(): Uebung {
     return this.uebungen[this.aktuelleFrageIndex];
@@ -142,6 +164,17 @@ export class UebenComponent implements OnInit, OnDestroy {
     this.thema = THEMEN.find(d => d.id === this.typ);
     const set = ALLE_UEBUNGS_SETS.find(s => s.themaId === this.typ);
     this.uebungen = set ? [...set.uebungen] : [];
+
+    // Gespeicherten Zwischenstand wiederherstellen (falls vorhanden und passend)
+    const versuch = this.progressService.getVersuch(this.typ);
+    if (versuch && versuch.aktuelleFrageIndex < this.uebungen.length
+        && versuch.antworten.length <= this.uebungen.length) {
+      this.aktuelleFrageIndex = versuch.aktuelleFrageIndex;
+      this.antworten = [...versuch.antworten];
+      this.beantworteteFragen = versuch.antworten.length;
+      this.richtigeAntworten = versuch.richtig;
+      this.fortgesetzt = true;
+    }
   }
 
   onBeantwortet(richtig: boolean): void {
@@ -149,6 +182,27 @@ export class UebenComponent implements OnInit, OnDestroy {
     this.beantworteteFragen++;
     this.antworten.push(richtig);
     if (richtig) this.richtigeAntworten++;
+    // Falsch-Liste pflegen (für "Falsche Fragen wiederholen")
+    this.progressService.markiereFrage(this.typ, this.aktuelleFrageIndex, richtig);
+    // Fortschritt im Quiz selbst speichern (für Fortsetzen)
+    this.zwischenstandSpeichern();
+  }
+
+  toggleMerken(): void {
+    this.progressService.toggleMerken(this.typ, this.aktuelleFrageIndex);
+  }
+
+  neuBeginnen(): void {
+    this.progressService.versuchLoeschen(this.typ);
+    this.aktuelleFrageIndex = 0;
+    this.aktuelleFrageBeantwortet = false;
+    this.richtigeAntworten = 0;
+    this.beantworteteFragen = 0;
+    this.antworten = [];
+    this.fortgesetzt = false;
+    this.quizSichtbar = false;
+    this.cdr.detectChanges();
+    this.quizSichtbar = true;
   }
 
   naechsteFrage(): void {
@@ -157,23 +211,28 @@ export class UebenComponent implements OnInit, OnDestroy {
     this.aktuelleFrageIndex++;
     this.aktuelleFrageBeantwortet = false;
     this.quizSichtbar = true;
+    this.zwischenstandSpeichern();
+  }
+
+  /** Speichert den aktuellen Stand, damit Fortsetzen möglich ist. */
+  private zwischenstandSpeichern(): void {
+    // Wenn wir schon am Ende sind und die letzte Frage beantwortet ist → nichts zu fortsetzen
+    if (this.aktuelleFrageIndex >= this.uebungen.length) return;
+    this.progressService.versuchSpeichern(this.typ, {
+      aktuelleFrageIndex: this.aktuelleFrageIndex,
+      antworten: this.antworten,
+      richtig: this.richtigeAntworten
+    });
   }
 
   private gespeichert = false;
 
   ngOnDestroy(): void {
-    this.zwischenspeichern();
-  }
-
-  private zwischenspeichern(): void {
-    if (this.gespeichert || this.beantworteteFragen === 0) return;
-    this.gespeichert = true;
-    const ergebnis: QuizErgebnis = {
-      richtig: this.richtigeAntworten,
-      gesamt: this.beantworteteFragen,
-      antworten: this.antworten
-    };
-    this.progressService.quizErgebnisSpeichern(this.typ, ergebnis);
+    // Falls mitten im Quiz verlassen: der laufende Versuch wurde bei jeder
+    // Antwort & jedem "Nächste Frage" bereits gespeichert. Hier nichts weiter.
+    if (this.gespeichert) return;
+    // Sicherheitshalber noch einmal den Zwischenstand persistieren.
+    this.zwischenstandSpeichern();
   }
 
   quizBeenden(): void {
@@ -184,6 +243,7 @@ export class UebenComponent implements OnInit, OnDestroy {
     };
     this.gespeichert = true;
     this.progressService.quizErgebnisSpeichern(this.typ, ergebnis);
+    this.progressService.versuchLoeschen(this.typ);
     this.router.navigate(['/ergebnis', this.typ], {
       state: { ergebnis }
     });

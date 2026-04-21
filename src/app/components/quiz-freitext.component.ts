@@ -2,23 +2,15 @@ import { Component, input, output, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ButtonModule } from 'primeng/button';
-import { FreitextUebung } from '../models/app.models';
+import { FreitextUebung, ExamAntwortDetail } from '../models/app.models';
 
-/**
- * Freitext-Aufgabe: User schreibt eine eigene Antwort, vergleicht sie mit der
- * Musterlösung und bewertet sich selbst (richtig / teilweise / falsch).
- *
- * Nach dem "Musterlösung anzeigen" wird optional noch geprüft, ob erwartete
- * Stichwörter in der Antwort vorkommen – das gibt dem User einen Hinweis,
- * ersetzt aber die Selbstbewertung nicht.
- */
 @Component({
   selector: 'app-quiz-freitext',
   standalone: true,
   imports: [FormsModule, ButtonModule],
   template: `
     <div class="space-y-4">
-      <p class="text-lg font-medium text-slate-800 whitespace-pre-line">{{ uebung().frage }}</p>
+      <p class="text-lg font-medium text-slate-800 whitespace-pre-line"><span [innerHTML]="sanitize(uebung().frage)"></span></p>
 
       @if (uebung().svgDiagramm) {
         <div class="p-4 bg-slate-50 rounded-lg border border-slate-200 flex justify-center overflow-x-auto">
@@ -35,21 +27,28 @@ import { FreitextUebung } from '../models/app.models';
 
       @if (phase === 'eingabe') {
         <div class="flex gap-2">
-          <p-button
-            label="Musterlösung anzeigen"
-            icon="pi pi-eye"
-            [disabled]="!eingabe.trim()"
-            (onClick)="loesungZeigen()" />
-          <p-button
-            label="Überspringen"
-            icon="pi pi-forward"
-            severity="secondary"
-            [outlined]="true"
-            (onClick)="loesungZeigen()" />
+          @if (!examModus()) {
+            <p-button
+              label="Musterlösung anzeigen"
+              icon="pi pi-eye"
+              [disabled]="!eingabe.trim()"
+              (onClick)="loesungZeigen()" />
+            <p-button
+              label="Überspringen"
+              icon="pi pi-forward"
+              severity="secondary"
+              [outlined]="true"
+              (onClick)="loesungZeigen()" />
+          } @else {
+            <p-button
+              label="Antwort speichern"
+              icon="pi pi-save"
+              (onClick)="examSpeichern()" />
+          }
         </div>
       }
 
-      @if (phase !== 'eingabe') {
+      @if (phase !== 'eingabe' && !examModus()) {
         <div class="p-4 rounded-lg bg-blue-50 border border-blue-200">
           <p class="text-xs uppercase tracking-widest text-blue-700 mb-2 font-semibold">Musterlösung</p>
           <p class="text-slate-800 text-sm leading-relaxed whitespace-pre-line">{{ uebung().musterloesung }}</p>
@@ -105,6 +104,12 @@ import { FreitextUebung } from '../models/app.models';
           </div>
         }
       }
+
+      @if (phase !== 'eingabe' && examModus()) {
+        <div class="p-3 rounded-lg bg-slate-50 border border-slate-200">
+          <p class="text-slate-500 text-sm"><i class="pi pi-lock mr-1"></i>Antwort gespeichert – Musterlösung und Auswertung nach der Prüfung.</p>
+        </div>
+      }
     </div>
   `
 })
@@ -112,7 +117,9 @@ export class QuizFreitextComponent {
   private sanitizer = inject(DomSanitizer);
 
   uebung = input.required<FreitextUebung>();
+  examModus = input(false);
   beantwortetEvent = output<boolean>();
+  examAntwortEvent = output<ExamAntwortDetail>();
 
   eingabe = '';
   phase: 'eingabe' | 'loesung' | 'bewertet' = 'eingabe';
@@ -134,5 +141,11 @@ export class QuizFreitextComponent {
   bewerten(richtig: boolean): void {
     this.phase = 'bewertet';
     this.beantwortetEvent.emit(richtig);
+  }
+
+  examSpeichern(): void {
+    this.phase = 'loesung';
+    this.examAntwortEvent.emit({ typ: 'freitext', freitextEingabe: this.eingabe.trim() });
+    this.beantwortetEvent.emit(false);
   }
 }

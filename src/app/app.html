@@ -6,13 +6,19 @@
         <span class="text-xl font-bold text-slate-800">AP2 Trainer</span>
       </a>
       <span class="text-sm text-slate-500 hidden sm:inline">Fachinformatiker Anwendungsentwicklung – Prüfungsvorbereitung</span>
-      <nav class="ml-auto flex gap-2">
+      <nav class="ml-auto flex items-center gap-2">
         <a routerLink="/"
            class="px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100 no-underline transition-colors"
            routerLinkActive="!bg-blue-50 !text-blue-700"
            [routerLinkActiveOptions]="{exact: true}">
           <i class="pi pi-home mr-1"></i> Dashboard
         </a>
+        <button type="button"
+                (click)="toggleDark()"
+                [attr.aria-label]="istDark() ? 'Zum hellen Modus wechseln' : 'Zum dunklen Modus wechseln'"
+                class="w-9 h-9 flex items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 transition-colors">
+          <i [class]="istDark() ? 'pi pi-sun text-lg' : 'pi pi-moon text-lg'"></i>
+        </button>
       </nav>
     </div>
   </header>

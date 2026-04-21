@@ -124,6 +124,28 @@ So kombiniert man Sicherheit (sicherer Schlüsselaustausch) mit Performance (sch
         frage: 'Eine _______ verifiziert Absender und Integrität, indem der Hash einer Nachricht mit dem privaten Schlüssel verschlüsselt wird.',
         antwort: 'digitale Signatur',
         erklaerung: 'Digitale Signatur: Hash(Nachricht) + privatem Schlüssel → Signatur. Empfänger prüft mit öffentlichem Schlüssel.'
+      },
+      {
+        typ: 'freitext',
+        frage: 'Erkläre, wie man Passwörter sicher in einer Datenbank speichert. Warum ist ein "Salt" nötig? (AP2 Sommer 2025)',
+        musterloesung: `Grundidee: Passwörter werden NIE im Klartext gespeichert. Stattdessen nutzt man eine Einweg-Hashfunktion (z.B. bcrypt, Argon2, PBKDF2).
+
+Ablauf beim Speichern:
+1. Zufälligen Salt (Salz) generieren – z.B. 16 zufällige Bytes.
+2. passwort_hash = hash(passwort + salt)
+3. Hash UND Salt in der Datenbank speichern.
+
+Ablauf beim Login:
+1. Salt aus DB laden.
+2. hash(eingabe + salt) berechnen.
+3. Mit gespeichertem Hash vergleichen.
+
+Warum Salt?
+- Ohne Salt erzeugen IDENTISCHE Passwörter IDENTISCHE Hashes → Angreifer kann mit einer Rainbow-Table (vorberechnete Hash-Tabelle) schnell alle Passwörter knacken.
+- Mit individuellem Salt pro Nutzer wird derselbe Passwort-Text zu unterschiedlichen Hashes → Rainbow-Tables werden nutzlos.
+- Langsame Hash-Funktionen (bcrypt) erschweren Brute-Force zusätzlich.`,
+        erklaerung: 'Original AP2 Sommer 2025, Aufgabe 2c. Merke: MD5 und SHA-1 sind für Passwörter NICHT sicher genug; Klartext-Speicherung ist ein schwerer Fehler.',
+        stichwoerter: ['Hash', 'Salt', 'bcrypt', 'Rainbow', 'einweg']
       }
     ]
   },

@@ -2,8 +2,9 @@ import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ProgressBar } from 'primeng/progressbar';
 import { THEMENBEREICHE } from '../../data/themenbereiche';
+import { PRUEFUNGS_CONFIGS } from '../../data/pruefungs-configs';
 import { ProgressService } from '../../services/progress.service';
-import { Themenbereich } from '../../models/app.models';
+import { Themenbereich, PruefungsConfig } from '../../models/app.models';
 
 @Component({
   selector: 'app-dashboard',
@@ -23,6 +24,46 @@ import { Themenbereich } from '../../models/app.models';
       <p-progressBar [value]="progress.gesamtFortschritt()" [showValue]="false" styleClass="h-3" />
       <p class="text-sm text-slate-500 mt-2">Lies die Theorie und löse die Quizze, um Fortschritt zu machen.</p>
     </div>
+
+    <!-- Testprüfung -->
+    <section class="mb-10">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-lg bg-red-100 flex items-center justify-center">
+          <i class="pi pi-graduation-cap text-red-600 text-lg"></i>
+        </div>
+        <div>
+          <h2 class="text-2xl font-bold text-slate-800">Testprüfung</h2>
+          <p class="text-sm text-slate-500">Prüfungssimulation mit Zeitlimit · keine sofortige Auswertung · vollständige Lösung danach</p>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        @for (config of pruefungsConfigs; track config.id) {
+          <a [routerLink]="['/pruefung', config.id]"
+             class="group bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all no-underline">
+            <div class="h-1.5" [style.background-color]="config.farbe"></div>
+            <div class="p-5">
+              <div class="flex items-start gap-3 mb-3">
+                <div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
+                     [style.background-color]="config.farbe + '20'">
+                  <i [class]="config.icon + ' text-xl'" [style.color]="config.farbe"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <h3 class="font-semibold text-slate-800 group-hover:text-slate-900">{{ config.name }}</h3>
+                  <p class="text-xs text-slate-500 mt-0.5">
+                    {{ config.fragenAnzahl }} Fragen · {{ config.zeitlimitMinuten }} Min.
+                  </p>
+                </div>
+              </div>
+              <p class="text-sm text-slate-600 mb-3">{{ config.beschreibung }}</p>
+              <div class="flex items-center gap-2 text-xs text-slate-500">
+                <i class="pi pi-clock"></i>
+                <span>Zeitlimit: {{ config.zeitlimitMinuten }} Minuten</span>
+              </div>
+            </div>
+          </a>
+        }
+      </div>
+    </section>
 
     <section class="mb-10">
       <div class="flex items-center gap-3 mb-4">
@@ -113,4 +154,5 @@ export class DashboardComponent {
   protected readonly progress = inject(ProgressService);
   protected readonly fachlich: Themenbereich[] = THEMENBEREICHE.filter(b => b.kategorie === 'fachlich');
   protected readonly wiso: Themenbereich[] = THEMENBEREICHE.filter(b => b.kategorie === 'wiso');
+  protected readonly pruefungsConfigs: PruefungsConfig[] = PRUEFUNGS_CONFIGS;
 }

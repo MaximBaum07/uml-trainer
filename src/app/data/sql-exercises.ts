@@ -422,6 +422,32 @@ Zusätzliche Beziehungsattribute (z.B. note, datum) kommen in die Verknüpfungst
         frage: 'Eine _______ Abhängigkeit liegt vor, wenn A → B und B → C gilt (und damit indirekt A → C).',
         antwort: 'transitive',
         erklaerung: 'Diese transitive Abhängigkeit verletzt die 3NF und führt zu Redundanz, wenn sie nicht aufgelöst wird.'
+      },
+      {
+        typ: 'zuordnung',
+        frage: 'Ordne die drei Datenbank-Anomalien ihrer Auswirkung zu (AP2 Winter 2025).',
+        paare: [
+          { begriff: 'Änderungsanomalie', definition: 'Bei Änderung eines Attributs müssen evtl. mehrere Datensätze angepasst werden' },
+          { begriff: 'Einfügeanomalie', definition: 'Beim Einfügen neuer Daten entstehen leere/NULL-Felder oder man kann gar nicht einfügen' },
+          { begriff: 'Löschanomalie', definition: 'Beim Löschen gehen auch andere, nur dort gespeicherte Informationen verloren' }
+        ],
+        erklaerung: 'Die drei klassischen Anomalien entstehen durch Redundanz in nicht-normalisierten Tabellen. Normalisierung (2NF/3NF) löst sie auf.'
+      },
+      {
+        typ: 'freitext',
+        frage: 'Erkläre den Begriff "Redundanz" im Datenbank-Kontext und gib ein konkretes Beispiel.',
+        musterloesung: `Redundanz = mehrfache Abspeicherung derselben Information in einer Datenbank.
+
+Beispiel: In einer Tabelle bestellung sind Name, Adresse und Telefon des Kunden in JEDER Bestellzeile gespeichert – obwohl der Kunde eindeutig identifizierbar ist.
+
+Folgen:
+- Speicherplatz wird verschwendet
+- Inkonsistenzen möglich (Adresse in einer Zeile aktualisiert, in anderen nicht)
+- Anomalien (Änderung/Einfügen/Löschen)
+
+Lösung: Normalisierung – Kundendaten in eine eigene Tabelle auslagern, nur Kunden-ID referenzieren.`,
+        erklaerung: 'Wortwörtlich AP2 Winter 2025, Aufgabe 4a. Redundanz ist das Grundproblem, das Normalisierung löst.',
+        stichwoerter: ['mehrfach', 'Information', 'Normalisierung', 'Inkonsistenz']
       }
     ]
   }

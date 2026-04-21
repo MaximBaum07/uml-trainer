@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { InputText } from 'primeng/inputtext';
 import { Button } from 'primeng/button';
-import { LueckentextUebung } from '../models/app.models';
+import { LueckentextUebung, ExamAntwortDetail } from '../models/app.models';
 
 @Component({
   selector: 'app-quiz-lueckentext',
@@ -11,7 +11,7 @@ import { LueckentextUebung } from '../models/app.models';
   imports: [FormsModule, InputText, Button],
   template: `
     <div class="space-y-4">
-      <p class="text-lg font-medium text-slate-800">{{ uebung().frage }}</p>
+      <p class="text-lg font-medium text-slate-800"><span [innerHTML]="sanitize(uebung().frage)"></span></p>
 
       @if (uebung().svgDiagramm) {
         <div class="p-4 bg-slate-50 rounded-lg border border-slate-200 flex justify-center overflow-x-auto">
@@ -26,13 +26,13 @@ import { LueckentextUebung } from '../models/app.models';
                placeholder="Deine Antwort..."
                class="flex-1"
                (keydown.enter)="pruefen()" />
-        <p-button label="Prüfen"
+        <p-button [label]="examModus() ? 'Weiter' : 'Prüfen'"
                 icon="pi pi-check"
                 [disabled]="beantwortet || !eingabe.trim()"
                 (click)="pruefen()" />
       </div>
 
-      @if (beantwortet) {
+      @if (beantwortet && !examModus()) {
         <div class="p-4 rounded-lg"
              [class]="istRichtig ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'">
           <p class="font-semibold mb-1" [class]="istRichtig ? 'text-green-800' : 'text-red-800'">
@@ -45,6 +45,12 @@ import { LueckentextUebung } from '../models/app.models';
           <p class="text-slate-700 text-sm">{{ uebung().erklaerung }}</p>
         </div>
       }
+
+      @if (beantwortet && examModus()) {
+        <div class="p-3 rounded-lg bg-slate-50 border border-slate-200">
+          <p class="text-slate-500 text-sm"><i class="pi pi-lock mr-1"></i>Antwort gespeichert – Auswertung nach der Prüfung.</p>
+        </div>
+      }
     </div>
   `
 })
@@ -52,7 +58,9 @@ export class QuizLueckentextComponent {
   private sanitizer = inject(DomSanitizer);
 
   uebung = input.required<LueckentextUebung>();
+  examModus = input(false);
   beantwortetEvent = output<boolean>();
+  examAntwortEvent = output<ExamAntwortDetail>();
 
   eingabe = '';
   beantwortet = false;
@@ -66,6 +74,7 @@ export class QuizLueckentextComponent {
     if (this.beantwortet || !this.eingabe.trim()) return;
     this.istRichtig = this.eingabe.trim().toLowerCase() === this.uebung().antwort.toLowerCase();
     this.beantwortet = true;
+    this.examAntwortEvent.emit({ typ: 'lueckentext', lueckentextEingabe: this.eingabe.trim() });
     this.beantwortetEvent.emit(this.istRichtig);
   }
 }

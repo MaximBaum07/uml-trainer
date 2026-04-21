@@ -1,7 +1,6 @@
 @import "tailwindcss";
 @import "primeicons/primeicons.css";
 
-/* Custom theme overrides */
 :root {
   --primary-color: #3B82F6;
   --surface-ground: #f8fafc;
@@ -15,4 +14,94 @@ body {
 
 html, body {
   height: 100%;
+}
+
+/* Inline-Code in Fragen, Erklärungen etc. – überall als erkennbare Box */
+code {
+  background-color: #f1f5f9;
+  color: #7c3aed;
+  padding: 0.15em 0.45em;
+  border-radius: 0.35em;
+  border: 1px solid #e2e8f0;
+  font-family: 'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace;
+  font-size: 0.9em;
+  white-space: nowrap;
+}
+
+/* Mehrzeilige Code-Blöcke */
+pre code {
+  display: block;
+  white-space: pre;
+  padding: 0.75em 1em;
+  overflow-x: auto;
+  line-height: 1.5;
+}
+
+/* -----------------------------------------------------------------
+   Dark Mode – wird über die Klasse .app-dark auf <html> aktiviert.
+   PrimeNG-Komponenten wechseln automatisch (via darkModeSelector).
+   Hier nur ein paar Tailwind-Klassen der Layout-Karten mitfärben.
+   ----------------------------------------------------------------- */
+html.app-dark {
+  --surface-ground: #0b1220;
+  color-scheme: dark;
+}
+
+html.app-dark body { color: #e2e8f0; }
+
+html.app-dark .bg-white       { background-color: #1e293b !important; }
+html.app-dark .bg-slate-50    { background-color: rgb(30 41 59 / 0.6) !important; }
+html.app-dark .bg-slate-100   { background-color: #1e293b !important; }
+html.app-dark .bg-slate-200   { background-color: #334155 !important; }
+html.app-dark .hover\:bg-slate-100:hover { background-color: #1e293b !important; }
+html.app-dark .hover\:bg-slate-200:hover { background-color: #334155 !important; }
+
+html.app-dark .text-slate-800 { color: #f1f5f9 !important; }
+html.app-dark .text-slate-700 { color: #e2e8f0 !important; }
+html.app-dark .text-slate-600 { color: #cbd5e1 !important; }
+html.app-dark .text-slate-500 { color: #94a3b8 !important; }
+html.app-dark .text-slate-400 { color: #94a3b8 !important; }
+html.app-dark .text-slate-300 { color: #64748b !important; }
+
+html.app-dark .border-slate-200 { border-color: #334155 !important; }
+html.app-dark .border-slate-300 { border-color: #475569 !important; }
+
+/* Akzent-Hintergründe: deutlicher machen, damit Auswahl sichtbar ist */
+html.app-dark .bg-green-50  { background-color: rgb(22 101 52 / 0.45) !important; }
+html.app-dark .bg-red-50    { background-color: rgb(153 27 27 / 0.45) !important; }
+html.app-dark .bg-blue-50   { background-color: rgb(30 58 138 / 0.5) !important; }
+html.app-dark .bg-amber-50  { background-color: rgb(120 53 15 / 0.4) !important; }
+
+/* Hover-Varianten (sonst wird im Dark Mode z.B. bg-blue-50 grellweiß) */
+html.app-dark .hover\:bg-blue-50:hover   { background-color: rgb(30 58 138 / 0.45) !important; }
+html.app-dark .hover\:bg-green-50:hover  { background-color: rgb(22 101 52 / 0.4) !important; }
+html.app-dark .hover\:border-blue-400:hover { border-color: #60a5fa !important; }
+
+html.app-dark .border-green-200 { border-color: rgb(22 101 52 / 0.6) !important; }
+html.app-dark .border-red-200   { border-color: rgb(153 27 27 / 0.6) !important; }
+html.app-dark .border-blue-200  { border-color: rgb(30 64 175 / 0.6) !important; }
+html.app-dark .border-amber-200 { border-color: rgb(146 64 14 / 0.6) !important; }
+
+html.app-dark .text-green-800 { color: #86efac !important; }
+html.app-dark .text-green-700 { color: #86efac !important; }
+html.app-dark .text-red-800   { color: #fca5a5 !important; }
+html.app-dark .text-red-700   { color: #fca5a5 !important; }
+html.app-dark .text-blue-900  { color: #dbeafe !important; }
+html.app-dark .text-blue-800  { color: #bfdbfe !important; }
+html.app-dark .text-blue-700  { color: #93c5fd !important; }
+html.app-dark .text-amber-700 { color: #fcd34d !important; }
+html.app-dark .text-amber-800 { color: #fcd34d !important; }
+html.app-dark .text-amber-900 { color: #fde68a !important; }
+
+html.app-dark .prose h4,
+html.app-dark .prose strong { color: #f1f5f9 !important; }
+html.app-dark .prose p,
+html.app-dark .prose ul,
+html.app-dark .prose li { color: #cbd5e1 !important; }
+
+/* Inline-Code im Dark Mode */
+html.app-dark code {
+  background-color: #1e293b;
+  border-color: #334155;
+  color: #c4b5fd;
 }

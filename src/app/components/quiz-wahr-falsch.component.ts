@@ -1,6 +1,6 @@
 import { Component, input, output, inject } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { WahrFalschUebung } from '../models/app.models';
+import { WahrFalschUebung, ExamAntwortDetail } from '../models/app.models';
 
 @Component({
   selector: 'app-quiz-wahr-falsch',
@@ -16,7 +16,7 @@ import { WahrFalschUebung } from '../models/app.models';
       }
 
       <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-        <p class="text-blue-900 font-medium text-lg italic">"{{ uebung().aussage }}"</p>
+        <p class="text-blue-900 font-medium text-lg italic"><span [innerHTML]="sanitize(uebung().aussage)"></span></p>
       </div>
 
       <div class="flex gap-4">
@@ -36,13 +36,19 @@ import { WahrFalschUebung } from '../models/app.models';
         </button>
       </div>
 
-      @if (beantwortet) {
+      @if (beantwortet && !examModus()) {
         <div class="p-4 rounded-lg"
              [class]="istRichtig ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'">
           <p class="font-semibold mb-1" [class]="istRichtig ? 'text-green-800' : 'text-red-800'">
             {{ istRichtig ? 'Richtig!' : 'Leider falsch!' }}
           </p>
           <p class="text-slate-700 text-sm">{{ uebung().erklaerung }}</p>
+        </div>
+      }
+
+      @if (beantwortet && examModus()) {
+        <div class="p-3 rounded-lg bg-slate-50 border border-slate-200">
+          <p class="text-slate-500 text-sm"><i class="pi pi-lock mr-1"></i>Antwort gespeichert – Auswertung nach der Prüfung.</p>
         </div>
       }
     </div>
@@ -52,7 +58,9 @@ export class QuizWahrFalschComponent {
   private sanitizer = inject(DomSanitizer);
 
   uebung = input.required<WahrFalschUebung>();
+  examModus = input(false);
   beantwortetEvent = output<boolean>();
+  examAntwortEvent = output<ExamAntwortDetail>();
 
   beantwortet = false;
   gewaehlteAntwort?: boolean;
@@ -67,6 +75,7 @@ export class QuizWahrFalschComponent {
     this.gewaehlteAntwort = antwort;
     this.istRichtig = antwort === this.uebung().korrekt;
     this.beantwortet = true;
+    this.examAntwortEvent.emit({ typ: 'wahr-falsch', wfGewaehlterWert: antwort });
     this.beantwortetEvent.emit(this.istRichtig);
   }
 
@@ -74,12 +83,13 @@ export class QuizWahrFalschComponent {
     if (!this.beantwortet) {
       return 'border-slate-200 hover:border-blue-400 hover:bg-blue-50 cursor-pointer text-slate-700';
     }
-    if (wert === this.uebung().korrekt) {
-      return 'border-green-500 bg-green-50 text-green-800';
+    if (this.examModus()) {
+      return wert === this.gewaehlteAntwort
+        ? 'border-blue-400 bg-blue-50 text-blue-800'
+        : 'border-slate-200 opacity-50 text-slate-400';
     }
-    if (wert === this.gewaehlteAntwort) {
-      return 'border-red-500 bg-red-50 text-red-800';
-    }
+    if (wert === this.uebung().korrekt) return 'border-green-500 bg-green-50 text-green-800';
+    if (wert === this.gewaehlteAntwort) return 'border-red-500 bg-red-50 text-red-800';
     return 'border-slate-200 opacity-50 text-slate-400';
   }
 }

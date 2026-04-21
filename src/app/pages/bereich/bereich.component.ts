@@ -34,6 +34,39 @@ import { Themenbereich, ThemaInfo } from '../../models/app.models';
         </div>
       </div>
 
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
+        @if (progress.getFalscheAnzahlBereich(bereich.id) > 0) {
+          <a [routerLink]="['/wiederholen', bereich.id]"
+             class="flex items-center justify-between gap-3 p-4 rounded-xl border border-amber-200 bg-amber-50 no-underline hover:bg-amber-100 transition-colors">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-lg bg-amber-200 flex items-center justify-center">
+                <i class="pi pi-refresh text-amber-800"></i>
+              </div>
+              <div>
+                <p class="font-semibold text-amber-900">Falsche Fragen wiederholen</p>
+                <p class="text-sm text-amber-800">{{ progress.getFalscheAnzahlBereich(bereich.id) }} offene Frage(n)</p>
+              </div>
+            </div>
+            <i class="pi pi-arrow-right text-amber-800"></i>
+          </a>
+        }
+        @if (progress.getGemerkteAnzahlBereich(bereich.id) > 0) {
+          <a [routerLink]="['/gemerkt', bereich.id]"
+             class="flex items-center justify-between gap-3 p-4 rounded-xl border border-blue-200 bg-blue-50 no-underline hover:bg-blue-100 transition-colors">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-lg bg-blue-200 flex items-center justify-center">
+                <i class="pi pi-bookmark-fill text-blue-800"></i>
+              </div>
+              <div>
+                <p class="font-semibold text-blue-900">Gemerkte Fragen wiederholen</p>
+                <p class="text-sm text-blue-800">{{ progress.getGemerkteAnzahlBereich(bereich.id) }} Frage(n) gemerkt</p>
+              </div>
+            </div>
+            <i class="pi pi-arrow-right text-blue-800"></i>
+          </a>
+        }
+      </div>
+
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         @for (thema of themen; track thema.id) {
           <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
@@ -65,10 +98,17 @@ import { Themenbereich, ThemaInfo } from '../../models/app.models';
                   </a>
                 }
                 @if (thema.hatQuiz) {
-                  <a [routerLink]="['/ueben', thema.id]"
-                     class="flex-1 min-w-[100px] inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium no-underline transition-colors bg-slate-100 text-slate-700 hover:bg-slate-200">
-                    <i class="pi pi-pencil"></i> Üben
-                  </a>
+                  @if (progress.getVersuch(thema.id); as versuch) {
+                    <a [routerLink]="['/ueben', thema.id]"
+                       class="flex-1 min-w-[100px] inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium no-underline transition-colors bg-blue-100 text-blue-700 hover:bg-blue-200">
+                      <i class="pi pi-play"></i> Fortsetzen
+                    </a>
+                  } @else {
+                    <a [routerLink]="['/ueben', thema.id]"
+                       class="flex-1 min-w-[100px] inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium no-underline transition-colors bg-slate-100 text-slate-700 hover:bg-slate-200">
+                      <i class="pi pi-pencil"></i> Üben
+                    </a>
+                  }
                 }
                 @if (thema.hatKarteikarten) {
                   <a [routerLink]="['/karteikarten', thema.id]"

@@ -188,6 +188,35 @@ Gegenmaßnahme: Frühzeitige Schnittstellen-Abstimmung, Adapter/Middleware einpl
         ],
         korrekteAntwort: 1,
         erklaerung: 'Kernkompetenzen bleiben im Haus, Nebenthemen werden gern fremdvergeben (Konzentration auf das Wesentliche).'
+      },
+      {
+        typ: 'zuordnung',
+        frage: 'Ordne die Arten der Machbarkeitsanalyse ihrem Prüfgegenstand zu (AP2 Winter 2025).',
+        paare: [
+          { begriff: 'Technische Machbarkeit', definition: 'Vorhandene IT-Infrastruktur, technische Umsetzbarkeit, Schnittstellen' },
+          { begriff: 'Wirtschaftliche Machbarkeit', definition: 'Investitionsrechnung, Kosten/Nutzen, ROI' },
+          { begriff: 'Organisatorische Machbarkeit', definition: 'Ressourcen- und Kapazitätsverfügbarkeit, Zeitrahmen' },
+          { begriff: 'Rechtliche Machbarkeit', definition: 'Gesetze, Datenschutz, Branchenvorschriften' }
+        ],
+        erklaerung: 'Vor dem Projektstart wird in der Machbarkeitsstudie geprüft, ob ein Projekt überhaupt realisierbar ist. Die 4 Dimensionen werden häufig gleichzeitig abgefragt.'
+      },
+      {
+        typ: 'freitext',
+        frage: 'Was versteht man unter Prototyping und wann ist es sinnvoll? (AP2 Winter 2025)',
+        musterloesung: `Prototyping = Erstellung einer vereinfachten, funktionsreduzierten Vorversion eines Systems.
+
+Sinnvoll wenn:
+- Anforderungen unklar oder schwer zu beschreiben sind (User sehen schneller was möglich ist).
+- Technische Machbarkeit einer komplexen Lösung getestet werden soll.
+- Der Aufwand verschiedener Lösungsansätze verglichen werden soll.
+- Entscheidungen anhand konkreter Demos getroffen werden müssen.
+
+Arten:
+- Wegwerf-Prototyp (Exploratives): dient nur der Klärung, wird nicht weiter verwendet.
+- Evolutionärer Prototyp: wird schrittweise zum fertigen Produkt weiterentwickelt.
+- Rapid Prototyping: Tools (Figma, Mockup-Tools) für schnelle UI-Prototypen.`,
+        erklaerung: 'AP2 Winter 2025, Aufgabe 3c. Prototyping gehört zu den iterativen Entwicklungsansätzen.',
+        stichwoerter: ['vereinfachte', 'Vorversion', 'Machbarkeit', 'Anforderungen']
       }
     ]
   },

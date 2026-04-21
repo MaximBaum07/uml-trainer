@@ -1,6 +1,7 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, inject, OnInit } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Button } from 'primeng/button';
-import { ZuordnungUebung, ZuordnungPaar } from '../models/app.models';
+import { ZuordnungUebung, ZuordnungPaar, ExamAntwortDetail } from '../models/app.models';
 
 @Component({
   selector: 'app-quiz-zuordnung',
@@ -8,7 +9,7 @@ import { ZuordnungUebung, ZuordnungPaar } from '../models/app.models';
   imports: [Button],
   template: `
     <div class="space-y-4">
-      <p class="text-lg font-medium text-slate-800">{{ uebung().frage }}</p>
+      <p class="text-lg font-medium text-slate-800"><span [innerHTML]="sanitize(uebung().frage)"></span></p>
       <p class="text-sm text-slate-500">Klicke zuerst auf einen Begriff (links), dann auf die passende Definition (rechts).</p>
 
       <div class="grid grid-cols-2 gap-4">
@@ -57,7 +58,7 @@ import { ZuordnungUebung, ZuordnungPaar } from '../models/app.models';
                 (click)="pruefen()" />
       }
 
-      @if (beantwortet) {
+      @if (beantwortet && !examModus()) {
         <div class="p-4 rounded-lg"
              [class]="alleRichtig ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'">
           <p class="font-semibold mb-2" [class]="alleRichtig ? 'text-green-800' : 'text-red-800'">
@@ -78,12 +79,26 @@ import { ZuordnungUebung, ZuordnungPaar } from '../models/app.models';
           <p class="text-slate-700 text-sm">{{ uebung().erklaerung }}</p>
         </div>
       }
+
+      @if (beantwortet && examModus()) {
+        <div class="p-3 rounded-lg bg-slate-50 border border-slate-200">
+          <p class="text-slate-500 text-sm"><i class="pi pi-lock mr-1"></i>Antwort gespeichert – Auswertung nach der Prüfung.</p>
+        </div>
+      }
     </div>
   `
 })
-export class QuizZuordnungComponent {
+export class QuizZuordnungComponent implements OnInit {
+  private sanitizer = inject(DomSanitizer);
+
   uebung = input.required<ZuordnungUebung>();
+  examModus = input(false);
   beantwortetEvent = output<boolean>();
+  examAntwortEvent = output<ExamAntwortDetail>();
+
+  sanitize(html: string): SafeHtml {
+    return this.sanitizer.bypassSecurityTrustHtml(html);
+  }
 
   gemischteBegriffe: ZuordnungPaar[] = [];
   gemischteDefinitionen: ZuordnungPaar[] = [];
@@ -96,7 +111,7 @@ export class QuizZuordnungComponent {
   richtigeAnzahl = 0;
 
   ngOnInit(): void {
-    this.gemischteBegriffe = [...this.uebung().paare];
+    this.gemischteBegriffe = this.mischen([...this.uebung().paare]);
     this.gemischteDefinitionen = this.mischen([...this.uebung().paare]);
   }
 
@@ -125,6 +140,7 @@ export class QuizZuordnungComponent {
     }
     this.alleRichtig = this.richtigeAnzahl === this.uebung().paare.length;
     this.beantwortet = true;
+    this.examAntwortEvent.emit({ typ: 'zuordnung', zuordnungen: [...this.zuordnungen] });
     this.beantwortetEvent.emit(this.alleRichtig);
   }
 
