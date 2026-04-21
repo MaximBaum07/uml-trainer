@@ -197,6 +197,51 @@ export interface PruefungsFrage {
   bereichName: string;
 }
 
+// ------- IHK-Prüfungsbogen (realistische Handlungsschritt-Aufgaben) -------
+
+export interface IhkTeilaufgabe {
+  /** Kennung wie 'a', 'b', 'ba', 'bb', 'c' – IHK-Schema */
+  id: string;
+  punkte: number;
+  text: string;
+  /** Optionaler Anlagen-Hinweis (z.B. "Siehe Anlage 2"). */
+  anlage?: string;
+  /** Zeilen für die handschriftliche Antwort (Standard: passend zu Punkten). */
+  antwortZeilen?: number;
+  /** Optional – Musterlösung, wird im PDF-Bogen NICHT gedruckt. */
+  loesungshinweis?: string;
+}
+
+export interface IhkAufgabe {
+  nummer: number;
+  titel: string;
+  /** Einleitender Text / Handlungsschritt-Beschreibung. HTML erlaubt. */
+  einleitung: string;
+  /** Gesamtpunkte dieser Aufgabe (Summe der Teilaufgaben). */
+  punkte: number;
+  teilaufgaben: IhkTeilaufgabe[];
+}
+
+export interface IhkPruefungsBogen {
+  /** Zuordnung zu einer PruefungsConfig-ID, z.B. 'ap2-fachaufgabe-1'. */
+  configId: string;
+  /** Nummer auf der Deckseite: 1 = Teil 1 (Planen), 2 = Teil 2 (Algorithmen), 3 = WiSo. */
+  teilNummer: 1 | 2 | 3;
+  /** Titel wie "Planen eines Softwareproduktes". */
+  titel: string;
+  /** Untertitel wie "Teil 2 der Abschlussprüfung". */
+  untertitel: string;
+  /** Saison-Kennung wie "Sommer 2026". */
+  saison: string;
+  /** Simulierter Prüfungstermin. */
+  termin: string;
+  zeitMinuten: number;
+  gesamtpunkte: number;
+  /** Ausgangssituation / Unternehmenskontext (eingerahmt oben im Aufgabenteil). HTML erlaubt. */
+  belegsatz: string;
+  aufgaben: IhkAufgabe[];
+}
+
 export interface PruefungsErgebnisState {
   configName: string;
   fragen: PruefungsFrage[];

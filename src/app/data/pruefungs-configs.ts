@@ -5,19 +5,29 @@ import { ALLE_UEBUNGS_SETS } from './alle-uebungen';
 
 export const PRUEFUNGS_CONFIGS: PruefungsConfig[] = [
   {
-    id: 'ap2-fachlich',
-    name: 'AP2 Fachlicher Teil – Simulation',
-    beschreibung: '90 Minuten, 40 Fragen aus allen fachlichen Themen – wie die echte Prüfung.',
+    id: 'ap2-fachaufgabe-1',
+    name: 'Teil 1 – Planen eines Softwareproduktes',
+    beschreibung: '90 Minuten, 100 Punkte, 4 Aufgaben mit Belegsatz – wie die echte AP2 Teil 1.',
     fragenAnzahl: 40,
     zeitlimitMinuten: 90,
-    icon: 'pi pi-graduation-cap',
+    icon: 'pi pi-bookmark',
     farbe: '#3B82F6',
     kategorie: 'fachlich'
   },
   {
+    id: 'ap2-fachaufgabe-2',
+    name: 'Teil 2 – Entwicklung und Umsetzung von Algorithmen',
+    beschreibung: '90 Minuten, 100 Punkte, 4 Aufgaben mit Belegsatz – wie die echte AP2 Teil 2.',
+    fragenAnzahl: 40,
+    zeitlimitMinuten: 90,
+    icon: 'pi pi-code',
+    farbe: '#8B5CF6',
+    kategorie: 'fachlich'
+  },
+  {
     id: 'ap2-wiso',
-    name: 'WiSo – Simulation',
-    beschreibung: '60 Minuten, 30 Fragen aus allen WiSo-Themen – wie die echte Prüfung.',
+    name: 'Teil 3 – Wirtschafts- und Sozialkunde',
+    beschreibung: '60 Minuten, 100 Punkte – WiSo-Teil der AP2.',
     fragenAnzahl: 30,
     zeitlimitMinuten: 60,
     icon: 'pi pi-building',
