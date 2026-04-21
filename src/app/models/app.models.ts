@@ -2,7 +2,7 @@
 // Ein Themenbereich (z.B. "SQL") bündelt mehrere Themen (z.B. "SELECT-Basics", "JOINs").
 // Jedes Thema kann Theorie, Quiz-Übungen und/oder Karteikarten enthalten.
 
-export type Kategorie = 'fachlich' | 'wiso';
+export type Kategorie = 'fachlich' | 'wiso' | 'englisch';
 
 export type ThemenbereichId = string;   // z.B. 'uml', 'sql', 'wiso-arbeitsrecht'
 export type ThemaId = string;           // z.B. 'uml-klassendiagramm', 'sql-joins'

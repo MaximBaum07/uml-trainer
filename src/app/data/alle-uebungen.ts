@@ -7,6 +7,7 @@ import { ALGO_UEBUNGEN } from './algorithmen-exercises';
 import { PM_UEBUNGEN } from './projektmanagement-exercises';
 import { QS_UEBUNGEN } from './qualitaet-exercises';
 import { WISO_UEBUNGEN } from './wiso-exercises';
+import { ENGLISCH_UEBUNGEN } from './englisch-exercises';
 
 export const ALLE_UEBUNGS_SETS: UebungsSet[] = [
   ...UML_UEBUNGEN,
@@ -16,5 +17,6 @@ export const ALLE_UEBUNGS_SETS: UebungsSet[] = [
   ...ALGO_UEBUNGEN,
   ...PM_UEBUNGEN,
   ...QS_UEBUNGEN,
-  ...WISO_UEBUNGEN
+  ...WISO_UEBUNGEN,
+  ...ENGLISCH_UEBUNGEN
 ];

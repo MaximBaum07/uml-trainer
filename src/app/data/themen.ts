@@ -461,6 +461,41 @@ export const THEMEN: ThemaInfo[] = [
     hatTheorie: true,
     hatQuiz: true,
     hatKarteikarten: true
+  },
+
+  // ============== Englisch ==============
+  {
+    id: 'englisch-vokabular',
+    bereichId: 'englisch',
+    name: 'IT Vocabulary',
+    beschreibung: 'Technical terms, translations and IT-specific English vocabulary',
+    icon: 'pi pi-book',
+    farbe: '#DC2626',
+    hatTheorie: true,
+    hatQuiz: true,
+    hatKarteikarten: false
+  },
+  {
+    id: 'englisch-leseverstehen',
+    bereichId: 'englisch',
+    name: 'Reading Comprehension',
+    beschreibung: 'Understanding IT texts in English – Cloud, Agile, Cybersecurity',
+    icon: 'pi pi-file-word',
+    farbe: '#B91C1C',
+    hatTheorie: true,
+    hatQuiz: true,
+    hatKarteikarten: false
+  },
+  {
+    id: 'englisch-pruefung',
+    bereichId: 'englisch',
+    name: 'AP2 Exam Tasks',
+    beschreibung: '1:1 Prüfungsaufgaben aus echten AP2-Prüfungen auf Englisch',
+    icon: 'pi pi-graduation-cap',
+    farbe: '#991B1B',
+    hatTheorie: true,
+    hatQuiz: true,
+    hatKarteikarten: false
   }
 ];
 

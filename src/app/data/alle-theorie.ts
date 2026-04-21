@@ -7,6 +7,7 @@ import { ALGO_THEORIE } from './algorithmen-content';
 import { PM_THEORIE } from './projektmanagement-content';
 import { QS_THEORIE } from './qualitaet-content';
 import { WISO_THEORIE } from './wiso-content';
+import { ENGLISCH_THEORIE } from './englisch-content';
 
 export const ALLE_THEORIE_INHALTE: TheorieInhalt[] = [
   ...UML_THEORIE,
@@ -16,5 +17,6 @@ export const ALLE_THEORIE_INHALTE: TheorieInhalt[] = [
   ...ALGO_THEORIE,
   ...PM_THEORIE,
   ...QS_THEORIE,
-  ...WISO_THEORIE
+  ...WISO_THEORIE,
+  ...ENGLISCH_THEORIE
 ];

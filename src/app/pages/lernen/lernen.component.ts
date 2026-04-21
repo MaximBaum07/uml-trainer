@@ -40,7 +40,7 @@ import { ThemaId, TheorieInhalt, ThemaInfo } from '../../models/app.models';
             <p class="text-slate-500">{{ thema.beschreibung }}</p>
           </div>
         </div>
-        <p class="text-slate-700 leading-relaxed text-lg">{{ inhalt.einleitung }}</p>
+        <p class="text-slate-700 leading-relaxed text-lg" [innerHTML]="sanitize(inhalt.einleitung)"></p>
       </div>
 
       <p-accordion [multiple]="true" [value]="geoeffneteAbschnitte">
@@ -71,7 +71,7 @@ import { ThemaId, TheorieInhalt, ThemaInfo } from '../../models/app.models';
           @for (tipp of inhalt.pruefungsTipps; track tipp) {
             <li class="flex items-start gap-2 text-amber-900">
               <i class="pi pi-check-circle mt-0.5 text-amber-600"></i>
-              <span>{{ tipp }}</span>
+              <span [innerHTML]="sanitize(tipp)"></span>
             </li>
           }
         </ul>

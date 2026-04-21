@@ -106,6 +106,20 @@ export const THEMENBEREICHE: Themenbereich[] = [
       'qs-review'
     ]
   },
+  // ---------------- Englisch ----------------
+  {
+    id: 'englisch',
+    name: 'Englisch',
+    beschreibung: 'IT-Fachvokabular, Leseverstehen und Prüfungsaufgaben auf Englisch',
+    icon: 'pi pi-globe',
+    farbe: '#DC2626',
+    kategorie: 'englisch',
+    themenIds: [
+      'englisch-vokabular',
+      'englisch-leseverstehen',
+      'englisch-pruefung'
+    ]
+  },
   // ---------------- WiSo ----------------
   {
     id: 'wiso',
