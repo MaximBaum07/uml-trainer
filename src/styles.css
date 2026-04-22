@@ -75,11 +75,11 @@ html.app-dark {
 
 html.app-dark body { color: #e2e8f0; }
 
-html.app-dark .bg-white       { background-color: #1e293b !important; }
-html.app-dark .bg-slate-50    { background-color: rgb(30 41 59 / 0.6) !important; }
-html.app-dark .bg-slate-100   { background-color: #1e293b !important; }
+html.app-dark .bg-white       { background-color: #172033 !important; }
+html.app-dark .bg-slate-50    { background-color: #1e293b !important; }
+html.app-dark .bg-slate-100   { background-color: #253548 !important; }
 html.app-dark .bg-slate-200   { background-color: #334155 !important; }
-html.app-dark .hover\:bg-slate-100:hover { background-color: #1e293b !important; }
+html.app-dark .hover\:bg-slate-100:hover { background-color: #253548 !important; }
 html.app-dark .hover\:bg-slate-200:hover { background-color: #334155 !important; }
 
 html.app-dark .text-slate-800 { color: #f1f5f9 !important; }
@@ -96,11 +96,20 @@ html.app-dark .border-slate-300 { border-color: #475569 !important; }
 html.app-dark .bg-green-50  { background-color: rgb(22 101 52 / 0.45) !important; }
 html.app-dark .bg-red-50    { background-color: rgb(153 27 27 / 0.45) !important; }
 html.app-dark .bg-blue-50   { background-color: rgb(30 58 138 / 0.5) !important; }
-html.app-dark .bg-amber-50  { background-color: rgb(120 53 15 / 0.4) !important; }
+html.app-dark .bg-amber-50  { background-color: #1c1507 !important; }
+html.app-dark .bg-amber-100 { background-color: #251c09 !important; }
+html.app-dark .bg-red-100   { background-color: rgb(127 29 29 / 0.35) !important; }
+html.app-dark .bg-blue-100  { background-color: rgb(30 58 138 / 0.35) !important; }
+html.app-dark .bg-green-100 { background-color: rgb(20 83 45 / 0.35) !important; }
+html.app-dark .bg-violet-100 { background-color: rgb(76 29 149 / 0.4) !important; }
+html.app-dark .bg-purple-100 { background-color: rgb(88 28 135 / 0.4) !important; }
+html.app-dark .bg-emerald-100 { background-color: rgb(6 78 59 / 0.4) !important; }
+html.app-dark .bg-cyan-100  { background-color: rgb(8 51 68 / 0.4) !important; }
 
 /* Hover-Varianten (sonst wird im Dark Mode z.B. bg-blue-50 grellweiß) */
 html.app-dark .hover\:bg-blue-50:hover   { background-color: rgb(30 58 138 / 0.45) !important; }
 html.app-dark .hover\:bg-green-50:hover  { background-color: rgb(22 101 52 / 0.4) !important; }
+html.app-dark .hover\:bg-amber-100:hover { background-color: #2d2210 !important; }
 html.app-dark .hover\:border-blue-400:hover { border-color: #60a5fa !important; }
 
 html.app-dark .border-green-200 { border-color: rgb(22 101 52 / 0.6) !important; }
@@ -112,12 +121,22 @@ html.app-dark .text-green-800 { color: #86efac !important; }
 html.app-dark .text-green-700 { color: #86efac !important; }
 html.app-dark .text-red-800   { color: #fca5a5 !important; }
 html.app-dark .text-red-700   { color: #fca5a5 !important; }
+html.app-dark .text-red-600   { color: #f87171 !important; }
 html.app-dark .text-blue-900  { color: #dbeafe !important; }
 html.app-dark .text-blue-800  { color: #bfdbfe !important; }
 html.app-dark .text-blue-700  { color: #93c5fd !important; }
+html.app-dark .text-blue-600  { color: #60a5fa !important; }
 html.app-dark .text-amber-700 { color: #fcd34d !important; }
 html.app-dark .text-amber-800 { color: #fcd34d !important; }
 html.app-dark .text-amber-900 { color: #fde68a !important; }
+html.app-dark .text-amber-600 { color: #fbbf24 !important; }
+html.app-dark .text-violet-800 { color: #c4b5fd !important; }
+html.app-dark .text-violet-700 { color: #c4b5fd !important; }
+html.app-dark .text-purple-800 { color: #d8b4fe !important; }
+html.app-dark .text-emerald-800 { color: #6ee7b7 !important; }
+html.app-dark .text-emerald-700 { color: #6ee7b7 !important; }
+html.app-dark .text-cyan-800  { color: #67e8f9 !important; }
+html.app-dark .text-green-600 { color: #4ade80 !important; }
 
 html.app-dark .prose h4,
 html.app-dark .prose strong { color: #f1f5f9 !important; }

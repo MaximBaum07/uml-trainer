@@ -266,118 +266,291 @@ import {
         </a>
         <p-button label="Drucken / Als PDF speichern" icon="pi pi-print" (click)="drucken()" />
       </div>
-      <div class="pdf-bogen bg-white shadow-sm border border-slate-200 mx-auto p-10">
-        <div class="pdf-header border-b-2 border-slate-800 pb-4 mb-6">
-          <div class="flex justify-between items-start mb-2">
-            <div>
-              <p class="text-xs uppercase tracking-wider text-slate-600">Abschlussprüfung Teil 2</p>
-              <h1 class="text-2xl font-bold text-slate-900 mt-1">{{ config.name }}</h1>
-            </div>
-            <div class="text-right text-xs text-slate-600">
-              <p>Datum: {{ heute }}</p>
-              <p>Bearbeitungszeit: {{ config.zeitlimitMinuten }} Minuten</p>
-              <p>Aufgaben: {{ fragen.length }}</p>
-            </div>
-          </div>
-          <div class="grid grid-cols-2 gap-6 mt-4 text-xs">
-            <div>
-              <span class="text-slate-600">Name, Vorname:</span>
-              <div class="border-b border-slate-400 h-6 mt-1"></div>
-            </div>
-            <div>
-              <span class="text-slate-600">Prüflings-Nr.:</span>
-              <div class="border-b border-slate-400 h-6 mt-1"></div>
-            </div>
-          </div>
-        </div>
-        <div class="pdf-hinweise text-xs text-slate-700 mb-6 p-3 bg-slate-50 border border-slate-200">
-          <p class="font-semibold mb-1">Hinweise zur Bearbeitung</p>
-          <ul class="list-disc ml-5 space-y-0.5">
-            <li>Beantworten Sie alle Aufgaben in den dafür vorgesehenen Feldern.</li>
-            <li>Zulässige Hilfsmittel: nicht programmierbarer Taschenrechner.</li>
-            <li>Tragen Sie bei Multiple-Choice-Fragen den Buchstaben der richtigen Antwort ein.</li>
-          </ul>
-        </div>
 
-        @for (frage of fragen; track $index) {
-          <div class="pdf-aufgabe mb-6 pb-4 border-b border-slate-200 break-inside-avoid">
-            <div class="flex items-start gap-2 mb-2">
-              <span class="font-bold text-slate-800">Aufgabe {{ $index + 1 }}.</span>
-              <span class="text-xs text-slate-500 mt-1">{{ frage.bereichName }} · {{ frage.themaName }} · {{ getTypLabel(frage.uebung.typ) }}</span>
-            </div>
-            @switch (frage.uebung.typ) {
-              @case ('multiple-choice') {
-                <div class="text-sm text-slate-900 mb-2" [innerHTML]="sanitize(asMultipleChoice(frage.uebung).frage)"></div>
-                @if (asMultipleChoice(frage.uebung).svgDiagramm) {
-                  <div class="my-2" [innerHTML]="sanitize(asMultipleChoice(frage.uebung).svgDiagramm!)"></div>
-                }
-                <ol class="text-sm text-slate-900 mt-2 space-y-1" style="list-style-type: upper-alpha; padding-left: 1.5rem;">
-                  @for (opt of asMultipleChoice(frage.uebung).optionen; track $index) {
-                    <li [innerHTML]="sanitize(opt)"></li>
+      @if (config.kategorie === 'wiso') {
+        <!-- ===== IHK WiSo-Bogen (dynamisch, variiert jedes Mal) ===== -->
+        <div class="pdf-bogen bg-white shadow-sm border border-slate-200 mx-auto">
+
+          <!-- DECKBLATT -->
+          <section class="pdf-deckblatt px-12 pt-10 pb-8 page-break-after">
+            <div class="flex justify-between items-start mb-4">
+              <div class="flex-1">
+                <p class="text-xs font-semibold text-slate-800 mb-1">Diese Kopfleiste bitte unbedingt ausfüllen!</p>
+                <p class="text-[10px] text-slate-600 mb-1">Familienname, Vorname (bitte durch eine Leerspalte trennen)</p>
+                <div class="border border-slate-800 mb-3" style="display: grid; grid-template-columns: repeat(24, 1fr);">
+                  @for (_ of [].constructor(24); track $index) {
+                    <div class="border-r border-slate-400 h-6 last:border-r-0"></div>
                   }
-                </ol>
-                <div class="mt-3 text-xs text-slate-600">
-                  Ihre Antwort: <span class="inline-block border-b border-slate-500 w-20 ml-1"></span>
                 </div>
-              }
-              @case ('wahr-falsch') {
-                <div class="text-sm text-slate-900 mb-2" [innerHTML]="sanitize(asWahrFalsch(frage.uebung).aussage)"></div>
-                @if (asWahrFalsch(frage.uebung).svgDiagramm) {
-                  <div class="my-2" [innerHTML]="sanitize(asWahrFalsch(frage.uebung).svgDiagramm!)"></div>
-                }
-                <div class="mt-3 text-xs text-slate-600 flex gap-6">
-                  <span><span class="inline-block w-4 h-4 border border-slate-700 align-middle mr-1"></span>Wahr</span>
-                  <span><span class="inline-block w-4 h-4 border border-slate-700 align-middle mr-1"></span>Falsch</span>
-                </div>
-              }
-              @case ('lueckentext') {
-                <div class="text-sm text-slate-900 mb-2" [innerHTML]="sanitize(asLueckentext(frage.uebung).frage)"></div>
-                <div class="mt-3 text-xs text-slate-600">
-                  Antwort: <span class="inline-block border-b border-slate-500 flex-1" style="display: inline-block; width: 70%;"></span>
-                </div>
-              }
-              @case ('zuordnung') {
-                <div class="text-sm text-slate-900 mb-2" [innerHTML]="sanitize(asZuordnung(frage.uebung).frage)"></div>
-                <div class="grid grid-cols-2 gap-4 mt-3 text-sm">
+                <div class="flex gap-3 items-end">
                   <div>
-                    <p class="font-semibold text-xs text-slate-600 mb-1">Begriffe</p>
-                    <ol class="space-y-1" style="list-style-type: decimal; padding-left: 1.25rem;">
-                      @for (p of asZuordnung(frage.uebung).paare; track $index) {
-                        <li>{{ p.begriff }}</li>
-                      }
-                    </ol>
+                    <p class="text-[9px] text-slate-600">Bereich</p>
+                    <div class="flex border border-slate-800">
+                      <div class="w-6 h-6 border-r border-slate-400 bg-blue-50 flex items-center justify-center text-xs font-bold">6</div>
+                      <div class="w-6 h-6 bg-blue-50 flex items-center justify-center text-xs font-bold">6</div>
+                    </div>
                   </div>
                   <div>
-                    <p class="font-semibold text-xs text-slate-600 mb-1">Definitionen</p>
-                    <ol class="space-y-1" style="list-style-type: upper-alpha; padding-left: 1.25rem;">
-                      @for (d of mischePaare(asZuordnung(frage.uebung).paare); track $index) {
-                        <li>{{ d.definition }}</li>
-                      }
-                    </ol>
+                    <p class="text-[9px] text-slate-600">Berufsnummer</p>
+                    <div class="flex border border-slate-800">
+                      <div class="w-6 h-6 border-r border-slate-400 bg-blue-50 flex items-center justify-center text-xs font-bold">1</div>
+                      <div class="w-6 h-6 border-r border-slate-400 bg-blue-50 flex items-center justify-center text-xs font-bold">2</div>
+                      <div class="w-6 h-6 border-r border-slate-400 bg-blue-50 flex items-center justify-center text-xs font-bold">0</div>
+                      <div class="w-6 h-6 bg-blue-50 flex items-center justify-center text-xs font-bold">1</div>
+                    </div>
                   </div>
+                  <div>
+                    <p class="text-[9px] text-slate-600">IHK-Nummer</p>
+                    <div class="flex border border-slate-800">
+                      @for (_ of [].constructor(3); track $index) {
+                        <div class="w-6 h-6 border-r border-slate-400 last:border-r-0"></div>
+                      }
+                    </div>
+                  </div>
+                  <div>
+                    <p class="text-[9px] text-slate-600">Prüflingsnummer</p>
+                    <div class="flex border border-slate-800">
+                      @for (_ of [].constructor(5); track $index) {
+                        <div class="w-6 h-6 border-r border-slate-400 last:border-r-0"></div>
+                      }
+                    </div>
+                  </div>
+                  <div class="ml-2 text-sm font-semibold text-slate-800">Termin: {{ heute }}</div>
                 </div>
-                <div class="mt-3 text-xs text-slate-600">Zuordnung (z.B. 1–C): <span class="inline-block border-b border-slate-500 w-40 ml-1"></span></div>
-              }
-              @case ('freitext') {
-                <div class="text-sm text-slate-900 mb-2" [innerHTML]="sanitize(asFreitext(frage.uebung).frage)"></div>
-                @if (asFreitext(frage.uebung).svgDiagramm) {
-                  <div class="my-2" [innerHTML]="sanitize(asFreitext(frage.uebung).svgDiagramm!)"></div>
-                }
-                <div class="mt-3 space-y-4">
-                  <div class="border-b border-slate-400 h-5"></div>
-                  <div class="border-b border-slate-400 h-5"></div>
-                  <div class="border-b border-slate-400 h-5"></div>
-                  <div class="border-b border-slate-400 h-5"></div>
-                </div>
-              }
-            }
-          </div>
-        }
+              </div>
+              <div class="ml-6 w-20 h-20 bg-slate-900 text-white flex items-center justify-center font-bold text-xl tracking-wider">IHK</div>
+            </div>
 
-        <div class="mt-8 pt-4 border-t border-slate-300 text-xs text-slate-500 text-center">
-          – Ende der Prüfung –
+            <div class="border-t-2 border-slate-800 pt-4 mt-2">
+              <h1 class="text-3xl font-bold text-slate-900">Abschlussprüfung Simulation {{ heute }}</h1>
+              <p class="text-lg text-slate-800 mt-1">1201</p>
+            </div>
+
+            <div class="flex items-start gap-6 mt-8">
+              <div class="w-20 h-28 bg-slate-900 text-white flex items-center justify-center text-6xl font-bold">3</div>
+              <div class="flex-1 pt-2">
+                <h2 class="text-xl font-bold text-slate-900 leading-tight">Wirtschafts- und Sozialkunde</h2>
+              </div>
+              <div class="text-right pt-2">
+                <p class="text-base text-slate-900 leading-tight">Fachinformatiker</p>
+                <p class="text-base text-slate-900 leading-tight">Fachinformatikerin</p>
+                <p class="text-base text-slate-900 leading-tight italic">Anwendungsentwicklung</p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-8 mt-10">
+              <div>
+                <h3 class="font-bold text-slate-900 text-base mb-3">Teil 3 der Abschlussprüfung</h3>
+                <ul class="text-sm text-slate-900 space-y-1 ml-4" style="list-style-type: none;">
+                  <li>{{ fragen.length }} Aufgaben</li>
+                  <li>{{ config.zeitlimitMinuten }} Minuten Prüfungszeit</li>
+                  <li>100 Punkte</li>
+                </ul>
+              </div>
+              <div>
+                <h3 class="font-bold text-slate-900 text-base mb-2">Bearbeitungshinweise</h3>
+                <ol class="text-[10px] text-slate-800 space-y-1 pl-4 leading-snug" style="list-style-type: decimal;">
+                  <li>Überprüfen Sie die <strong>Vollständigkeit</strong> dieses Aufgabensatzes.</li>
+                  <li>Füllen Sie zuerst die <strong>Kopfzeile</strong> aus.</li>
+                  <li>Lesen Sie die Aufgaben vollständig, bevor Sie beginnen.</li>
+                  <li>Tragen Sie bei Einfachauswahl-Aufgaben genau <strong>eine Ziffer</strong> ein.</li>
+                  <li>Bei Mehrfachauswahl: tragen Sie genau die <strong>geforderte Anzahl</strong> Ziffern ein.</li>
+                  <li>Zur Lösung von Rechenaufgaben darf ein nicht programmierter <strong>Taschenrechner</strong> verwendet werden.</li>
+                  <li>Schreiben Sie deutlich und gut lesbar – unleserliche Antworten werden als <strong>falsch</strong> gewertet.</li>
+                </ol>
+              </div>
+            </div>
+
+            <div class="mt-10 border-t border-slate-800 pt-4">
+              <p class="font-bold text-sm text-slate-900 mb-3">Wird vom Korrektor ausgefüllt!</p>
+              <div class="flex items-center gap-4">
+                <span class="font-semibold text-sm">Gesamtpunktzahl</span>
+                <div class="flex border border-slate-800">
+                  @for (_ of [].constructor(3); track $index) {
+                    <div class="w-7 h-7 border-r border-slate-400 last:border-r-0"></div>
+                  }
+                </div>
+                <div class="ml-auto text-right text-xs">
+                  <div class="border-b border-slate-500 w-48 h-6"></div>
+                  <p class="text-[10px] mt-1">Prüfungsort, Datum</p>
+                  <div class="border-b border-slate-500 w-48 h-6 mt-4"></div>
+                  <p class="text-[10px] mt-1">Unterschrift</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- AUFGABENTEIL -->
+          <section class="pdf-aufgabenteil px-12 py-8">
+            <!-- Ausgangssituation -->
+            <div class="pdf-ausgangssituation mb-6 p-4 border border-slate-800">
+              <div class="text-sm text-slate-900 leading-relaxed" [innerHTML]="sanitize(wisoAusgangssituation)"></div>
+            </div>
+
+            @for (frage of fragen; track $index) {
+              <div class="pdf-aufgabe mb-5 break-inside-avoid">
+
+                @if (frage.uebung.typ === 'multiple-choice') {
+                  <!-- Aufgabennummer + Thema -->
+                  <div class="flex items-baseline gap-2 mb-1">
+                    <span class="font-bold text-slate-900 text-sm">Aufgabe {{ $index + 1 }}</span>
+                    <span class="text-[10px] text-slate-500">({{ frage.themaName }})</span>
+                  </div>
+                  <!-- Fragetext -->
+                  <div class="text-sm text-slate-900 leading-snug mb-2 ml-1"
+                       [innerHTML]="sanitize(asMultipleChoice(frage.uebung).frage)"></div>
+                  <!-- Optionen mit Kästchen -->
+                  @for (opt of asMultipleChoice(frage.uebung).optionen; track $index) {
+                    <div class="flex items-start gap-2 mb-1 ml-1">
+                      <span class="text-sm text-slate-700 font-semibold min-w-4 shrink-0">{{ $index + 1 }}</span>
+                      <div class="w-4 h-4 border border-slate-700 shrink-0 mt-0.5"></div>
+                      <span class="text-sm text-slate-900 leading-snug" [innerHTML]="sanitize(opt)"></span>
+                    </div>
+                  }
+                  <!-- Antwortfeld -->
+                  <div class="mt-2 flex items-center gap-2 ml-1">
+                    <span class="text-xs text-slate-600 font-semibold">Antwort (Ziffer eintragen):</span>
+                    <div class="w-8 h-6 border border-slate-800"></div>
+                  </div>
+                  <div class="mt-3 border-b border-slate-200"></div>
+                }
+
+                @if (frage.uebung.typ === 'zuordnung') {
+                  <div class="flex items-baseline gap-2 mb-1">
+                    <span class="font-bold text-slate-900 text-sm">Aufgabe {{ $index + 1 }}</span>
+                    <span class="text-[10px] text-slate-500">({{ frage.themaName }})</span>
+                  </div>
+                  <div class="text-sm text-slate-900 leading-snug mb-3 ml-1"
+                       [innerHTML]="sanitize(asZuordnung(frage.uebung).frage)"></div>
+                  <div class="grid grid-cols-2 gap-4 ml-1 text-sm">
+                    <div>
+                      <p class="font-semibold text-xs text-slate-700 mb-1 uppercase tracking-wide">Begriffe</p>
+                      @for (p of asZuordnung(frage.uebung).paare; track $index) {
+                        <div class="flex items-start gap-2 mb-1">
+                          <span class="font-semibold min-w-4">{{ $index + 1 }}.</span>
+                          <span class="text-slate-900">{{ p.begriff }}</span>
+                        </div>
+                      }
+                    </div>
+                    <div>
+                      <p class="font-semibold text-xs text-slate-700 mb-1 uppercase tracking-wide">Definitionen</p>
+                      @for (d of wisoMischePaare(asZuordnung(frage.uebung), $index); track $index) {
+                        <div class="flex items-start gap-2 mb-1">
+                          <span class="font-semibold min-w-4">{{ 'ABCDEFGHIJ'[$index] }}.</span>
+                          <span class="text-slate-900">{{ d.definition }}</span>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                  <div class="mt-2 flex items-center gap-2 ml-1 flex-wrap">
+                    <span class="text-xs text-slate-600 font-semibold">Zuordnung (z. B. 1–A):</span>
+                    @for (p of asZuordnung(frage.uebung).paare; track $index) {
+                      <div class="flex items-center gap-1">
+                        <span class="text-xs font-semibold">{{ $index + 1 }}–</span>
+                        <div class="w-6 h-6 border border-slate-800"></div>
+                      </div>
+                    }
+                  </div>
+                  <div class="mt-3 border-b border-slate-200"></div>
+                }
+
+                @if (frage.uebung.typ === 'freitext') {
+                  <div class="flex items-baseline gap-2 mb-1">
+                    <span class="font-bold text-slate-900 text-sm">Aufgabe {{ $index + 1 }}</span>
+                    <span class="text-[10px] text-slate-500">({{ frage.themaName }} · Rechenaufgabe)</span>
+                  </div>
+                  <div class="text-sm text-slate-900 leading-snug mb-3 ml-1"
+                       [innerHTML]="sanitize(asFreitext(frage.uebung).frage)"></div>
+                  <div class="ml-1 space-y-3">
+                    @for (_ of [].constructor(5); track $index) {
+                      <div class="border-b border-slate-400 h-5"></div>
+                    }
+                  </div>
+                  <div class="mt-3 flex items-center gap-2 ml-1">
+                    <span class="text-xs text-slate-600 font-semibold">Ergebnis:</span>
+                    <div class="border-b border-slate-800 w-40 h-6"></div>
+                  </div>
+                  <div class="mt-3 border-b border-slate-200"></div>
+                }
+
+              </div>
+            }
+
+            <div class="mt-10 pt-3 border-t border-slate-800 text-[10px] text-slate-600 flex justify-between">
+              <span>ZPA FIA WiSo – Simulation</span>
+              <span>– Ende der Prüfung –</span>
+            </div>
+          </section>
         </div>
-      </div>
+
+      } @else {
+        <!-- Einfacher Fallback für andere Prüfungstypen (z. B. Schnelltest) -->
+        <div class="pdf-bogen bg-white shadow-sm border border-slate-200 mx-auto p-10">
+          <div class="pdf-header border-b-2 border-slate-800 pb-4 mb-6">
+            <div class="flex justify-between items-start mb-2">
+              <div>
+                <h1 class="text-2xl font-bold text-slate-900">{{ config.name }}</h1>
+              </div>
+              <div class="text-right text-xs text-slate-600">
+                <p>Datum: {{ heute }}</p>
+                <p>Bearbeitungszeit: {{ config.zeitlimitMinuten }} Minuten</p>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-6 mt-4 text-xs">
+              <div>
+                <span class="text-slate-600">Name, Vorname:</span>
+                <div class="border-b border-slate-400 h-6 mt-1"></div>
+              </div>
+              <div>
+                <span class="text-slate-600">Prüflings-Nr.:</span>
+                <div class="border-b border-slate-400 h-6 mt-1"></div>
+              </div>
+            </div>
+          </div>
+
+          @for (frage of fragen; track $index) {
+            <div class="pdf-aufgabe mb-6 pb-4 border-b border-slate-200 break-inside-avoid">
+              <span class="font-bold text-slate-800">Aufgabe {{ $index + 1 }}.</span>
+              @switch (frage.uebung.typ) {
+                @case ('multiple-choice') {
+                  <div class="text-sm text-slate-900 mb-2 mt-1" [innerHTML]="sanitize(asMultipleChoice(frage.uebung).frage)"></div>
+                  <ol class="text-sm text-slate-900 mt-2 space-y-1" style="list-style-type: upper-alpha; padding-left: 1.5rem;">
+                    @for (opt of asMultipleChoice(frage.uebung).optionen; track $index) {
+                      <li [innerHTML]="sanitize(opt)"></li>
+                    }
+                  </ol>
+                  <div class="mt-3 text-xs text-slate-600">Antwort: <span class="inline-block border-b border-slate-500 w-20 ml-1"></span></div>
+                }
+                @case ('zuordnung') {
+                  <div class="text-sm text-slate-900 mb-2 mt-1" [innerHTML]="sanitize(asZuordnung(frage.uebung).frage)"></div>
+                  <div class="grid grid-cols-2 gap-4 mt-3 text-sm">
+                    <div>
+                      <p class="font-semibold text-xs text-slate-600 mb-1">Begriffe</p>
+                      <ol class="space-y-1" style="list-style-type: decimal; padding-left: 1.25rem;">
+                        @for (p of asZuordnung(frage.uebung).paare; track $index) { <li>{{ p.begriff }}</li> }
+                      </ol>
+                    </div>
+                    <div>
+                      <p class="font-semibold text-xs text-slate-600 mb-1">Definitionen</p>
+                      <ol class="space-y-1" style="list-style-type: upper-alpha; padding-left: 1.25rem;">
+                        @for (d of mischePaare(asZuordnung(frage.uebung).paare); track $index) { <li>{{ d.definition }}</li> }
+                      </ol>
+                    </div>
+                  </div>
+                  <div class="mt-3 text-xs text-slate-600">Zuordnung (z.B. 1–C): <span class="inline-block border-b border-slate-500 w-40 ml-1"></span></div>
+                }
+                @case ('freitext') {
+                  <div class="text-sm text-slate-900 mb-2 mt-1" [innerHTML]="sanitize(asFreitext(frage.uebung).frage)"></div>
+                  <div class="mt-3 space-y-4">
+                    @for (_ of [].constructor(4); track $index) { <div class="border-b border-slate-400 h-5"></div> }
+                  </div>
+                }
+              }
+            </div>
+          }
+          <div class="mt-8 pt-4 border-t border-slate-300 text-xs text-slate-500 text-center">– Ende der Prüfung –</div>
+        </div>
+      }
     }
 
     @if (config && modus() === 'web' && fragen.length > 0) {
@@ -530,6 +703,10 @@ export class PruefungComponent implements OnInit, OnDestroy {
   modus = signal<'auswahl' | 'web' | 'pdf'>('auswahl');
   heute = new Date().toLocaleDateString('de-DE');
   ihkBogen?: IhkPruefungsBogen;
+  wisoAusgangssituation = '';
+
+  // Gecachte gemischte Paare pro Zuordnungs-Aufgabe (Index → gemischte Definitionen)
+  private zuordnungCache = new Map<number, { begriff: string; definition: string }[]>();
 
   antwortZeilen(t: { punkte: number; antwortZeilen?: number }): number[] {
     const n = t.antwortZeilen ?? Math.max(4, Math.min(14, Math.round(t.punkte * 1.5)));
@@ -582,6 +759,9 @@ export class PruefungComponent implements OnInit, OnDestroy {
 
     this.ihkBogen = findIhkBogen(this.config.id);
     this.fragen = buildPruefungsFragen(this.config);
+    if (this.config.kategorie === 'wiso') {
+      this.wisoAusgangssituation = this.zufaelligeWisoAusgangssituation();
+    }
     if (this.fragen.length === 0) { this.router.navigate(['/']); return; }
 
     this.antwortDetails = new Array(this.fragen.length).fill(null);
@@ -699,6 +879,35 @@ export class PruefungComponent implements OnInit, OnDestroy {
         return false;
     }
     return false;
+  }
+
+  private zufaelligeWisoAusgangssituation(): string {
+    const firmen = [
+      { name: 'Infotec GmbH', ort: 'Dortmund', n: '120', branche: 'Softwareentwicklung und IT-Beratung' },
+      { name: 'Gramberg IT GmbH', ort: 'Bremen', n: '85', branche: 'IT-Dienstleistungen für Industrie und Handwerk' },
+      { name: 'GreenByte Solutions GmbH', ort: 'Münster', n: '200', branche: 'nachhaltige IT-Lösungen und Cloud-Services' },
+      { name: 'Sachs-IT GmbH', ort: 'Bochum', n: '145', branche: 'IT-Systemintegration und Softwareentwicklung' },
+      { name: 'MarSi-IT GmbH', ort: 'Duisburg', n: '60', branche: 'Webentwicklung und digitale Transformation' },
+      { name: 'EcoTec GmbH', ort: 'Essen', n: '175', branche: 'IT-Infrastruktur und grüne Technologien' },
+      { name: 'DataVision GmbH', ort: 'Hannover', n: '110', branche: 'Datenbankentwicklung und Business Intelligence' },
+      { name: 'NetWork Solutions AG', ort: 'Bielefeld', n: '230', branche: 'Netzwerkinfrastruktur und IT-Sicherheit' },
+    ];
+    const f = firmen[Math.floor(Math.random() * firmen.length)];
+    return `<p>Die <strong>${f.name}</strong> mit Sitz in ${f.ort} beschäftigt ca. ${f.n} Mitarbeitende und ist im Bereich ${f.branche} tätig. Sie befinden sich im dritten Ausbildungsjahr als Fachinformatiker/-in für Anwendungsentwicklung und sind dem Unternehmen zugeteilt. Im Folgenden werden Ihnen verschiedene Sachverhalte aus dem beruflichen und wirtschaftlichen Alltag vorgelegt.</p>`;
+  }
+
+  // Gemischte Zuordnungs-Definitionen – pro Aufgabe gecacht, damit sie beim
+  // erneuten Rendern nicht neu gemischt werden (würde Reihenfolge ändern).
+  wisoMischePaare(uebung: ZuordnungUebung, index: number): { begriff: string; definition: string }[] {
+    if (!this.zuordnungCache.has(index)) {
+      const copy = [...uebung.paare];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      this.zuordnungCache.set(index, copy);
+    }
+    return this.zuordnungCache.get(index)!;
   }
 
   ngOnDestroy(): void {

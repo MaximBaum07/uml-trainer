@@ -1,82 +1,130 @@
 import { UebungsSet } from '../models/app.models';
 
-// WiSo: fast ausschließlich Multiple-Choice mit gelegentlichen Zuordnungen.
-// Fragen basieren auf wiederkehrenden Mustern aus AP2 WiSo 2019-2024.
+// WiSo-Übungen basieren auf IHK AP2 WiSo Sommer 2019 – Winter 2024/25 (ZPA Nord-West).
+// Format: 30 Aufgaben, 60 Min., 100 Punkte.
+// Aufgabentypen: ~60% Single-Choice (1 aus 5), ~10% Zuordnung, ~5% Freitext-Rechenaufgabe.
+// Wahr-Falsch kommt im echten WiSo-Bogen praktisch nicht vor → hier entfernt.
 
 export const WISO_UEBUNGEN: UebungsSet[] = [
+
   // ========= wiso-berufsausbildung =========
   {
     themaId: 'wiso-berufsausbildung',
     uebungen: [
       {
         typ: 'multiple-choice',
-        frage: 'Welches Gesetz regelt die Berufsausbildung in Deutschland?',
-        optionen: ['Arbeitsschutzgesetz', 'Berufsbildungsgesetz (BBiG)', 'Tarifvertragsgesetz', 'Arbeitszeitgesetz'],
-        korrekteAntwort: 1,
-        erklaerung: 'Das BBiG regelt u.a. Ausbildungsvertrag, Probezeit, Prüfungen, Rechte und Pflichten.'
-      },
-      {
-        typ: 'multiple-choice',
-        frage: 'Wie lange darf die Probezeit in einer Berufsausbildung maximal dauern?',
-        optionen: ['1 Monat', '2 Monate', '4 Monate', '6 Monate'],
+        frage: 'Welche der folgenden Aussagen zur Probezeit in der Berufsausbildung trifft zu?',
+        optionen: [
+          'Die Probezeit beträgt mindestens 3 Monate und maximal 6 Monate.',
+          'In der Probezeit kann nur der Ausbildungsbetrieb das Ausbildungsverhältnis kündigen.',
+          'Die Probezeit beträgt mindestens 1 Monat und maximal 4 Monate.',
+          'In der Probezeit ist eine Kündigung nur mit Angabe von Gründen möglich.',
+          'Die Probezeit ist im Arbeitszeitgesetz (ArbZG) geregelt.'
+        ],
         korrekteAntwort: 2,
-        erklaerung: '§ 20 BBiG: mindestens 1 Monat, maximal 4 Monate. Während dieser Zeit ist Kündigung ohne Angabe von Gründen möglich.'
+        erklaerung: '§ 20 BBiG: Probezeit mindestens 1 Monat, maximal 4 Monate. Beide Seiten können in der Probezeit jederzeit, ohne Frist und ohne Angabe von Gründen kündigen – aber schriftlich.'
       },
       {
         typ: 'multiple-choice',
-        frage: 'Welche Institution ist für die IHK-Abschlussprüfung zuständig?',
-        optionen: ['Der Ausbildungsbetrieb', 'Die IHK (Industrie- und Handelskammer)', 'Die Berufsschule', 'Das Arbeitsamt'],
-        korrekteAntwort: 1,
-        erklaerung: 'Die IHK ist die zuständige Stelle im Sinne des BBiG. Prüfungsausschüsse sind jedoch paritätisch besetzt.'
-      },
-      {
-        typ: 'multiple-choice',
-        frage: 'Welche Pflicht hat der Auszubildende?',
+        frage: 'Wie viele Werktage Urlaub stehen einem 17-jährigen Auszubildenden laut Jugendarbeitsschutzgesetz (JArbSchG) mindestens zu?',
         optionen: [
-          'Den Ausbildungsbetrieb zu bewerten',
-          'Das Ausbildungsziel anzustreben und Aufgaben sorgfältig auszuführen',
-          'Den Betrieb nach bestandener Prüfung zu verlassen',
-          'Den Berichtsheft-Text öffentlich zu machen'
+          '20 Werktage',
+          '23 Werktage',
+          '24 Werktage',
+          '25 Werktage',
+          '30 Werktage'
+        ],
+        korrekteAntwort: 3,
+        erklaerung: '§ 19 JArbSchG: Wer zu Beginn des Kalenderjahres noch nicht 17 Jahre alt ist → 27 Werktage; wer noch nicht 18 Jahre alt ist → 25 Werktage. Für einen 17-Jährigen gelten 25 Werktage.'
+      },
+      {
+        typ: 'multiple-choice',
+        frage: 'Welche der folgenden Angaben muss zwingend im Berufsausbildungsvertrag enthalten sein?',
+        optionen: [
+          'Die vereinbarte Gleitzeitregelung',
+          'Das Recht des Auszubildenden auf Homeoffice',
+          'Die Dauer der täglichen Ausbildungszeit',
+          'Die private Handynummer des Ausbilders',
+          'Die monatliche Fahrtkostenerstattung'
+        ],
+        korrekteAntwort: 2,
+        erklaerung: '§ 11 BBiG: Pflichtinhalte u. a.: Art und Ziel der Ausbildung, Beginn und Dauer, tägliche Ausbildungszeit, Probezeit, Vergütung, Urlaub. Gleitzeit und Homeoffice sind keine Pflichtangaben.'
+      },
+      {
+        typ: 'multiple-choice',
+        frage: 'Welches der folgenden Sachverhalte ist eine berufliche Fortbildung?',
+        optionen: [
+          'Max nimmt nach seiner Kündigung als Fachinformatiker an einer Umschulung zum Buchhalter teil.',
+          'Lena schließt nach ihrer Ausbildung als Kauffrau im E-Commerce einen Fernlehrgang „Business English" ab.',
+          'Tim wechselt von der Fachinformatiker-Ausbildung in eine Ausbildung zum Kaufmann für IT-System-Management.',
+          'Selin absolviert nach dem Hauptschulabschluss eine Ausbildung zur Köchin.',
+          'Kai beendet sein Studium und beginnt eine Ausbildung als Fachinformatiker.'
         ],
         korrekteAntwort: 1,
-        erklaerung: '§ 13 BBiG: Lernpflicht, Weisungsgebundenheit, Berichtsheftführung, Schweigepflicht, Sorgfaltspflicht.'
+        erklaerung: 'Fortbildung vertieft oder erweitert Kenntnisse im bestehenden Beruf (z. B. Sprachkurs nach der Ausbildung). Umschulung qualifiziert für einen neuen Beruf.'
       },
       {
         typ: 'multiple-choice',
-        frage: 'Welches Dokument bescheinigt EU-weit erworbene Qualifikationen?',
-        optionen: ['Europäischer Führerschein', 'Europass', 'EU-Zeugnis', 'Schengen-Ausweis'],
-        korrekteAntwort: 1,
-        erklaerung: 'Europass: standardisierte Dokumente (Lebenslauf, Sprachenpass, Zeugniserläuterung) für die EU-weite Mobilität. Taucht fast jedes Jahr in WiSo auf.'
-      },
-      {
-        typ: 'multiple-choice',
-        frage: 'Nach welcher Zeit gilt der Ausbildungsvertrag bei Weiterbeschäftigung als unbefristet verlängert, wenn nichts Gegenteiliges vereinbart wird?',
+        frage: 'Was beschreibt den Europass korrekt?',
         optionen: [
-          'Sofort nach bestandener Prüfung',
-          'Bei unwidersprochener Weiterarbeit nach Ausbildungsende',
-          'Nach 3 Monaten',
-          'Nach 1 Jahr'
+          'Ein europäisches Reisedokument für Auszubildende mit Auslandsaufenthalt.',
+          'Ein kostenpflichtiges Zertifikat der IHK für internationale Abschlüsse.',
+          'Ein staatlich vorgeschriebenes Berichtsheft für Auszubildende.',
+          'Ein kostenfreies EU-Instrument zur einheitlichen Darstellung von Qualifikationen und Kompetenzen.',
+          'Ein Arbeitsvertrag nach EU-Mindeststandard.'
+        ],
+        korrekteAntwort: 3,
+        erklaerung: 'Europass: kostenfreies EU-Dokumentationsset (Lebenslauf, Sprachenpass, Zeugniserläuterungen), das Qualifikationen europaweit verständlich macht. Nicht verpflichtend.'
+      },
+      {
+        typ: 'multiple-choice',
+        frage: 'Ein Auszubildender möchte sein Ausbildungsverhältnis nach der Probezeit kündigen. Welche Aussage trifft zu?',
+        optionen: [
+          'Er kann jederzeit fristlos kündigen, ohne einen Grund zu nennen.',
+          'Er kann mit einer Frist von 4 Wochen kündigen, wenn er die Ausbildung aufgeben möchte.',
+          'Er benötigt die Zustimmung des Betriebsrats.',
+          'Eine Kündigung ist nach der Probezeit grundsätzlich nicht mehr möglich.',
+          'Er muss die Kündigung mindestens 3 Monate vorher schriftlich ankündigen.'
         ],
         korrekteAntwort: 1,
-        erklaerung: '§ 24 BBiG: Wer nach Ausbildungsende weiter beschäftigt wird, hat ein unbefristetes Arbeitsverhältnis auf Grundlage der bisherigen Tätigkeit.'
-      },
-      {
-        typ: 'wahr-falsch',
-        aussage: 'Der Ausbildungsvertrag muss schriftlich abgeschlossen werden.',
-        korrekt: true,
-        erklaerung: '§ 11 BBiG: Spätestens vor Beginn der Ausbildung ist der wesentliche Inhalt des Vertrags schriftlich niederzulegen.'
+        erklaerung: '§ 22 Abs. 2 BBiG: Nach der Probezeit kann der Auszubildende mit einer Frist von 4 Wochen kündigen, wenn er die Ausbildung aufgeben oder eine andere Ausbildung beginnen möchte. Schriftform ist vorgeschrieben.'
       },
       {
         typ: 'multiple-choice',
-        frage: 'Welche Pflicht hat der Ausbildende (Betrieb)?',
+        frage: 'Was ist der Unterschied zwischen einem einfachen und einem qualifizierten Ausbildungszeugnis?',
         optionen: [
-          'Nur Ausbildungsvergütung zahlen',
-          'Ausbildungsziel vermitteln, Ausbilder bestellen, Freistellung für Berufsschule',
-          'Ausbildungsinhalte frei wählen',
-          'Nach Ausbildung übernehmen'
+          'Das einfache Zeugnis wird nur auf Antrag ausgestellt, das qualifizierte immer.',
+          'Das qualifizierte Zeugnis enthält zusätzlich eine Beurteilung von Leistung und Verhalten.',
+          'Das einfache Zeugnis darf nur digital ausgestellt werden.',
+          'Das qualifizierte Zeugnis wird ausschließlich von der IHK ausgestellt.',
+          'Das einfache Zeugnis enthält mehr Details als das qualifizierte.'
         ],
         korrekteAntwort: 1,
-        erklaerung: '§ 14 BBiG listet Pflichten des Ausbildenden. Übernahmepflicht gibt es NICHT.'
+        erklaerung: 'Einfaches Zeugnis: nur Daten, Ausbildungsberuf und Dauer. Qualifiziertes Zeugnis: enthält zusätzlich eine Beurteilung von Führung und Leistung. Auszubildende haben Anspruch auf ein Zeugnis, auf Wunsch auf ein qualifiziertes.'
+      },
+      {
+        typ: 'multiple-choice',
+        frage: 'Welche Voraussetzungen muss ein Ausbilder nach BBiG erfüllen?',
+        optionen: [
+          'Er muss mindestens 30 Jahre alt und seit 5 Jahren im Betrieb tätig sein.',
+          'Er braucht lediglich den Berufsabschluss im Ausbildungsberuf.',
+          'Er muss persönlich und fachlich geeignet sein, i. d. R. nachgewiesen durch die AEVO-Prüfung.',
+          'Die Eignung wird ausschließlich durch die Berufsschule geprüft.',
+          'Er muss einen staatlich anerkannten Hochschulabschluss besitzen.'
+        ],
+        korrekteAntwort: 2,
+        erklaerung: '§§ 28–30 BBiG: Ausbilder müssen persönlich (Zuverlässigkeit, keine Vorstrafen) und fachlich (AdA-Schein nach AEVO) geeignet sein. Berufsabschluss allein reicht nicht.'
+      },
+      {
+        typ: 'zuordnung',
+        frage: 'Ordne die Begriffe dem jeweiligen Sachverhalt zu.',
+        paare: [
+          { begriff: 'Fortbildung', definition: 'Kauffrau nimmt nach Ausbildungsende an Kurs „Projektmanagement-Zertifizierung" teil' },
+          { begriff: 'Umschulung', definition: 'Fachinformatiker wird nach Kündigung zum Kaufmann für Versicherungen ausgebildet' },
+          { begriff: 'Berufsausbildung', definition: 'Abiturient beginnt 3-jährige Ausbildung zum Kaufmann im E-Commerce' },
+          { begriff: 'Probezeit', definition: 'Erste 3 Monate des Ausbildungsverhältnisses, in denen beide Seiten ohne Frist kündigen dürfen' }
+        ],
+        erklaerung: 'Fortbildung = gleicher Beruf, neue Kompetenzen. Umschulung = neuer Beruf. Berufsausbildung = Erstausbildung. Probezeit = § 20 BBiG, max. 4 Monate.'
       }
     ]
   },
@@ -87,73 +135,127 @@ export const WISO_UEBUNGEN: UebungsSet[] = [
     uebungen: [
       {
         typ: 'multiple-choice',
-        frage: 'Wie viel Urlaub steht einem 17-jährigen Auszubildenden nach JArbSchG mindestens zu?',
-        optionen: ['24 Werktage', '25 Werktage', '27 Werktage', '30 Werktage'],
-        korrekteAntwort: 2,
-        erklaerung: '§ 19 JArbSchG: 27 Werktage für 16-Jährige, 25 für 17-Jährige (zu Jahresbeginn), 23 für 17/18. Formulierung im Analyse-Dokument: identische Frage in mehreren Prüfungen 2019-2024.'
-      },
-      {
-        typ: 'multiple-choice',
-        frage: 'Welche Kündigungsfrist gilt für Arbeitgeber nach § 622 BGB bei einem Mitarbeiter nach 2 Jahren Betriebszugehörigkeit?',
+        frage: 'Welche der folgenden Aussagen zum Arbeitszeitgesetz (ArbZG) trifft zu?',
         optionen: [
-          '2 Wochen zum Monatsende',
-          '4 Wochen zum 15. oder Monatsende',
-          '1 Monat zum Monatsende',
-          '2 Monate zum Monatsende'
-        ],
-        korrekteAntwort: 2,
-        erklaerung: '§ 622 Abs. 2 BGB: Bei 2 Jahren Betriebszugehörigkeit = 1 Monat zum Monatsende. Fristen verlängern sich mit zunehmender Dauer.'
-      },
-      {
-        typ: 'multiple-choice',
-        frage: 'Welche Voraussetzung muss für eine fristlose Kündigung erfüllt sein?',
-        optionen: [
-          'Der Arbeitgeber ist verärgert',
-          'Ein wichtiger Grund im Sinne des § 626 BGB',
-          'Mindestens 3 Abmahnungen',
-          'Schriftform genügt'
+          'Die werktägliche Arbeitszeit darf 8 Stunden niemals überschreiten.',
+          'Eine tägliche Arbeitszeit von 10 Stunden ist zulässig, wenn innerhalb von 6 Monaten der Durchschnitt von 8 Stunden nicht überschritten wird.',
+          'Arbeitnehmer dürfen täglich maximal 12 Stunden arbeiten, wenn sie dafür eine bezahlte Pause erhalten.',
+          'Das ArbZG gilt gleichermaßen für Auszubildende wie für Vollzeitbeschäftigte ab 18 Jahren.',
+          'Die Regelarbeitszeit von 8 Stunden kann durch Betriebsvereinbarung auf 11 Stunden erhöht werden.'
         ],
         korrekteAntwort: 1,
-        erklaerung: '§ 626 BGB: fristlose Kündigung nur bei wichtigem Grund (z.B. Diebstahl, Gewalt). Innerhalb 2 Wochen nach Kenntnis des Grundes erklären.'
+        erklaerung: '§ 3 ArbZG: Grundregel 8 Stunden/Werktag; Verlängerung auf bis zu 10 Stunden zulässig, wenn der Ausgleich innerhalb von 6 Kalendermonaten/24 Wochen erfolgt. Für Jugendliche gilt das strengere JArbSchG.'
       },
       {
         typ: 'multiple-choice',
-        frage: 'Wie viele Urlaubstage stehen einem vollzeitbeschäftigten Erwachsenen nach BUrlG mindestens zu (5-Tage-Woche)?',
-        optionen: ['20', '24', '25', '30'],
+        frage: 'Ein Arbeitnehmer erkrankt während seines Erholungsurlaubs und legt dem Arbeitgeber ein ärztliches Attest vor. Was gilt nach dem Bundesurlaubsgesetz (BUrlG)?',
+        optionen: [
+          'Die Urlaubstage verfallen, da der Urlaub bereits begonnen hatte.',
+          'Der Arbeitnehmer erhält die nachgewiesenen Krankheitstage auf seinen Jahresurlaub gutgeschrieben.',
+          'Der Arbeitnehmer muss den Urlaub sofort antreten, sobald er wieder gesund ist.',
+          'Der Arbeitgeber kann verlangen, dass der Urlaub neu beantragt wird.',
+          'Die Krankheitstage werden nur gutgeschrieben, wenn die Erkrankung mindestens 3 Tage dauert.'
+        ],
+        korrekteAntwort: 1,
+        erklaerung: '§ 9 BUrlG: Krankheitstage, die durch ärztliches Zeugnis nachgewiesen werden, werden nicht auf den Jahresurlaub angerechnet. Es genügt ein Attest; eine Mindestdauer ist nicht vorgeschrieben.'
+      },
+      {
+        typ: 'multiple-choice',
+        frage: 'Welche der folgenden Fragen darf ein Arbeitgeber im Vorstellungsgespräch NICHT stellen?',
+        optionen: [
+          'Welche Erfahrungen haben Sie mit agiler Softwareentwicklung?',
+          'Sind Sie bereit, gelegentlich Überstunden zu leisten?',
+          'Planen Sie in den nächsten zwei Jahren eine Schwangerschaft?',
+          'Wann könnten Sie frühestens die Stelle antreten?',
+          'Haben Sie Erfahrung mit dem genannten Technologie-Stack?'
+        ],
+        korrekteAntwort: 2,
+        erklaerung: 'Fragen nach Schwangerschaft, Familienplanung, Religion oder Gewerkschaftszugehörigkeit sind unzulässig (AGG). Bei unzulässigen Fragen hat der Bewerber das „Recht zur Lüge".'
+      },
+      {
+        typ: 'multiple-choice',
+        frage: 'Welche der folgenden Aussagen zum Kündigungsschutzgesetz (KSchG) ist korrekt?',
+        optionen: [
+          'Der KSchG gilt ab dem ersten Beschäftigungstag für alle Arbeitnehmer.',
+          'Arbeitnehmer können innerhalb von 3 Monaten nach Kündigung Klage beim Arbeitsgericht einreichen.',
+          'Der KSchG gilt nur für Arbeitnehmer in Betrieben mit mehr als 10 Beschäftigten nach mehr als 6 Monaten Betriebszugehörigkeit.',
+          'Betriebsbedingte Kündigungen sind nach dem KSchG grundsätzlich unzulässig.',
+          'Während der Probezeit gilt der KSchG uneingeschränkt.'
+        ],
+        korrekteAntwort: 2,
+        erklaerung: '§ 23 KSchG: Gilt in Betrieben mit mehr als 10 AN. § 1 KSchG: Kündigung muss sozial gerechtfertigt sein. § 4 KSchG: Klage innerhalb von 3 Wochen (nicht 3 Monaten!) nach Zugang der Kündigung.'
+      },
+      {
+        typ: 'multiple-choice',
+        frage: 'Ein Arbeitnehmer soll eine verhaltensbedingte Kündigung erhalten. Welcher Sachverhalt rechtfertigt diese Art der Kündigung?',
+        optionen: [
+          'Schließung des Standorts, an dem der Arbeitnehmer tätig ist.',
+          'Der Arbeitnehmer ist seit 18 Monaten dauerhaft krank und kann seine Arbeit nicht mehr ausüben.',
+          'Der Arbeitnehmer stiehlt wiederholt Firmeneigentum, obwohl er bereits abgemahnt wurde.',
+          'Das Unternehmen führt eine neue Technologie ein, für die der Arbeitnehmer nicht qualifiziert ist.',
+          'Der Arbeitnehmer hat Insolvenz angemeldet.'
+        ],
+        korrekteAntwort: 2,
+        erklaerung: 'Verhaltensbedingte Kündigung: schuldhaftes Verhalten des AN (z. B. Diebstahl, wiederholte Arbeitsverweigerung). Standortschließung = betriebsbedingt, dauerhafte Krankheit = personenbedingt.'
+      },
+      {
+        typ: 'multiple-choice',
+        frage: 'Welche Schutzfrist gilt für Mütter nach der Entbindung gemäß Mutterschutzgesetz (MuSchG)?',
+        optionen: [
+          '4 Wochen nach der Entbindung.',
+          '6 Wochen nach der Entbindung.',
+          '8 Wochen nach der Entbindung (bei Früh- oder Mehrlingsgeburt: 12 Wochen).',
+          '12 Wochen nach der Entbindung in jedem Fall.',
+          '6 Monate nach der Entbindung.'
+        ],
+        korrekteAntwort: 2,
+        erklaerung: '§ 3 Abs. 2 MuSchG: 8 Wochen Beschäftigungsverbot nach der Entbindung (Schutzfrist). Bei Früh- und Mehrlingsgeburt: 12 Wochen. Davor: 6 Wochen vor der Entbindung.'
+      },
+      {
+        typ: 'multiple-choice',
+        frage: 'Eine Bürokauffrau arbeitet auf Basis eines befristeten Arbeitsvertrags. Was gilt zum Ende des Vertrags?',
+        optionen: [
+          'Das Arbeitsverhältnis endet automatisch mit Ablauf der Frist, ohne dass eine Kündigung ausgesprochen werden muss.',
+          'Der Arbeitgeber muss 4 Wochen vor Fristablauf schriftlich kündigen.',
+          'Nach 6-monatiger Laufzeit wandelt sich der Vertrag automatisch in ein unbefristetes Verhältnis um.',
+          'Die Arbeitnehmerin hat Anspruch auf eine Abfindung in Höhe eines Monatsgehalts.',
+          'Der Betriebsrat muss der Beendigung zustimmen.'
+        ],
         korrekteAntwort: 0,
-        erklaerung: '§ 3 BUrlG: 24 Werktage bei 6-Tage-Woche = 20 Arbeitstage bei 5-Tage-Woche. Das ist das gesetzliche Minimum, Tarifverträge haben oft mehr.'
+        erklaerung: '§ 15 TzBfG: Befristete Arbeitsverträge enden automatisch mit Fristablauf – ohne Kündigung. Voraussetzung: Schriftform. Ohne Sachgrund max. 2 Jahre zulässig (§ 14 Abs. 2 TzBfG).'
       },
       {
         typ: 'multiple-choice',
-        frage: 'Wie lang darf die tägliche Arbeitszeit nach ArbZG maximal sein?',
-        optionen: ['8 Stunden', '10 Stunden (wenn Durchschnitt 8 h nicht überschritten wird)', '12 Stunden', '14 Stunden'],
-        korrekteAntwort: 1,
-        erklaerung: '§ 3 ArbZG: grundsätzlich 8 h/Tag, ausnahmsweise 10 h wenn im Durchschnitt von 6 Monaten 8 h nicht überschritten.'
-      },
-      {
-        typ: 'multiple-choice',
-        frage: 'Welche Pausenzeit ist bei 8 Stunden Arbeit vorgeschrieben?',
-        optionen: ['Keine', '15 Minuten', '30 Minuten', '45 Minuten'],
-        korrekteAntwort: 2,
-        erklaerung: '§ 4 ArbZG: bei 6–9 h → 30 min, über 9 h → 45 min. Pause muss mindestens in Abschnitten von 15 min genommen werden.'
-      },
-      {
-        typ: 'wahr-falsch',
-        aussage: 'Eine Kündigung kann wirksam per E-Mail ausgesprochen werden.',
-        korrekt: false,
-        erklaerung: '§ 623 BGB: Kündigung bedarf der Schriftform, elektronische Form ist ausgeschlossen. E-Mail/SMS sind unwirksam.'
-      },
-      {
-        typ: 'multiple-choice',
-        frage: 'Was ist ein Tarifvertrag?',
+        frage: 'Das Allgemeine Gleichbehandlungsgesetz (AGG) verbietet Benachteiligungen aufgrund bestimmter Merkmale. Welche der folgenden Merkmale nennt das AGG?',
         optionen: [
-          'Vertrag zwischen einzelnem Arbeitnehmer und Arbeitgeber',
-          'Kollektiver Vertrag zwischen Gewerkschaft und Arbeitgeberverband (oder einzelnem AG)',
-          'Vertrag zwischen Betriebsrat und Arbeitgeber',
-          'EU-weites Abkommen'
+          'Schulabschluss, Wohnort und Gehalt.',
+          'Rasse/ethnische Herkunft, Geschlecht, Religion, Behinderung, Alter und sexuelle Identität.',
+          'Aussehen, Schuhgröße und Freizeitverhalten.',
+          'Nationalität, Berufsstand und Familienstand.',
+          'Einkommen, Vermögen und politische Überzeugung.'
         ],
         korrekteAntwort: 1,
-        erklaerung: 'Tarifvertrag regelt Arbeitsbedingungen kollektiv (Gehalt, Arbeitszeit, Urlaub). Betriebsvereinbarung dagegen zwischen BR und AG.'
+        erklaerung: '§ 1 AGG: Benachteiligungen wegen der ethnischen Herkunft, des Geschlechts, der Religion oder Weltanschauung, einer Behinderung, des Alters oder der sexuellen Identität sind verboten.'
+      },
+      {
+        typ: 'multiple-choice',
+        frage: 'Welche Aussage zum Günstigkeitsprinzip im Arbeitsrecht trifft zu?',
+        optionen: [
+          'Tarifvertragliche Regelungen dürfen durch Einzelverträge niemals verändert werden.',
+          'Einzelvertragliche Regelungen, die für den Arbeitnehmer günstiger sind als der Tarifvertrag, sind zulässig.',
+          'Der Betriebsrat kann das Günstigkeitsprinzip außer Kraft setzen.',
+          'Das Günstigkeitsprinzip gilt nur für Vollzeitbeschäftigte.',
+          'Günstigere Regelungen bedürfen stets der Zustimmung der Gewerkschaft.'
+        ],
+        korrekteAntwort: 1,
+        erklaerung: 'Günstigkeitsprinzip: Individualvertragliche Regelungen, die für den AN besser sind als der Tarifvertrag, sind wirksam (z. B. höheres Gehalt, mehr Urlaub). Schlechtere Regelungen sind dagegen unwirksam.'
+      },
+      {
+        typ: 'freitext',
+        frage: 'Eine Auszubildende wird am 15. März eingestellt. Die Probezeit beträgt die gesetzlich vorgeschriebene Mindestdauer. An welchem Tag endet die Probezeit?',
+        musterloesung: '15. April (nach 1 Monat Probezeit). Die gesetzliche Mindestprobezeit laut § 20 BBiG beträgt 1 Monat.',
+        erklaerung: '§ 20 BBiG: Probezeit mindestens 1 Monat. Beginn 15. März → Ende nach einem Monat am 15. April.',
+        stichwoerter: ['15. April', 'April', '1 Monat']
       }
     ]
   },
@@ -163,67 +265,88 @@ export const WISO_UEBUNGEN: UebungsSet[] = [
     themaId: 'wiso-sozialversicherung',
     uebungen: [
       {
-        typ: 'multiple-choice',
-        frage: 'Welche Sozialversicherungen zählen zu den klassischen fünf Säulen?',
-        optionen: [
-          'Krankenversicherung, Rentenversicherung, Pflegeversicherung, Arbeitslosenversicherung, Unfallversicherung',
-          'Krankenversicherung, Lebensversicherung, Rentenversicherung, Unfallversicherung, KFZ',
-          'Kranken-, Haftpflicht-, Berufsunfähigkeits-, Renten-, Unfallversicherung',
-          'Steuerversicherung, Krankenversicherung, Rentenversicherung, Pflegeversicherung, Arbeitslosenversicherung'
-        ],
-        korrekteAntwort: 0,
-        erklaerung: 'Fünf gesetzliche Sozialversicherungen. Beiträge meist paritätisch (je zur Hälfte AG/AN), außer Unfallversicherung (nur AG).'
-      },
-      {
-        typ: 'multiple-choice',
-        frage: 'Wer zahlt die Unfallversicherung?',
-        optionen: ['Arbeitnehmer allein', 'Arbeitgeber allein', 'Beide paritätisch', 'Der Staat'],
-        korrekteAntwort: 1,
-        erklaerung: 'Unfallversicherung (Berufsgenossenschaften) wird vollständig vom Arbeitgeber gezahlt.'
-      },
-      {
-        typ: 'multiple-choice',
-        frage: 'Welche Versicherung springt ein, wenn ein Arbeitnehmer seinen Job verliert?',
-        optionen: ['Krankenversicherung', 'Rentenversicherung', 'Arbeitslosenversicherung', 'Pflegeversicherung'],
-        korrekteAntwort: 2,
-        erklaerung: 'Die Arbeitslosenversicherung zahlt Arbeitslosengeld I. Arbeitslosengeld II (Bürgergeld) ist keine Sozialversicherungsleistung.'
-      },
-      {
         typ: 'zuordnung',
-        frage: 'Ordne die Leistung der passenden Sozialversicherung zu.',
+        frage: 'Ordne den Sachverhalt dem zuständigen Sozialversicherungsträger zu.',
         paare: [
-          { begriff: 'Lohnfortzahlung / Krankengeld nach 6 Wochen', definition: 'Gesetzliche Krankenversicherung' },
-          { begriff: 'Altersrente', definition: 'Gesetzliche Rentenversicherung' },
-          { begriff: 'Pflegeheim / ambulante Pflege', definition: 'Pflegeversicherung' },
-          { begriff: 'ALG I nach Jobverlust', definition: 'Arbeitslosenversicherung' },
-          { begriff: 'Arbeitsunfall / Berufskrankheit', definition: 'Unfallversicherung' }
+          { begriff: 'Mitarbeiter erkrankt an Grippe und geht zum Arzt', definition: 'Gesetzliche Krankenversicherung (GKV)' },
+          { begriff: 'Mitarbeiterin stürzt auf dem direkten Weg zur Arbeit', definition: 'Gesetzliche Unfallversicherung / Berufsgenossenschaft' },
+          { begriff: 'Mitarbeiter wird nach Kündigung arbeitslos', definition: 'Bundesagentur für Arbeit (Arbeitslosenversicherung)' },
+          { begriff: 'Mitarbeiterin tritt in den Ruhestand', definition: 'Deutsche Rentenversicherung (GRV)' },
+          { begriff: 'Großvater wird pflegebedürftig und zieht ins Pflegeheim', definition: 'Soziale Pflegeversicherung (GPV)' }
         ],
-        erklaerung: 'Typisches Zuordnungsmuster in der WiSo. Gut zu unterscheiden: Krankengeld (KV) vs Lohnfortzahlung (AG, erste 6 Wochen).'
+        erklaerung: 'Merkhilfe: KRAP+U (Kranken, Renten, Arbeitslosen, Pflege, Unfall). Wegeunfall = direkter Weg zur Arbeit → GUV (Berufsgenossenschaft), nicht GKV.'
       },
       {
         typ: 'multiple-choice',
-        frage: 'Ab welcher Einkommensgrenze kann man sich als Arbeitnehmer 2024 PRIVAT krankenversichern?',
+        frage: 'Wer trägt die Beiträge zur gesetzlichen Unfallversicherung?',
         optionen: [
-          'Ab 3.000 € brutto',
-          'Ab Überschreiten der Jahresarbeitsentgeltgrenze (aktuell ~69.300 €/Jahr)',
-          'Ab 100.000 €',
-          'Egal, jeder kann'
+          'Arbeitnehmer und Arbeitgeber je zur Hälfte.',
+          'Ausschließlich der Arbeitnehmer.',
+          'Ausschließlich der Arbeitgeber.',
+          'Der Staat übernimmt zwei Drittel, der Arbeitgeber ein Drittel.',
+          'Der Arbeitnehmer zahlt den Grundbeitrag, der Arbeitgeber den Zusatzbeitrag.'
         ],
-        korrekteAntwort: 1,
-        erklaerung: 'Jahresarbeitsentgeltgrenze (JAEG) 2024 ca. 69.300 €. Selbstständige und Beamte haben Wahlfreiheit. Genauer Wert ändert sich jährlich.'
-      },
-      {
-        typ: 'wahr-falsch',
-        aussage: 'Die Beiträge zur Sozialversicherung werden in der Regel paritätisch von AG und AN getragen.',
-        korrekt: true,
-        erklaerung: 'Ausnahmen: Unfallversicherung (nur AG), Zusatzbeitrag in der KV (AN allein), früher Pflege-Zuschlag für Kinderlose.'
+        korrekteAntwort: 2,
+        erklaerung: 'Die gesetzliche Unfallversicherung wird zu 100 % vom Arbeitgeber getragen. Träger sind die Berufsgenossenschaften. Sie deckt Arbeitsunfälle, Wegeunfälle und Berufskrankheiten ab.'
       },
       {
         typ: 'multiple-choice',
-        frage: 'Wie lange zahlt der Arbeitgeber bei Krankheit weiter Lohn fort, bevor die Krankenkasse Krankengeld übernimmt?',
-        optionen: ['1 Woche', '2 Wochen', '6 Wochen', '12 Wochen'],
+        frage: 'Ein Mitarbeiter ist nach einem Freizeitunfall im Wochenende drei Wochen arbeitsunfähig. Wer zahlt die Heilbehandlungskosten?',
+        optionen: [
+          'Die Berufsgenossenschaft, da jeder Unfall versichert ist.',
+          'Der Arbeitgeber, da er Fürsorgepflicht hat.',
+          'Die gesetzliche Krankenversicherung, da es sich um einen privaten Unfall handelt.',
+          'Die Arbeitslosenversicherung, da der Mitarbeiter ausfällt.',
+          'Das Sozialamt, bei privaten Unfällen am Wochenende.'
+        ],
         korrekteAntwort: 2,
-        erklaerung: 'Entgeltfortzahlungsgesetz: 6 Wochen voller Lohn durch AG. Danach übernimmt die KV Krankengeld (ca. 70 % des Bruttos, max. 90 % netto).'
+        erklaerung: 'Die gesetzliche Unfallversicherung (Berufsgenossenschaft) deckt nur Arbeitsunfälle, Wegeunfälle (direkter Weg) und Berufskrankheiten. Ein privater Freizeitunfall ist Sache der GKV.'
+      },
+      {
+        typ: 'multiple-choice',
+        frage: 'Wie lange zahlt der Arbeitgeber bei Erkrankung des Arbeitnehmers Entgelt fort, bevor die Krankenkasse das Krankengeld übernimmt?',
+        optionen: [
+          '2 Wochen',
+          '4 Wochen',
+          '6 Wochen',
+          '8 Wochen',
+          '12 Wochen'
+        ],
+        korrekteAntwort: 2,
+        erklaerung: '§ 3 EFZG: Arbeitgeber zahlt 6 Wochen vollen Lohn fort. Ab der 7. Woche übernimmt die GKV Krankengeld (ca. 70 % des Brutto, max. 90 % des Netto, max. 78 Wochen).'
+      },
+      {
+        typ: 'multiple-choice',
+        frage: 'Was bedeutet die Beitragsbemessungsgrenze (BBG) in der Sozialversicherung?',
+        optionen: [
+          'Unterhalb dieser Grenze ist man von der Sozialversicherungspflicht befreit.',
+          'Oberhalb dieser Grenze darf man in eine private Krankenversicherung wechseln.',
+          'Bis zu dieser Einkommenshöhe werden Sozialversicherungsbeiträge berechnet; darüber nicht.',
+          'Es handelt sich um die Mindestbeitragsgrundlage für Selbstständige.',
+          'Sie bestimmt, wie viel der Arbeitgeber maximal an Beiträgen zahlen muss.'
+        ],
+        korrekteAntwort: 2,
+        erklaerung: 'BBG: Einkommensteil oberhalb der Grenze ist beitragsfrei. Beispiel: Verdient jemand mehr als die BBG der GRV, zahlt er Rentenversicherungsbeiträge nur auf den Teil bis zur BBG. Versicherungspflichtgrenze (JAEG) ist davon zu unterscheiden.'
+      },
+      {
+        typ: 'multiple-choice',
+        frage: 'Was ist das Solidarprinzip in der gesetzlichen Sozialversicherung?',
+        optionen: [
+          'Jeder zahlt denselben festen Beitrag, unabhängig vom Einkommen.',
+          'Die Leistungen richten sich nach der Höhe der eingezahlten Beiträge.',
+          'Die Beiträge richten sich nach dem Einkommen, die Leistungen nach dem Bedarf.',
+          'Nur Arbeitnehmer leisten Beiträge; Unternehmer sind ausgenommen.',
+          'Leistungen werden nur an Mitglieder mit lückenlosem Beitragsverlauf gewährt.'
+        ],
+        korrekteAntwort: 2,
+        erklaerung: 'Solidarprinzip: Wer mehr verdient, zahlt mehr (einkommensabhängig), erhält aber dieselbe Leistung wie jemand mit niedrigem Einkommen. Gegensatz: Äquivalenzprinzip (PKV: Beitrag nach Risiko).'
+      },
+      {
+        typ: 'freitext',
+        frage: 'Eine Mitarbeiterin hat ein Bruttogehalt von 3.200 € pro Monat. Der allgemeine Beitragssatz der GKV beträgt 14,6 % plus ein Zusatzbeitrag von 1,6 %. Berechnen Sie den Arbeitnehmer-Anteil zur gesetzlichen Krankenversicherung.',
+        musterloesung: '3.200 € × (14,6 % + 1,6 %) / 2 = 3.200 € × 16,2 % / 2 = 518,40 € / 2 = 259,20 € (AN-Anteil)',
+        erklaerung: 'GKV-Beitrag: Gesamtbeitrag = Brutto × (Beitragssatz + Zusatzbeitrag). Paritätische Aufteilung: AN und AG zahlen je die Hälfte.',
+        stichwoerter: ['259', '259,20']
       }
     ]
   },
@@ -234,71 +357,105 @@ export const WISO_UEBUNGEN: UebungsSet[] = [
     uebungen: [
       {
         typ: 'multiple-choice',
-        frage: 'Wer wählt den Betriebsrat?',
+        frage: 'In welchen der folgenden Angelegenheiten hat der Betriebsrat ein zwingendes Mitbestimmungsrecht?',
         optionen: [
-          'Die Geschäftsführung',
-          'Die Gewerkschaft',
-          'Die Arbeitnehmer des Betriebs in geheimer und unmittelbarer Wahl',
-          'Die IHK'
+          'Eröffnung einer neuen Filiale im Ausland.',
+          'Einführung eines technischen Zeiterfassungssystems.',
+          'Festlegung des Unternehmensbudgets für das Folgejahr.',
+          'Erwerb von Betriebsgrundstücken.',
+          'Wahl des Logistikpartners für die Lieferkette.'
+        ],
+        korrekteAntwort: 1,
+        erklaerung: '§ 87 BetrVG: Zwingende Mitbestimmung bei sozialen Angelegenheiten, u. a. technische Überwachungseinrichtungen (Zeiterfassung), Beginn/Ende der Arbeitszeit, Urlaubsgrundsätze. KEIN Mitbestimmungsrecht bei unternehmerischen Entscheidungen wie Filialgründung oder Budgetplanung.'
+      },
+      {
+        typ: 'multiple-choice',
+        frage: 'Welche Aussage zur Kündigung im Zusammenhang mit dem Betriebsrat ist korrekt?',
+        optionen: [
+          'Der Betriebsrat kann jede Kündigung verhindern, wenn er ihr widerspricht.',
+          'Bei Betrieben mit weniger als 50 Mitarbeitern muss der Betriebsrat nicht angehört werden.',
+          'Jede Kündigung ist unwirksam, wenn der Betriebsrat vorher nicht angehört wurde.',
+          'Der Betriebsrat muss nur bei betriebsbedingten Kündigungen informiert werden.',
+          'Die Anhörung des Betriebsrats ist eine Kann-Vorschrift, keine Pflicht.'
         ],
         korrekteAntwort: 2,
-        erklaerung: '§ 14 BetrVG. Wahl alle 4 Jahre. Voraussetzung: Betrieb mit mindestens 5 wahlberechtigten Arbeitnehmern.'
+        erklaerung: '§ 102 BetrVG: Vor jeder Kündigung muss der Betriebsrat angehört werden. Eine ohne Anhörung ausgesprochene Kündigung ist unwirksam – unabhängig von der Betriebsgröße. Der BR kann widersprechen, nicht aber vetieren.'
       },
       {
         typ: 'multiple-choice',
-        frage: 'Ab wie vielen Arbeitnehmern kann ein Betriebsrat gewählt werden?',
-        optionen: ['2', '5', '10', '20'],
-        korrekteAntwort: 1,
-        erklaerung: '§ 1 BetrVG: mindestens 5 wahlberechtigte AN, davon 3 wählbar. Größe des BR steigt mit Belegschaft (§ 9 BetrVG).'
-      },
-      {
-        typ: 'multiple-choice',
-        frage: 'Was ist KEINE Aufgabe des Betriebsrats?',
+        frage: 'Wer schließt Betriebsvereinbarungen ab?',
         optionen: [
-          'Mitbestimmung bei sozialen Angelegenheiten',
-          'Überwachung der Einhaltung von Gesetzen und Tarifverträgen',
-          'Vertretung der Arbeitnehmer gegenüber Arbeitgeber',
-          'Führen von Tarifverhandlungen'
+          'Gewerkschaft und Arbeitgeberverband',
+          'Geschäftsleitung und Gewerkschaft',
+          'IHK und Betriebsrat',
+          'Geschäftsleitung und Betriebsrat',
+          'Betriebsrat und Belegschaft'
         ],
         korrekteAntwort: 3,
-        erklaerung: 'Tarifverhandlungen führen Gewerkschaften. Betriebsrat = auf Betriebsebene, Gewerkschaft = branchen-/überbetrieblich.'
+        erklaerung: '§ 77 BetrVG: Betriebsvereinbarungen werden zwischen Arbeitgeber (Geschäftsleitung) und Betriebsrat geschlossen. Nicht zu verwechseln mit dem Tarifvertrag (Gewerkschaft + Arbeitgeberverband).'
       },
       {
         typ: 'multiple-choice',
-        frage: 'Welches Gremium vertritt Auszubildende und Jugendliche?',
-        optionen: ['Betriebsrat', 'JAV (Jugend- und Auszubildendenvertretung)', 'Ausbilderrat', 'Azubi-Kammer'],
-        korrekteAntwort: 1,
-        erklaerung: 'JAV wird bei mindestens 5 AN unter 18 oder Azubis unter 25 gewählt. Nimmt beratend an BR-Sitzungen teil.'
-      },
-      {
-        typ: 'multiple-choice',
-        frage: 'Welche Arten von Tarifverträgen gibt es?',
+        frage: 'Was ist eine Aussperrung im Arbeitskampf?',
         optionen: [
-          'Firmen- und Flächentarifvertrag',
-          'Einzel- und Gruppenvertrag',
-          'Kurz- und Langzeitvertrag',
-          'Pflicht- und Optionsvertrag'
-        ],
-        korrekteAntwort: 0,
-        erklaerung: 'Flächentarifvertrag (Branche) vs. Firmen-/Haustarifvertrag (einzelner AG). Dazu: Rahmen-, Mantel-, Lohn-/Gehaltstarifvertrag.'
-      },
-      {
-        typ: 'wahr-falsch',
-        aussage: 'Der Betriebsrat hat ein Mitbestimmungsrecht bei der Einstellung neuer Mitarbeiter.',
-        korrekt: true,
-        erklaerung: '§ 99 BetrVG: Bei Betrieben ab 20 AN muss der BR Einstellungen, Versetzungen und Eingruppierungen zustimmen.'
-      },
-      {
-        typ: 'multiple-choice',
-        frage: 'Was ist das Ziel eines Streiks?',
-        optionen: [
-          'Dem Arbeitgeber wirtschaftlich schaden',
-          'Druckmittel zur Durchsetzung tariflicher Forderungen',
-          'Mehr Urlaubstage für alle',
-          'Kündigung des Tarifvertrags'
+          'Die Verweigerung der Lohnzahlung während des Streiks.',
+          'Die vorübergehende Freistellung von Arbeitnehmern durch den Arbeitgeber als Gegenmittel zum Streik.',
+          'Das Fernbleiben der Arbeitnehmer von der Arbeit ohne Streikbeschluss.',
+          'Das Verbot, neue Arbeitnehmer einzustellen.',
+          'Die Kündigung aller streikenden Arbeitnehmer.'
         ],
         korrekteAntwort: 1,
-        erklaerung: 'Streik ist das legale Arbeitskampfmittel der Gewerkschaft. Voraussetzung: tariflich regelbares Ziel, Streikbeschluss, Ultima Ratio.'
+        erklaerung: 'Aussperrung ist das Arbeitskampfmittel des Arbeitgebers: Er schließt Arbeitnehmer vorübergehend vom Betrieb aus und zahlt keinen Lohn. Pendant zum Streik (AN-Seite). Beide sind Ultima Ratio.'
+      },
+      {
+        typ: 'multiple-choice',
+        frage: 'Welche Voraussetzungen müssen erfüllt sein, damit eine Jugend- und Auszubildendenvertretung (JAV) gewählt werden kann?',
+        optionen: [
+          'Im Betrieb müssen mindestens 10 Auszubildende beschäftigt sein.',
+          'Eine JAV kann auch ohne Betriebsrat gewählt werden.',
+          'Es müssen mindestens 5 Arbeitnehmer unter 18 Jahren oder Auszubildende unter 25 Jahren beschäftigt sein und ein Betriebsrat muss bestehen.',
+          'Die JAV-Wahl wird von der IHK organisiert.',
+          'Alle Auszubildenden eines Unternehmens wählen gemeinsam – auch wenn es mehrere Betriebe gibt.'
+        ],
+        korrekteAntwort: 2,
+        erklaerung: '§ 60 BetrVG: JAV kann gewählt werden, wenn mindestens 5 jugendliche AN (unter 18) oder Azubis (unter 25) im Betrieb beschäftigt sind UND bereits ein Betriebsrat besteht. Ohne BR keine JAV.'
+      },
+      {
+        typ: 'multiple-choice',
+        frage: 'Was regelt ein Manteltarifvertrag typischerweise?',
+        optionen: [
+          'Monatliche Gehaltssätze und Lohngruppen.',
+          'Ausschließlich Urlaubsansprüche.',
+          'Länger gültige Rahmenbedingungen wie Arbeitszeit, Urlaub, Kündigungsfristen und Zuschläge.',
+          'Die Zusammensetzung des Betriebsrats.',
+          'Sozialversicherungsbeiträge und deren Aufteilung.'
+        ],
+        korrekteAntwort: 2,
+        erklaerung: 'Manteltarifvertrag (= Rahmentarifvertrag): langfristig gültige allgemeine Arbeitsbedingungen (Urlaub, Arbeitszeit, Kündigungsfristen). Entgelt-/Lohntarifvertrag: aktuelle Gehaltssätze, meist kürzer laufend.'
+      },
+      {
+        typ: 'multiple-choice',
+        frage: 'Welche Aussage zu den Sozialpartnern trifft zu?',
+        optionen: [
+          'Sozialpartner sind das Bundesarbeitsministerium und die IHK.',
+          'Sozialpartner sind Gewerkschaften auf Arbeitnehmerseite und Arbeitgeberverbände auf Arbeitgeberseite.',
+          'Sozialpartner sind Betriebsrat und Geschäftsführung.',
+          'Sozialpartner sind die Bundesagentur für Arbeit und die Deutsche Rentenversicherung.',
+          'Sozialpartner sind ausschließlich staatliche Institutionen.'
+        ],
+        korrekteAntwort: 1,
+        erklaerung: 'Tarifautonomie (Art. 9 Abs. 3 GG): Sozialpartner = Gewerkschaften (AN-Seite) + Arbeitgeberverbände (AG-Seite). Sie verhandeln Tarifverträge ohne staatliche Einflussnahme.'
+      },
+      {
+        typ: 'zuordnung',
+        frage: 'Ordne die Sachverhalte dem jeweiligen Begriff aus dem Betriebsverfassungsrecht zu.',
+        paare: [
+          { begriff: 'Zwingende Mitbestimmung (§ 87 BetrVG)', definition: 'Betriebsrat muss der Einführung von Gleitzeit zustimmen' },
+          { begriff: 'Anhörungsrecht (§ 102 BetrVG)', definition: 'Arbeitgeber muss Betriebsrat vor jeder Kündigung informieren' },
+          { begriff: 'Keine Mitbestimmung', definition: 'Unternehmen eröffnet eine neue Niederlassung in München' },
+          { begriff: 'Betriebsvereinbarung (§ 77 BetrVG)', definition: 'Geschäftsleitung und Betriebsrat einigen sich auf Regelung zur mobilen Arbeit' }
+        ],
+        erklaerung: 'Mitbestimmung nur bei sozialen Angelegenheiten (§ 87). Unternehmerische Entscheidungen (Filialgründung, Investitionen) unterliegen keiner Mitbestimmung.'
       }
     ]
   },
@@ -309,63 +466,81 @@ export const WISO_UEBUNGEN: UebungsSet[] = [
     uebungen: [
       {
         typ: 'multiple-choice',
-        frage: 'Welche Wirtschaftsordnung herrscht in Deutschland?',
-        optionen: ['Planwirtschaft', 'Freie Marktwirtschaft', 'Soziale Marktwirtschaft', 'Zentralverwaltungswirtschaft'],
+        frage: 'Was beschreibt die soziale Marktwirtschaft in Deutschland korrekt?',
+        optionen: [
+          'Der Staat legt Preise und Produktionsmengen zentral fest.',
+          'Es gibt freien Wettbewerb ohne staatliche Eingriffe.',
+          'Der freie Markt wird durch staatliche Sozialgesetzgebung ergänzt, um negative Auswirkungen des Marktes abzufedern.',
+          'Alle Produktionsmittel befinden sich im Staatsbesitz.',
+          'Unternehmen müssen ihre Preise mit dem Staat abstimmen.'
+        ],
         korrekteAntwort: 2,
-        erklaerung: 'Soziale Marktwirtschaft = freier Markt + soziale Absicherung + Regulierung. Konzept von Ludwig Erhard (1950er).'
+        erklaerung: 'Soziale Marktwirtschaft (Ludwig Erhard): Marktwirtschaft + soziale Absicherung. Der Staat setzt Rahmenbedingungen (Gesetze, Sozialversicherung), greift aber nicht direkt in die Preisbildung ein.'
       },
       {
         typ: 'multiple-choice',
-        frage: 'Wie entsteht der Gleichgewichtspreis auf einem Markt?',
+        frage: 'Welche der folgenden Aussagen zur Nachfrage trifft zu?',
         optionen: [
-          'Durch staatliche Festsetzung',
-          'Wo Angebot und Nachfrage übereinstimmen',
-          'Durch Zufall',
-          'Wer zuerst kauft, bestimmt den Preis'
+          'Nachfrage entsteht allein durch Bedürfnisse, unabhängig von der Kaufkraft.',
+          'Nachfrage ist identisch mit Bedürfnis.',
+          'Nachfrage entsteht, wenn ein Bedürfnis auf Kaufkraft trifft und am Markt wirksam wird.',
+          'Bei höherem Preis steigt die Nachfrage nach normalen Gütern.',
+          'Nachfrage kann nur durch den Staat beeinflusst werden.'
         ],
-        korrekteAntwort: 1,
-        erklaerung: 'Marktgleichgewicht: Menge, die Anbieter verkaufen wollen = Menge, die Nachfrager kaufen wollen.'
-      },
-      {
-        typ: 'zuordnung',
-        frage: 'Ordne die Marktformen zu.',
-        paare: [
-          { begriff: 'Monopol', definition: 'Ein Anbieter, viele Nachfrager' },
-          { begriff: 'Oligopol', definition: 'Wenige Anbieter, viele Nachfrager' },
-          { begriff: 'Polypol', definition: 'Viele Anbieter, viele Nachfrager' },
-          { begriff: 'Monopson', definition: 'Viele Anbieter, ein Nachfrager' }
-        ],
-        erklaerung: 'Klassifikation nach Anzahl Anbieter/Nachfrager. Beispiel Monopol: Deutsche Bahn im Fernverkehr (früher).'
+        korrekteAntwort: 2,
+        erklaerung: 'Bedürfnis → Bedarf (mit Kaufkraft) → Nachfrage (am Markt). Nachfrage setzt Zahlungsbereitschaft und -fähigkeit voraus. Bei höherem Preis sinkt die Nachfrage nach normalen Gütern.'
       },
       {
         typ: 'multiple-choice',
-        frage: 'Was passiert bei einem Preisanstieg eines Gutes normalerweise mit der Nachfrage?',
+        frage: 'Die Infotec GmbH stellt fest, dass auf dem IT-Dienstleistungsmarkt sehr viele Anbieter und viele Nachfrager tätig sind. Welche Marktform liegt vor?',
         optionen: [
-          'Sie steigt',
-          'Sie sinkt',
-          'Sie bleibt gleich',
-          'Sie verdoppelt sich'
+          'Angebotsmonopol',
+          'Angebotsoligopol',
+          'Polypol',
+          'Nachfragemonopol',
+          'Nachfrageoligopol'
         ],
-        korrekteAntwort: 1,
-        erklaerung: 'Nachfragegesetz: Höherer Preis → geringere Nachfrage (bei normalen Gütern). Ausnahmen: Luxus-/Giffen-Güter.'
+        korrekteAntwort: 2,
+        erklaerung: 'Polypol: viele Anbieter, viele Nachfrager. Monopol: ein Anbieter (oder Nachfrager). Oligopol: wenige Anbieter (oder Nachfrager).'
       },
       {
         typ: 'multiple-choice',
-        frage: 'Welche Wirtschaftsteilnehmer bilden den einfachen Wirtschaftskreislauf?',
+        frage: 'Welche der folgenden Aussagen beschreibt einen Käufermarkt?',
         optionen: [
-          'Unternehmen und Staat',
-          'Haushalte und Unternehmen',
-          'Staat und Banken',
-          'Haushalte und Staat'
+          'Nachfrage übersteigt das Angebot; Preise steigen tendenziell.',
+          'Angebot und Nachfrage halten sich die Waage; der Preis ist stabil.',
+          'Das Angebot übersteigt die Nachfrage; Preise sinken tendenziell.',
+          'Nur ein einziger Anbieter bestimmt den Marktpreis.',
+          'Der Staat greift regulierend in das Marktgeschehen ein.'
         ],
-        korrekteAntwort: 1,
-        erklaerung: 'Einfacher Kreislauf: Haushalte stellen Arbeitskraft, erhalten Lohn. Unternehmen bieten Waren, erhalten Kaufpreis. Erweiterter Kreislauf ergänzt Staat, Banken, Ausland.'
+        korrekteAntwort: 2,
+        erklaerung: 'Käufermarkt = Angebotsüberhang: Angebot > Nachfrage → Preiswettbewerb, Preise sinken. Verkäufermarkt = Nachfrageüberhang: Nachfrage > Angebot → Preissteigerungen möglich.'
       },
       {
-        typ: 'wahr-falsch',
-        aussage: 'In einer Marktwirtschaft wird die Produktion zentral geplant.',
-        korrekt: false,
-        erklaerung: 'Zentrale Planung ist Planwirtschaft (z.B. DDR). In der Marktwirtschaft regelt der Preismechanismus die Produktion.'
+        typ: 'multiple-choice',
+        frage: 'Welchem Wirtschaftssektor ist die IT-Dienstleistungsbranche zuzuordnen?',
+        optionen: [
+          'Primärer Sektor (Urproduktion)',
+          'Sekundärer Sektor (Produktion/Industrie)',
+          'Tertiärer Sektor (Dienstleistungen)',
+          'Quartärer Sektor (Energieversorgung)',
+          'Öffentlicher Sektor (Staatsbetriebe)'
+        ],
+        korrekteAntwort: 2,
+        erklaerung: 'Tertiärer Sektor: alle Dienstleistungen (IT, Handel, Finanz, Transport). Primär: Landwirtschaft, Bergbau. Sekundär: verarbeitendes Gewerbe, Industrie, Handwerk.'
+      },
+      {
+        typ: 'multiple-choice',
+        frage: 'Die Sachs-IT GmbH möchte durch eine intensive Mitarbeiterschulung die Qualität ihrer Produkte steigern. Welche Art von Zielen liegt hier vor?',
+        optionen: [
+          'Konkurrierende Ziele, da Schulungskosten den Gewinn senken.',
+          'Komplementäre Ziele, da Mitarbeiterqualifikation und Produktqualität sich gegenseitig fördern.',
+          'Indifferente Ziele ohne Wechselwirkung.',
+          'Antagonistische Ziele, da Personal- und Qualitätsziele sich ausschließen.',
+          'Strategische Ziele ohne operativen Bezug.'
+        ],
+        korrekteAntwort: 1,
+        erklaerung: 'Komplementäre Ziele fördern sich gegenseitig (Mitarbeiterqualifikation ↔ Produktqualität ↔ Kundenzufriedenheit). Konkurrierende Ziele stehen im Konflikt (z. B. Kostensenkung ↔ Lohnerhöhung).'
       }
     ]
   },
@@ -376,49 +551,79 @@ export const WISO_UEBUNGEN: UebungsSet[] = [
     uebungen: [
       {
         typ: 'multiple-choice',
-        frage: 'Wie hoch ist das Mindeststammkapital einer GmbH?',
-        optionen: ['1 €', '10.000 €', '25.000 €', '50.000 €'],
+        frage: 'Wann erlangt eine GmbH ihre Rechtsfähigkeit?',
+        optionen: [
+          'Mit der Unterzeichnung des Gesellschaftsvertrags durch alle Gesellschafter.',
+          'Nach Einzahlung des gesamten Stammkapitals.',
+          'Mit der Eintragung in das Handelsregister.',
+          'Nach Ablauf von 6 Wochen seit der Gründungsversammlung.',
+          'Sobald die erste Rechnung ausgestellt wird.'
+        ],
         korrekteAntwort: 2,
-        erklaerung: 'GmbH: 25.000 € Stammkapital, davon bei Gründung mindestens 12.500 € eingezahlt.'
+        erklaerung: '§ 11 GmbHG: Die GmbH entsteht als juristische Person mit der Eintragung in das Handelsregister (konstitutive Wirkung). Davor besteht eine Vor-GmbH, bei der die Gründer persönlich haften.'
       },
       {
         typ: 'multiple-choice',
-        frage: 'Wie hoch ist das Mindestgrundkapital einer AG?',
-        optionen: ['25.000 €', '50.000 €', '100.000 €', '500.000 €'],
-        korrekteAntwort: 1,
-        erklaerung: 'AG: 50.000 € Grundkapital, in Aktien aufgeteilt.'
+        frage: 'Was darf ein Prokurist NICHT ohne besondere Ermächtigung?',
+        optionen: [
+          'Verträge mit Kunden abschließen.',
+          'Das Unternehmen gegenüber Banken vertreten.',
+          'Grundstücke des Unternehmens verkaufen oder belasten.',
+          'Personal einstellen und entlassen.',
+          'Bestellungen bei Lieferanten aufgeben.'
+        ],
+        korrekteAntwort: 2,
+        erklaerung: '§ 49 Abs. 2 HGB: Prokura umfasst alle gerichtlichen und außergerichtlichen Geschäfte, AUSGENOMMEN Veräußerung und Belastung von Grundstücken. Ebenso: keine Prokura erteilen, keine Bilanz unterschreiben.'
       },
       {
         typ: 'zuordnung',
-        frage: 'Ordne die Rechtsformen ihrer Haftungsart zu.',
+        frage: 'Ordne die Beschreibung der passenden Rechtsform zu.',
         paare: [
-          { begriff: 'Einzelunternehmen', definition: 'Vollhaftung mit Privatvermögen' },
-          { begriff: 'OHG', definition: 'Alle Gesellschafter haften persönlich und unbeschränkt' },
-          { begriff: 'KG', definition: 'Komplementär: unbeschränkt, Kommanditist: beschränkt auf Einlage' },
-          { begriff: 'GmbH', definition: 'Haftung auf Gesellschaftsvermögen beschränkt' },
-          { begriff: 'AG', definition: 'Haftung auf Grundkapital beschränkt' }
+          { begriff: 'GmbH', definition: 'Kapitalgesellschaft, Stammkapital mind. 25.000 €, Haftung auf Gesellschaftsvermögen beschränkt' },
+          { begriff: 'OHG', definition: 'Personengesellschaft, alle Gesellschafter haften unbeschränkt mit Privatvermögen' },
+          { begriff: 'AG', definition: 'Kapitalgesellschaft, Grundkapital mind. 50.000 €, Organe: Vorstand, Aufsichtsrat, Hauptversammlung' },
+          { begriff: 'Einzelunternehmen', definition: 'Eine natürliche Person, unbeschränkte Haftung mit gesamtem Privatvermögen' }
         ],
-        erklaerung: 'Faustregel: Personengesellschaften (OHG, KG, GbR) haften persönlich. Kapitalgesellschaften (GmbH, AG, UG) nur mit Gesellschaftsvermögen.'
+        erklaerung: 'Faustregel: Kapitalgesellschaften (GmbH, AG, UG) haften mit Gesellschaftsvermögen. Personengesellschaften (OHG, KG, GbR) und Einzelunternehmen haften persönlich.'
       },
       {
         typ: 'multiple-choice',
-        frage: 'Welche Rechtsform benötigt mindestens zwei Gesellschafter?',
-        optionen: ['Einzelunternehmen', 'GmbH', 'OHG', 'UG'],
-        korrekteAntwort: 2,
-        erklaerung: 'OHG = Offene Handelsgesellschaft, mindestens 2 Personen. GmbH und UG können auch als Ein-Personen-Gesellschaft gegründet werden.'
-      },
-      {
-        typ: 'multiple-choice',
-        frage: 'Welches ist KEIN Organ einer AG?',
-        optionen: ['Vorstand', 'Aufsichtsrat', 'Hauptversammlung', 'Betriebsrat'],
+        frage: 'Die EcoTec GmbH wird von einem anderen Unternehmen aufgekauft und als eigenständige GmbH weitergeführt. Welcher Begriff beschreibt diesen Zusammenschluss?',
+        optionen: [
+          'Fusion (Verschmelzung)',
+          'Kartell',
+          'ARGE (Arbeitsgemeinschaft)',
+          'Konzern',
+          'Kooperation'
+        ],
         korrekteAntwort: 3,
-        erklaerung: 'AG-Organe: Vorstand (Geschäftsführung), Aufsichtsrat (Kontrolle), Hauptversammlung (Aktionäre). Betriebsrat ist kein Organ.'
+        erklaerung: 'Konzern: Unternehmen bleiben rechtlich selbstständig, werden aber wirtschaftlich einheitlich geleitet. Fusion: Unternehmen verlieren Identität. Kartell: Absprachen ohne Zusammenschluss. ARGE: für einen begrenzten Auftrag.'
       },
       {
-        typ: 'wahr-falsch',
-        aussage: 'Eine UG (haftungsbeschränkt) ist eine besondere Form der GmbH und kann mit nur 1 € Stammkapital gegründet werden.',
-        korrekt: true,
-        erklaerung: 'UG = "Mini-GmbH". Mindestens 1 € Stammkapital, aber Pflicht zur Gewinnrücklage (25 %) bis 25.000 € erreicht sind.'
+        typ: 'multiple-choice',
+        frage: 'Welche natürlichen Personen sind an einem Rechtsgeschäft beteiligt?',
+        optionen: [
+          'Die Städtische Werke GmbH und die Staatlichen Museen Berlin.',
+          'Die Bundesrepublik Deutschland und die Stadt Hamburg.',
+          'Die Softwareentwicklerin Lena Heine und der Steuerberater Jonas Müller.',
+          'Die Infotec GmbH & Co. KG und die MarSi-IT AG.',
+          'Der Deutsche Fußball-Bund e. V. und der FC Bayern München e. V.'
+        ],
+        korrekteAntwort: 2,
+        erklaerung: 'Natürliche Personen sind einzelne Menschen (z. B. Lena Heine, Jonas Müller). Juristische Personen sind Organisationen (GmbH, AG, Verein, Stadt, Bundesrepublik).'
+      },
+      {
+        typ: 'multiple-choice',
+        frage: 'Welche der folgenden Aussagen zur GmbH ist korrekt?',
+        optionen: [
+          'Gesellschafter einer GmbH haften unbeschränkt mit ihrem Privatvermögen.',
+          'Das Mindeststammkapital einer GmbH beträgt 50.000 €.',
+          'Eine GmbH kann von einer einzigen Person gegründet werden.',
+          'Die Organe der GmbH sind Vorstand, Aufsichtsrat und Hauptversammlung.',
+          'Die Haftung des Geschäftsführers ist auf seinen Jahresgehalt begrenzt.'
+        ],
+        korrekteAntwort: 2,
+        erklaerung: 'Eine GmbH kann als Ein-Personen-GmbH gegründet werden. Stammkapital: 25.000 € (AG: 50.000 €). Haftung der Gesellschafter: nur mit Einlage. Organe: Geschäftsführer + Gesellschafterversammlung (+ ggf. Aufsichtsrat ab 500 AN).'
       }
     ]
   },
@@ -429,52 +634,68 @@ export const WISO_UEBUNGEN: UebungsSet[] = [
     uebungen: [
       {
         typ: 'multiple-choice',
-        frage: 'Welcher ist KEIN klassischer Produktionsfaktor?',
-        optionen: ['Arbeit', 'Boden', 'Kapital', 'Zeit'],
-        korrekteAntwort: 3,
-        erklaerung: 'Klassisch: Arbeit, Boden, Kapital. In der BWL zusätzlich: Betriebsmittel, Werkstoffe, dispositive Arbeit.'
-      },
-      {
-        typ: 'multiple-choice',
-        frage: 'Was ist Aufbauorganisation?',
+        frage: 'Was ist eine Stabsstelle im Unternehmen?',
         optionen: [
-          'Die zeitliche Abfolge von Arbeitsschritten',
-          'Das hierarchische Gefüge von Stellen und Abteilungen',
-          'Der Bauplan eines Gebäudes',
-          'Ein Organigramm der Kunden'
+          'Eine Abteilung mit besonders vielen Mitarbeitern und hohem Weisungsrecht.',
+          'Eine beratende Stelle ohne Weisungsbefugnis gegenüber anderen Abteilungen.',
+          'Eine Stelle, die direkt dem Betriebsrat untersteht.',
+          'Eine temporäre Stelle für Saisonkräfte.',
+          'Die Stelle des unmittelbaren Vorgesetzten in der Linienhierarchie.'
         ],
         korrekteAntwort: 1,
-        erklaerung: 'Aufbau = "wer macht was" (Stellen, Abteilungen, Hierarchie). Ablauf = "wann und wie" (Prozesse).'
-      },
-      {
-        typ: 'zuordnung',
-        frage: 'Ordne die Organisationsformen zu.',
-        paare: [
-          { begriff: 'Einliniensystem', definition: 'Jede Stelle hat genau einen Vorgesetzten' },
-          { begriff: 'Mehrliniensystem', definition: 'Stelle hat mehrere fachliche Vorgesetzte' },
-          { begriff: 'Stab-Linien-Organisation', definition: 'Linien-Aufbau mit beratenden Stabsstellen' },
-          { begriff: 'Matrixorganisation', definition: 'Funktion + Projekt als zwei Dimensionen' }
-        ],
-        erklaerung: 'Einliniensystem ist am häufigsten. Matrix findet man oft in Projekt-/Produktunternehmen.'
+        erklaerung: 'Stabsstellen (z. B. Rechtsabteilung, Controlling, Unternehmenskommunikation) beraten die Leitung, haben aber KEIN Weisungsrecht gegenüber Linienstellen. Typisch für das Stab-Linien-System.'
       },
       {
         typ: 'multiple-choice',
-        frage: 'Was beschreibt die Ablauforganisation?',
+        frage: 'Die GreenByte GmbH teilt die Programmierung eines neuen Systems in Teilaufgaben auf, die von verschiedenen Entwicklern bearbeitet werden. Welches Prinzip liegt vor?',
         optionen: [
-          'Die Hierarchie im Unternehmen',
-          'Die zeitliche und räumliche Anordnung von Arbeitsprozessen',
-          'Die Rechtsform',
-          'Die Mitarbeiterzahl'
+          'Outsourcing an externe Dienstleister.',
+          'Betriebliche Arbeitsteilung (Arbeitszerlegung).',
+          'Vertikale Integration der Wertschöpfungskette.',
+          'Matrixorganisation.',
+          'Offshoring in ein Niedriglohnland.'
         ],
         korrekteAntwort: 1,
-        erklaerung: 'Ablauforganisation strukturiert Prozesse: Wer macht was wann in welcher Reihenfolge?'
+        erklaerung: 'Betriebliche Arbeitsteilung (Arbeitszerlegung): Ein Prozess wird in mehrere Teilschritte gegliedert, die von verschiedenen Arbeitskräften innerhalb des Betriebs ausgeführt werden.'
       },
       {
         typ: 'multiple-choice',
-        frage: 'Welche betriebliche Funktion umfasst Einkauf, Lagerung und Bereitstellung von Materialien?',
-        optionen: ['Produktion', 'Beschaffung / Materialwirtschaft', 'Absatz', 'Personalwesen'],
-        korrekteAntwort: 1,
-        erklaerung: 'Beschaffung ist vorgelagerte Funktion. Im Wertschöpfungsprozess: Beschaffung → Produktion → Absatz.'
+        frage: 'Ein 16-jähriger Schüler kauft ein E-Bike für 2.799 € auf Raten, ohne seine Eltern zu fragen. Welche rechtliche Wirkung hat dieses Rechtsgeschäft?',
+        optionen: [
+          'Das Rechtsgeschäft ist von Anfang an nichtig, da Minderjährige keine Verträge abschließen dürfen.',
+          'Das Rechtsgeschäft ist sofort wirksam, da er mit eigenem Taschengeld zahlt.',
+          'Das Rechtsgeschäft ist schwebend unwirksam und wird erst mit Genehmigung der gesetzlichen Vertreter wirksam.',
+          'Das Rechtsgeschäft ist wirksam, da er 16 Jahre alt und damit geschäftsfähig ist.',
+          'Das Rechtsgeschäft ist anfechtbar, da er sich im Irrtum über den Preis befunden hat.'
+        ],
+        korrekteAntwort: 2,
+        erklaerung: '§§ 106, 108 BGB: Beschränkt Geschäftsfähige (7–17 Jahre) können ohne Zustimmung der Eltern kein verpflichtendes Rechtsgeschäft abschließen. Es ist schwebend unwirksam – wirksam erst mit Genehmigung der gesetzlichen Vertreter.'
+      },
+      {
+        typ: 'multiple-choice',
+        frage: 'Welche der folgenden Organisationsformen ist durch das Merkmal gekennzeichnet, dass jeder Mitarbeiter genau einen Vorgesetzten hat?',
+        optionen: [
+          'Matrixorganisation',
+          'Mehrliniensystem',
+          'Einliniensystem',
+          'Stab-Linien-System',
+          'Projektorganisation'
+        ],
+        korrekteAntwort: 2,
+        erklaerung: 'Einliniensystem: klare Hierarchie, jede Stelle hat genau einen direkten Vorgesetzten (Prinzip der Einheit der Auftragserteilung). Vorteil: klare Zuständigkeiten. Nachteil: lange Dienstwege.'
+      },
+      {
+        typ: 'multiple-choice',
+        frage: 'Eine 18-jährige Auszubildende kauft ein Smartphone für 1.200 € auf Raten. Welche rechtliche Wirkung hat dieses Rechtsgeschäft?',
+        optionen: [
+          'Das Rechtsgeschäft ist schwebend unwirksam, da sie noch Auszubildende ist.',
+          'Das Rechtsgeschäft ist nichtig, da Auszubildende keine Ratenkäufe abschließen dürfen.',
+          'Das Rechtsgeschäft ist wirksam, da sie mit 18 Jahren voll geschäftsfähig ist.',
+          'Das Rechtsgeschäft bedarf der Zustimmung des Ausbildungsbetriebs.',
+          'Das Rechtsgeschäft ist anfechtbar, wenn der Arbeitgeber dagegen Einspruch erhebt.'
+        ],
+        korrekteAntwort: 2,
+        erklaerung: '§ 2 BGB: Volljährigkeit mit Vollendung des 18. Lebensjahres → volle Geschäftsfähigkeit. Ab 18 darf sie unbeschränkt Verträge eingehen, unabhängig von ihrer Eigenschaft als Auszubildende.'
       }
     ]
   },
@@ -485,51 +706,66 @@ export const WISO_UEBUNGEN: UebungsSet[] = [
     uebungen: [
       {
         typ: 'multiple-choice',
-        frage: 'Welche vier Ziele bilden das magische Viereck der Wirtschaftspolitik?',
+        frage: 'Welche vier Ziele bilden das „Magische Viereck" der Wirtschaftspolitik?',
         optionen: [
-          'Wachstum, Preisstabilität, Beschäftigung, außenwirtschaftliches Gleichgewicht',
-          'Export, Import, Inflation, Arbeitslosigkeit',
-          'Steuern, Ausgaben, Zinsen, Wechselkurse',
-          'Nachhaltigkeit, Gerechtigkeit, Freiheit, Wohlstand'
+          'Wachstum, Preisstabilität, Beschäftigung, außenwirtschaftliches Gleichgewicht.',
+          'Export, Import, Inflation, Arbeitslosigkeit.',
+          'Nachhaltigkeit, Gerechtigkeit, Wohlstand, Umweltschutz.',
+          'Bildung, Gesundheit, Sicherheit, Mobilität.',
+          'Steuern, Zinsen, Wechselkurse, Subventionen.'
         ],
         korrekteAntwort: 0,
-        erklaerung: 'Stabilitätsgesetz 1967: stetiges Wachstum, Preisstabilität, hoher Beschäftigungsstand, außenwirtschaftl. Gleichgewicht. Identische Frage in mehreren WiSo-Jahrgängen.'
+        erklaerung: '§ 1 StabWG (Stabilitätsgesetz 1967): Preisniveaustabilität, hoher Beschäftigungsstand, außenwirtschaftliches Gleichgewicht, stetiges und angemessenes Wirtschaftswachstum. Das „Magische Sechseck" ergänzt: Einkommensverteilung + Umweltschutz.'
       },
       {
         typ: 'zuordnung',
-        frage: 'Ordne die Konjunkturphasen ihrer Beschreibung zu.',
+        frage: 'Ordne die wirtschaftlichen Kennzahlen dem jeweiligen Ziel des Magischen Vierecks zu.',
         paare: [
-          { begriff: 'Aufschwung (Expansion)', definition: 'Wachstum nimmt zu, Beschäftigung steigt' },
-          { begriff: 'Boom (Hochkonjunktur)', definition: 'Maximale Auslastung, Inflationsgefahr' },
-          { begriff: 'Abschwung (Rezession)', definition: 'Nachfrage sinkt, Investitionen gehen zurück' },
-          { begriff: 'Tief (Depression)', definition: 'Wirtschaft auf Tiefpunkt, hohe Arbeitslosigkeit' }
+          { begriff: 'Preisstabilität', definition: 'Verbraucherpreisindex (VPI) / Inflationsrate' },
+          { begriff: 'Hoher Beschäftigungsstand', definition: 'Arbeitslosenquote' },
+          { begriff: 'Wirtschaftswachstum', definition: 'Zuwachsrate des realen Bruttoinlandsprodukts (BIP)' },
+          { begriff: 'Außenwirtschaftliches Gleichgewicht', definition: 'Außenbeitrag (Saldo aus Exporten und Importen)' }
         ],
-        erklaerung: 'Zyklus aus 4 Phasen. Dauer historisch 5–8 Jahre.'
+        erklaerung: 'Jedes Ziel des Magischen Vierecks hat einen spezifischen Indikator. EZB misst Preisstabilität über den HVPI (Harmonisierter Verbraucherpreisindex).'
       },
       {
         typ: 'multiple-choice',
-        frage: 'Was ist Inflation?',
+        frage: 'Welche Aussage beschreibt eine Rezession korrekt?',
         optionen: [
-          'Sinkendes Preisniveau',
-          'Allgemeiner Anstieg des Preisniveaus (Kaufkraftverlust)',
-          'Hohe Arbeitslosigkeit',
-          'Niedrige Zinsen'
+          'Das BIP wächst kräftig, die Arbeitslosenquote sinkt.',
+          'Das Preisniveau sinkt deutlich, die Wirtschaft boomt.',
+          'Das BIP geht zurück (negatives Wachstum) und die Arbeitslosenquote steigt.',
+          'Die Zinsen steigen stark, während die Nachfrage anzieht.',
+          'Außenhandel bricht ein, während die Binnennachfrage stabil bleibt.'
+        ],
+        korrekteAntwort: 2,
+        erklaerung: 'Rezession (Abschwung): BIP-Rückgang, steigende Arbeitslosigkeit, sinkende Investitionen. Technisch: zwei aufeinanderfolgende Quartale mit negativem BIP-Wachstum.'
+      },
+      {
+        typ: 'multiple-choice',
+        frage: 'Welche der folgenden Maßnahmen erhöht die Kaufkraft der Bevölkerung?',
+        optionen: [
+          'Erhöhung der Mehrwertsteuer von 19 % auf 21 %.',
+          'Erhöhung von Einfuhrzöllen auf Importgüter.',
+          'Erhöhung der Sozialversicherungsbeiträge um 1 Prozentpunkt.',
+          'Erhöhung des Wohngeldes für einkommensschwache Haushalte.',
+          'Kürzung von Transferleistungen im Rahmen der Haushaltskonsolidierung.'
+        ],
+        korrekteAntwort: 3,
+        erklaerung: 'Wohngeld ist eine staatliche Transferleistung, die direkt die Kaufkraft erhöht. MwSt-Erhöhung, Zölle und höhere Sozialabgaben verringern die verfügbare Kaufkraft.'
+      },
+      {
+        typ: 'multiple-choice',
+        frage: 'Welche Maßnahme fördert die Globalisierung des Welthandels?',
+        optionen: [
+          'Einführung von Importzöllen auf ausländische IT-Produkte.',
+          'Abschluss von Freihandelsabkommen zwischen Ländern.',
+          'Verschärfung der Einreisebestimmungen für ausländische Fachkräfte.',
+          'Aufbau nationaler Produktionskapazitäten zur Importsubstitution.',
+          'Verbot des Exports sensibler Technologien.'
         ],
         korrekteAntwort: 1,
-        erklaerung: 'Inflation = Geld verliert Kaufkraft. EZB-Ziel: 2 % mittelfristig. Deflation (Gegenteil) gilt als gefährlicher, weil sie Konsum bremst.'
-      },
-      {
-        typ: 'multiple-choice',
-        frage: 'Welche Institution betreibt die Geldpolitik im Euroraum?',
-        optionen: ['Deutsche Bundesbank', 'EU-Kommission', 'Europäische Zentralbank (EZB)', 'Bundesfinanzministerium'],
-        korrekteAntwort: 2,
-        erklaerung: 'Seit 1999 macht die EZB die Geldpolitik für alle Euro-Länder. Nationale Zentralbanken setzen sie um.'
-      },
-      {
-        typ: 'wahr-falsch',
-        aussage: 'Eine Erhöhung der Leitzinsen wirkt tendenziell inflationsdämpfend.',
-        korrekt: true,
-        erklaerung: 'Höhere Zinsen → Kredite teurer → Nachfrage sinkt → Preise steigen weniger. Klassisches Instrument der EZB gegen Inflation.'
+        erklaerung: 'Globalisierung wird gefördert durch Abbau von Handelshemmnissen (Zölle ↓, Freihandelsabkommen), internationale Niederlassungen und Arbeitsteilung. Zölle, Einreisebeschränkungen und Exportverbote hemmen die Globalisierung.'
       }
     ]
   },
@@ -539,48 +775,62 @@ export const WISO_UEBUNGEN: UebungsSet[] = [
     themaId: 'wiso-steuern',
     uebungen: [
       {
-        typ: 'zuordnung',
-        frage: 'Ordne die Steuern ihrer Art zu.',
-        paare: [
-          { begriff: 'Einkommensteuer', definition: 'Direkte Steuer (Lohnsteuer, progressiv)' },
-          { begriff: 'Umsatzsteuer (MwSt.)', definition: 'Indirekte Steuer (19% / 7% erm.)' },
-          { begriff: 'Körperschaftsteuer', definition: 'Direkte Steuer für juristische Personen' },
-          { begriff: 'Gewerbesteuer', definition: 'Direkte Steuer für Gewerbetreibende' },
-          { begriff: 'Grunderwerbsteuer', definition: 'Verkehrsteuer beim Immobilienkauf' }
-        ],
-        erklaerung: 'Direkte Steuer = Steuerschuldner = Steuerträger. Indirekt = wird über Preis weitergegeben (USt.).'
-      },
-      {
         typ: 'multiple-choice',
-        frage: 'Was ist eine progressive Steuer?',
+        frage: 'Was ist eine direkte Steuer?',
         optionen: [
-          'Der Steuersatz ist immer gleich',
-          'Höheres Einkommen → höherer prozentualer Steuersatz',
-          'Wird nur für Unternehmen erhoben',
-          'Wird nur einmal im Leben gezahlt'
+          'Eine Steuer, die vom Käufer über den Preis getragen wird.',
+          'Eine Steuer, bei der Steuerschuldner und Steuerträger dieselbe Person sind.',
+          'Eine Steuer, die nur einmal im Leben anfällt.',
+          'Eine Steuer, die ausschließlich von Unternehmen gezahlt wird.',
+          'Eine Steuer, deren Höhe staatlich festgelegt und nicht verhandelbar ist.'
         ],
         korrekteAntwort: 1,
-        erklaerung: 'Einkommensteuer ist progressiv (14 % bis 45 % Spitzensteuersatz). Proportional wäre konstant (z.B. Körperschaftsteuer mit 15 %).'
+        erklaerung: 'Direkte Steuer: Steuerschuldner = Steuerträger (z. B. Einkommensteuer, Körperschaftsteuer, Gewerbesteuer). Indirekte Steuer: Steuerschuldner (Unternehmen) ≠ Steuerträger (Endverbraucher), z. B. Umsatzsteuer.'
+      },
+      {
+        typ: 'zuordnung',
+        frage: 'Ordne die Steuerart dem passenden Begriff zu.',
+        paare: [
+          { begriff: 'Einkommensteuer', definition: 'Direkte Steuer, progressiv, Steuerschuldner = Steuerträger' },
+          { begriff: 'Umsatzsteuer (MwSt)', definition: 'Indirekte Steuer, Regelsteuersatz 19 %, vom Endverbraucher getragen' },
+          { begriff: 'Gewerbesteuer', definition: 'Direkte Gemeindesteuer auf Gewerbeerträge, Hebesatz variiert je Gemeinde' },
+          { begriff: 'Körperschaftsteuer', definition: 'Direkte Steuer auf Gewinne juristischer Personen (GmbH, AG), Satz 15 %' }
+        ],
+        erklaerung: 'Indirekte Steuern werden vom Unternehmer ans Finanzamt abgeführt, wirtschaftlich aber vom Verbraucher getragen. Direkte Steuern belasten denjenigen, der sie zahlt.'
+      },
+      {
+        typ: 'freitext',
+        frage: 'Die Gramberg GmbH erwirtschaftet in einem Geschäftsjahr einen Umsatz von 480.000 € und einen Gewinn von 33.600 €. Berechnen Sie die Umsatzrentabilität.',
+        musterloesung: 'Umsatzrentabilität = Gewinn / Umsatz × 100 = 33.600 € / 480.000 € × 100 = 7,0 %',
+        erklaerung: 'Formel: Umsatzrentabilität = Gewinn / Umsatz × 100. Je höher die Umsatzrentabilität, desto mehr Gewinn erzielt das Unternehmen pro Euro Umsatz.',
+        stichwoerter: ['7', '7,0', '7,0%']
+      },
+      {
+        typ: 'freitext',
+        frage: 'Die Sachs-IT GmbH hat ein Eigenkapital von 1.250.000 € und erzielt einen Jahresgewinn von 112.500 €. Berechnen Sie die Eigenkapitalrentabilität.',
+        musterloesung: 'Eigenkapitalrentabilität = Gewinn / Eigenkapital × 100 = 112.500 € / 1.250.000 € × 100 = 9,0 %',
+        erklaerung: 'Formel: EK-Rentabilität = Gewinn / Eigenkapital × 100. Sie gibt an, wie rentabel das eingesetzte Eigenkapital ist.',
+        stichwoerter: ['9', '9,0', '9,0%']
+      },
+      {
+        typ: 'freitext',
+        frage: 'Ein Unternehmen vergleicht zwei Aufträge: Auftrag A hat einen Ertrag von 95.000 € bei einem Aufwand von 76.000 €. Auftrag B hat einen Ertrag von 110.000 € bei einem Aufwand von 90.000 €. Berechnen Sie die Wirtschaftlichkeit beider Aufträge und geben Sie an, welcher wirtschaftlicher ist.',
+        musterloesung: 'Auftrag A: 95.000 / 76.000 = 1,25. Auftrag B: 110.000 / 90.000 ≈ 1,22. Auftrag A ist wirtschaftlicher (höhere Wirtschaftlichkeitszahl).',
+        erklaerung: 'Wirtschaftlichkeit = Ertrag / Aufwand. Wert > 1 = Gewinn. Der höhere Wert kennzeichnet den wirtschaftlicheren Auftrag.',
+        stichwoerter: ['1,25', 'A', 'Auftrag A']
       },
       {
         typ: 'multiple-choice',
-        frage: 'Wie hoch ist der normale Umsatzsteuersatz in Deutschland?',
-        optionen: ['7 %', '15 %', '19 %', '25 %'],
-        korrekteAntwort: 2,
-        erklaerung: '19 % Regelsatz, 7 % ermäßigt (Lebensmittel, Bücher, ÖPNV). Wird vom Endverbraucher getragen.'
-      },
-      {
-        typ: 'multiple-choice',
-        frage: 'Welche Steuer zahlt ein Unternehmer an die Gemeinde?',
-        optionen: ['Einkommensteuer', 'Gewerbesteuer', 'Umsatzsteuer', 'Körperschaftsteuer'],
-        korrekteAntwort: 1,
-        erklaerung: 'Gewerbesteuer ist Gemeindesteuer. Die Höhe hängt vom Hebesatz der jeweiligen Gemeinde ab.'
-      },
-      {
-        typ: 'wahr-falsch',
-        aussage: 'Die Umsatzsteuer ist eine direkte Steuer.',
-        korrekt: false,
-        erklaerung: 'USt. ist indirekt: Unternehmen führt sie ans Finanzamt ab, bezahlt wird sie aber vom Endverbraucher über den Preis.'
+        frage: 'Welche der folgenden Steuern ist eine indirekte Steuer?',
+        optionen: [
+          'Einkommensteuer',
+          'Körperschaftsteuer',
+          'Gewerbesteuer',
+          'Umsatzsteuer (Mehrwertsteuer)',
+          'Erbschaftsteuer'
+        ],
+        korrekteAntwort: 3,
+        erklaerung: 'Die Umsatzsteuer (MwSt.) ist indirekt: Der Händler führt sie ans Finanzamt ab, wirtschaftlich trägt sie der Endverbraucher über den Preis. Einkommensteuer, Körperschaftsteuer und Gewerbesteuer sind direkte Steuern.'
       }
     ]
   },
@@ -591,59 +841,94 @@ export const WISO_UEBUNGEN: UebungsSet[] = [
     uebungen: [
       {
         typ: 'multiple-choice',
-        frage: 'Welche drei Dimensionen bilden das Nachhaltigkeitsdreieck?',
+        frage: 'Was besagt das Verursacherprinzip im Umweltrecht?',
         optionen: [
-          'Gesundheit, Bildung, Politik',
-          'Ökologie, Ökonomie, Soziales',
-          'Vergangenheit, Gegenwart, Zukunft',
-          'Import, Export, Binnenmarkt'
+          'Der Staat trägt grundsätzlich die Kosten für alle Umweltschäden.',
+          'Umweltschäden werden solidarisch auf alle Verursacher verteilt.',
+          'Derjenige, der Umweltschäden verursacht, trägt die Kosten für deren Beseitigung.',
+          'Unternehmen müssen pauschal 1 % ihres Umsatzes für Umweltschutz aufwenden.',
+          'Verursacher können Umweltschäden durch Zahlung einer Ausgleichsabgabe legalisieren.'
+        ],
+        korrekteAntwort: 2,
+        erklaerung: 'Verursacherprinzip: Wer Umweltschäden verursacht, trägt die Kosten (nicht die Allgemeinheit). Daneben: Vorsorgeprinzip (Schäden vermeiden) und Kooperationsprinzip (Staat + Wirtschaft + Gesellschaft).'
+      },
+      {
+        typ: 'multiple-choice',
+        frage: 'Die EcoTec GmbH sortiert ihre Verpackungen nach Materialien und führt sie dem Dualen System zu. Welcher Begriff beschreibt diesen Sachverhalt?',
+        optionen: [
+          'Wiederverwendung',
+          'Recycling',
+          'Vermeidung',
+          'Deponiierung',
+          'Downcycling'
         ],
         korrekteAntwort: 1,
-        erklaerung: '„Drei Säulen der Nachhaltigkeit". Auch bekannt als ESG-Prinzip (Environment, Social, Governance).'
+        erklaerung: 'Recycling: Abfälle werden nach Materialien sortiert und als Rohstoff dem Produktionskreislauf wieder zugeführt. Abfallhierarchie (KrWG): Vermeiden > Wiederverwenden > Recyceln > Verwerten > Beseitigen.'
       },
       {
         typ: 'multiple-choice',
-        frage: 'Wofür steht die Charta der Vielfalt?',
+        frage: 'Was beschreibt Diversity Management korrekt?',
         optionen: [
-          'Umweltschutzrichtlinie',
-          'Selbstverpflichtung zur Förderung von Diversität und Chancengleichheit am Arbeitsplatz',
-          'Steuerrichtlinie',
-          'Handelsabkommen'
+          'Einstellung ausschließlich von Mitarbeitern mit demselben kulturellen Hintergrund.',
+          'Die gezielte Nutzung der Vielfalt der Belegschaft (Alter, Geschlecht, Herkunft, Fähigkeiten) als Wettbewerbsvorteil.',
+          'Ein gesetzlich vorgeschriebenes Programm für Unternehmen ab 500 Mitarbeitern.',
+          'Die Gleichstellung von Teilzeit- und Vollzeitbeschäftigten im Gehalt.',
+          'Die Vorgabe, alle Abteilungen geschlechterparitätisch zu besetzen.'
         ],
         korrekteAntwort: 1,
-        erklaerung: 'Unterzeichnende Unternehmen verpflichten sich zu Wertschätzung unabhängig von Geschlecht, Alter, Herkunft, Religion, Behinderung, Orientierung. Kommt seit WiSo W22 regelmäßig.'
+        erklaerung: 'Diversity Management: Vielfalt der Belegschaft bewusst einsetzen, um Innovation und Leistung zu steigern. Charta der Vielfalt (seit 2006): freiwillige Selbstverpflichtung von Unternehmen.'
       },
       {
         typ: 'multiple-choice',
-        frage: 'Welches EU-Organ erlässt gemeinsam mit dem Rat die EU-Gesetze?',
+        frage: 'Welche Maßnahme entspricht einem ökologischen Unternehmensziel?',
         optionen: [
-          'Europäischer Gerichtshof',
-          'Europäisches Parlament',
-          'EU-Kommission',
-          'Europarat'
+          'Erhöhung der Mitarbeitervergütung um 5 %.',
+          'Erschließung neuer Märkte in Ostasien.',
+          'Bezug von Strom ausschließlich aus erneuerbaren Energiequellen.',
+          'Einführung eines neuen CRM-Systems zur Kundenpflege.',
+          'Senkung der Verwaltungskosten um 10 %.'
+        ],
+        korrekteAntwort: 2,
+        erklaerung: 'Ökologische Ziele: Emissionsreduzierung, erneuerbare Energien, umweltfreundliche Rohstoffe, Recycling. Lohnerhöhung = soziales Ziel, Markterschließung/Kostensenkung = ökonomisches Ziel.'
+      },
+      {
+        typ: 'multiple-choice',
+        frage: 'In welcher Reihenfolge sind beim Entdecken eines Brandes die Maßnahmen durchzuführen?',
+        optionen: [
+          'Löschen → Retten → Alarmieren',
+          'Alarmieren → Retten → Löschen',
+          'Retten → Löschen → Alarmieren',
+          'Alarmieren → Löschen → Retten',
+          'Retten → Alarmieren → Löschen'
         ],
         korrekteAntwort: 1,
-        erklaerung: 'Parlament + Rat = Gesetzgebung (ordentliches Gesetzgebungsverfahren). Kommission hat das Initiativrecht. Gerichtshof = Judikative.'
+        erklaerung: 'Richtige Reihenfolge: 1) Alarm schlagen / Notruf 112 → 2) Gefährdete Personen retten/evakuieren → 3) Mit geeignetem Löschmittel löschen. Fenster und Türen schließen, nicht mit dem Aufzug flüchten.'
       },
       {
         typ: 'multiple-choice',
-        frage: 'Welches Gesetz regelt den Arbeitsschutz in Deutschland?',
-        optionen: ['ArbSchG (Arbeitsschutzgesetz)', 'BGB', 'GG', 'BBiG'],
-        korrekteAntwort: 0,
-        erklaerung: 'ArbSchG verpflichtet den Arbeitgeber, Gefährdungen zu beurteilen und Maßnahmen zu ergreifen. Konkretisiert durch BGV, BetrSichV.'
-      },
-      {
-        typ: 'wahr-falsch',
-        aussage: 'Die SDGs (Sustainable Development Goals) der UN umfassen 17 Ziele.',
-        korrekt: true,
-        erklaerung: '17 SDGs, 169 Unterziele, Laufzeit bis 2030. Ziele z.B. „Keine Armut", „Hochwertige Bildung", „Maßnahmen zum Klimaschutz".'
-      },
-      {
-        typ: 'multiple-choice',
-        frage: 'Welches Organ der EU vertritt die Regierungen der Mitgliedstaaten?',
-        optionen: ['Parlament', 'Rat der EU (Ministerrat)', 'Kommission', 'Rechnungshof'],
+        frage: 'Welche Aussage zum AGG (Allgemeines Gleichbehandlungsgesetz) trifft zu?',
+        optionen: [
+          'Das AGG gilt ausschließlich für Unternehmen mit mehr als 50 Mitarbeitern.',
+          'Benachteiligungen aufgrund von Alter, Behinderung oder Geschlecht sind durch das AGG verboten.',
+          'Das AGG verpflichtet Unternehmen, eine Quote von 30 % Frauen in Führungspositionen einzuhalten.',
+          'Auszubildende sind vom AGG nicht erfasst, da sie keine vollwertigen Arbeitnehmer sind.',
+          'Das AGG erlaubt eine unterschiedliche Bezahlung, wenn sie auf dem Alter basiert.'
+        ],
         korrekteAntwort: 1,
-        erklaerung: 'Rat der EU (= Ministerrat): Minister der Nationalstaaten. Nicht zu verwechseln mit Europäischem Rat (Staats-/Regierungschefs).'
+        erklaerung: 'AGG (§ 1): Benachteiligungen wegen Rasse/ethnischer Herkunft, Geschlecht, Religion, Behinderung, Alter oder sexueller Identität sind verboten. Gilt für alle Beschäftigungsverhältnisse inkl. Ausbildung.'
+      },
+      {
+        typ: 'multiple-choice',
+        frage: 'Welche Emissionen werden durch das Bundesimmissionsschutzgesetz (BImSchG) geregelt?',
+        optionen: [
+          'Ausschließlich Luftschadstoffe wie CO₂ und Feinstaub.',
+          'Nur radioaktive Strahlung aus Kernkraftwerken.',
+          'Luftverunreinigungen, Geräusche (Lärm), Erschütterungen, Wärme und Strahlung.',
+          'Wasserverschmutzungen und Ölunfälle.',
+          'Nur gewerbliche Abfälle, die deponiert werden.'
+        ],
+        korrekteAntwort: 2,
+        erklaerung: 'BImSchG schützt vor schädlichen Umwelteinwirkungen: Luftverunreinigungen, Geräusche, Erschütterungen, Wärme und Strahlung. Auch Lärm (Schallemission) ist eine Emission im Sinne des Gesetzes.'
       }
     ]
   }

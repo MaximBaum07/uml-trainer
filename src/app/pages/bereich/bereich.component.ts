@@ -91,7 +91,7 @@ import { Themenbereich, ThemaInfo } from '../../models/app.models';
               <div class="flex flex-wrap gap-2">
                 @if (thema.hatTheorie) {
                   <a [routerLink]="['/lernen', thema.id]"
-                     class="flex-1 min-w-[100px] inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium no-underline transition-colors"
+                     class="lernen-btn flex-1 min-w-[100px] inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium no-underline transition-colors"
                      [style.background-color]="thema.farbe + '15'"
                      [style.color]="thema.farbe">
                     <i class="pi pi-book"></i> Lernen

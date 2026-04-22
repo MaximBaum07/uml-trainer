@@ -475,8 +475,11 @@ Messungen(<u>MessungID</u>, <em>ChargenNr</em>, Zeitpunkt, Temperatur)
         ]
       }
     ]
-  },
-  {
+  }
+  // WiSo-PDF wird dynamisch aus buildPruefungsFragen generiert (kein statischer Bogen).
+  // Früher war hier ein statischer Bogen; er wurde entfernt, damit jede Simulation
+  // andere Fragen zeigt — genauso wie der Online-Modus.
+  /* {
     configId: 'ap2-wiso',
     teilNummer: 3,
     titel: 'Wirtschafts- und Sozialkunde',
@@ -678,7 +681,7 @@ Messungen(<u>MessungID</u>, <em>ChargenNr</em>, Zeitpunkt, Temperatur)
         ]
       }
     ]
-  }
+  } */
 ];
 
 export function findIhkBogen(configId: string): IhkPruefungsBogen | undefined {
