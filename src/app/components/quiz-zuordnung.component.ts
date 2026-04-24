@@ -3,9 +3,15 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Button } from 'primeng/button';
 import { ZuordnungUebung, ZuordnungPaar, ExamAntwortDetail } from '../models/app.models';
 
+interface DefinitionItem {
+  definition: string;
+  origIdx: number;  // index in u.paare, used as unique key
+}
+
 interface Paarung {
   begriff: string;
   definition: string;
+  definitionOrigIdx: number;  // unique identifier even if definition text is duplicate
   farbIndex: number;
 }
 
@@ -58,20 +64,20 @@ const FARBEN = [
 
         <div class="space-y-2">
           <p class="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Definitionen</p>
-          @for (paar of gemischteDefinitionen; track paar.definition) {
+          @for (item of gemischteDefinitionen; track item.origIdx) {
             <button type="button"
               class="w-full text-left p-3 rounded-lg border-2 text-sm transition-all flex items-center gap-2"
-              [class]="getDefinitionKlass(paar)"
+              [class]="getDefinitionKlass(item)"
               [disabled]="beantwortet"
-              (click)="definitionKlick(paar)">
-              @let dp = getDefinitionPaarung(paar.definition);
+              (click)="definitionKlick(item)">
+              @let dp = getDefinitionPaarung(item.origIdx);
               @if (dp) {
                 <span class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0"
                       [class]="getFarbe(dp.farbIndex).chip">
                   {{ paarungen.indexOf(dp) + 1 }}
                 </span>
               }
-              <span class="flex-1">{{ paar.definition }}</span>
+              <span class="flex-1">{{ item.definition }}</span>
               @if (dp && !beantwortet) {
                 <i class="pi pi-times text-xs opacity-60"></i>
               }
@@ -86,7 +92,7 @@ const FARBEN = [
             Deine Zuordnungen ({{ paarungen.length }}/{{ uebung().paare.length }}):
           </p>
           <div class="space-y-1">
-            @for (p of paarungen; track p.begriff + '::' + p.definition; let i = $index) {
+            @for (p of paarungen; track p.begriff + '::' + p.definitionOrigIdx; let i = $index) {
               @let f = getFarbe(p.farbIndex);
               <div class="flex items-center gap-2 text-sm py-1.5 px-2 rounded"
                    [class]="f.bg">
@@ -132,9 +138,9 @@ const FARBEN = [
           </p>
           @if (!alleRichtig) {
             <div class="space-y-1 mb-2">
-              @for (paar of uebung().paare; track paar.begriff) {
+              @for (paar of uebung().paare; track paar.begriff; let i = $index) {
                 <div class="flex items-center gap-2 text-sm">
-                  <i [class]="getErgebnisIcon(paar)" class="text-xs"></i>
+                  <i [class]="getErgebnisIcon(paar.begriff, i)" class="text-xs"></i>
                   <span class="font-medium">{{ paar.begriff }}</span>
                   <i class="pi pi-arrow-right text-slate-400 text-xs"></i>
                   <span>{{ paar.definition }}</span>
@@ -158,7 +164,7 @@ export class QuizZuordnungComponent {
   examAntwortEvent = output<ExamAntwortDetail>();
 
   gemischteBegriffe: ZuordnungPaar[] = [];
-  gemischteDefinitionen: ZuordnungPaar[] = [];
+  gemischteDefinitionen: DefinitionItem[] = [];
   gewaehlterBegriff?: ZuordnungPaar;
   paarungen: Paarung[] = [];
   private naechsterFarbIndex = 0;
@@ -174,7 +180,7 @@ export class QuizZuordnungComponent {
       const u = this.uebung();
       const prev = untracked(() => this.vorherigeAntwort());
       this.gemischteBegriffe = this.mischen([...u.paare]);
-      this.gemischteDefinitionen = this.mischen([...u.paare]);
+      this.gemischteDefinitionen = this.mischen(u.paare.map((p, i) => ({ definition: p.definition, origIdx: i })));
       this.paarungen = [];
       this.naechsterFarbIndex = 0;
       this.gewaehlterBegriff = undefined;
@@ -183,12 +189,19 @@ export class QuizZuordnungComponent {
       this.richtigeAnzahl = 0;
 
       if (prev?.typ === 'zuordnung' && prev.zuordnungen) {
+        const usedOrigIdxs = new Set<number>();
         for (const z of prev.zuordnungen) {
-          this.paarungen.push({
-            begriff: z.begriff,
-            definition: z.definition,
-            farbIndex: this.naechsterFarbIndex++
-          });
+          // Find origIdx for this definition that hasn't been assigned yet
+          const origIdx = u.paare.findIndex((p, i) => p.definition === z.definition && !usedOrigIdxs.has(i));
+          if (origIdx >= 0) {
+            usedOrigIdxs.add(origIdx);
+            this.paarungen.push({
+              begriff: z.begriff,
+              definition: z.definition,
+              definitionOrigIdx: origIdx,
+              farbIndex: this.naechsterFarbIndex++
+            });
+          }
         }
       }
     });
@@ -202,8 +215,8 @@ export class QuizZuordnungComponent {
     return this.paarungen.find(p => p.begriff === begriff);
   }
 
-  getDefinitionPaarung(def: string): Paarung | undefined {
-    return this.paarungen.find(p => p.definition === def);
+  getDefinitionPaarung(origIdx: number): Paarung | undefined {
+    return this.paarungen.find(p => p.definitionOrigIdx === origIdx);
   }
 
   begriffKlick(paar: ZuordnungPaar): void {
@@ -226,10 +239,10 @@ export class QuizZuordnungComponent {
     }
   }
 
-  definitionKlick(paar: ZuordnungPaar): void {
+  definitionKlick(item: DefinitionItem): void {
     if (this.beantwortet) return;
 
-    const vorhanden = this.getDefinitionPaarung(paar.definition);
+    const vorhanden = this.getDefinitionPaarung(item.origIdx);
     if (vorhanden) {
       this.paarungen = this.paarungen.filter(p => p !== vorhanden);
       this.emitExam();
@@ -242,7 +255,8 @@ export class QuizZuordnungComponent {
       ...this.paarungen,
       {
         begriff: this.gewaehlterBegriff.begriff,
-        definition: paar.definition,
+        definition: item.definition,
+        definitionOrigIdx: item.origIdx,
         farbIndex: this.naechsterFarbIndex % FARBEN.length
       }
     ];
@@ -260,9 +274,10 @@ export class QuizZuordnungComponent {
   pruefen(): void {
     if (this.examModus()) return;
     this.richtigeAnzahl = 0;
-    const originalMap = new Map(this.uebung().paare.map(p => [p.begriff, p.definition]));
     for (const z of this.paarungen) {
-      if (originalMap.get(z.begriff) === z.definition) {
+      // Correct if the definition at z.definitionOrigIdx belongs to z.begriff
+      const correctOrigIdx = this.uebung().paare.findIndex(p => p.begriff === z.begriff);
+      if (correctOrigIdx === z.definitionOrigIdx) {
         this.richtigeAnzahl++;
       }
     }
@@ -291,8 +306,8 @@ export class QuizZuordnungComponent {
     return 'border-slate-200 hover:border-blue-400 cursor-pointer text-slate-700';
   }
 
-  getDefinitionKlass(paar: ZuordnungPaar): string {
-    const paarung = this.getDefinitionPaarung(paar.definition);
+  getDefinitionKlass(item: DefinitionItem): string {
+    const paarung = this.getDefinitionPaarung(item.origIdx);
     if (paarung) {
       const f = FARBEN[paarung.farbIndex % FARBEN.length];
       return `${f.border} ${f.bg} ${f.text} cursor-pointer`;
@@ -307,9 +322,9 @@ export class QuizZuordnungComponent {
     return FARBEN[index % FARBEN.length];
   }
 
-  getErgebnisIcon(paar: ZuordnungPaar): string {
-    const paarung = this.paarungen.find(p => p.begriff === paar.begriff);
-    if (paarung && paarung.definition === paar.definition) {
+  getErgebnisIcon(begriff: string, origIdx: number): string {
+    const paarung = this.paarungen.find(p => p.begriff === begriff);
+    if (paarung && paarung.definitionOrigIdx === origIdx) {
       return 'pi pi-check-circle text-green-600';
     }
     return 'pi pi-times-circle text-red-600';

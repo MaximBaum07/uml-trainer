@@ -1,5 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Button } from 'primeng/button';
 import {
   PruefungsErgebnisState, PruefungsFrage, ExamAntwortDetail,
@@ -105,7 +106,7 @@ import {
                 <!-- Fragetext -->
                 <div>
                   <p class="text-xs uppercase tracking-widest text-slate-400 mb-1 font-semibold">Aufgabe</p>
-                  <p class="text-slate-800 font-medium">{{ getFrageText(frage) }}</p>
+                  <div class="text-slate-800 font-medium" [innerHTML]="sanitize(getFrageText(frage))"></div>
                 </div>
 
                 <!-- Deine Antwort -->
@@ -124,6 +125,24 @@ import {
                     </div>
                   }
                 </div>
+
+                <!-- Als richtig markieren (für falsch bewertete, nicht-Freitext-Fragen) -->
+                @if (!isFreitext(i) && state.richtig[i] === false && !korrekturenRichtig[i]) {
+                  <div>
+                    <button (click)="alsRichtigMarkieren(i)"
+                            class="text-xs px-3 py-1.5 rounded-lg border border-slate-300 text-slate-600 hover:border-blue-400 hover:text-blue-700 hover:bg-blue-50 transition-colors">
+                      <i class="pi pi-pencil mr-1"></i>Als richtig markieren (z.B. bei Tippfehler)
+                    </button>
+                  </div>
+                }
+                @if (!isFreitext(i) && korrekturenRichtig[i]) {
+                  <div class="flex items-center gap-2 text-xs text-green-700">
+                    <i class="pi pi-check-circle"></i>
+                    <span>Manuell als richtig markiert.</span>
+                    <button (click)="korrekturZurueck(i)"
+                            class="underline opacity-70 hover:opacity-100">Rückgängig</button>
+                  </div>
+                }
 
                 <!-- Musterlösung für Freitext -->
                 @if (isFreitext(i)) {
@@ -164,7 +183,7 @@ import {
                   }
                 }
 
-                <!-- Erklärung (Belegsatz) -->
+                <!-- Erklärung -->
                 <div class="p-3 rounded-lg bg-slate-50 border border-slate-200">
                   <p class="text-xs uppercase tracking-widest text-slate-400 mb-1 font-semibold">Erklärung</p>
                   <p class="text-slate-700 text-sm">{{ getErklaerung(frage) }}</p>
@@ -192,6 +211,7 @@ import {
 })
 export class PruefungErgebnisComponent implements OnInit {
   private router = inject(Router);
+  private sanitizer = inject(DomSanitizer);
 
   state?: PruefungsErgebnisState;
   autoRichtig = 0;
@@ -201,6 +221,7 @@ export class PruefungErgebnisComponent implements OnInit {
   gesamtRichtig = 0;
   gesamtProzent = 0;
   freitextBewertung: (boolean | undefined)[] = [];
+  korrekturenRichtig: boolean[] = [];
 
   ngOnInit(): void {
     this.state = history.state as PruefungsErgebnisState | undefined;
@@ -209,20 +230,27 @@ export class PruefungErgebnisComponent implements OnInit {
       return;
     }
     this.freitextBewertung = new Array(this.state.fragen.length).fill(undefined);
+    this.korrekturenRichtig = new Array(this.state.fragen.length).fill(false);
     this.berechneScore();
+  }
+
+  sanitize(html: string): SafeHtml {
+    return this.sanitizer.bypassSecurityTrustHtml(html);
   }
 
   private berechneScore(): void {
     if (!this.state) return;
     this.freitextAnzahl = this.state.fragen.filter((_, i) => this.isFreitext(i)).length;
     this.autoGesamt = this.state.fragen.length - this.freitextAnzahl;
-    this.autoRichtig = this.state.richtig.filter((r, i) => r && !this.isFreitext(i)).length;
-    this.prozent = this.autoGesamt > 0 ? Math.round((this.autoRichtig / this.autoGesamt) * 100) : 0;
     this.updateGesamtScore();
   }
 
   updateGesamtScore(): void {
     if (!this.state) return;
+    this.autoRichtig = this.state.fragen.filter((_, i) =>
+      !this.isFreitext(i) && (this.state!.richtig[i] || this.korrekturenRichtig[i])
+    ).length;
+    this.prozent = this.autoGesamt > 0 ? Math.round((this.autoRichtig / this.autoGesamt) * 100) : 0;
     const freitextRichtig = this.freitextBewertung.filter(b => b === true).length;
     this.gesamtRichtig = this.autoRichtig + freitextRichtig;
     this.gesamtProzent = Math.round((this.gesamtRichtig / this.state.fragen.length) * 100);
@@ -233,12 +261,23 @@ export class PruefungErgebnisComponent implements OnInit {
     this.updateGesamtScore();
   }
 
+  alsRichtigMarkieren(index: number): void {
+    this.korrekturenRichtig[index] = true;
+    this.updateGesamtScore();
+  }
+
+  korrekturZurueck(index: number): void {
+    this.korrekturenRichtig[index] = false;
+    this.updateGesamtScore();
+  }
+
   isFreitext(i: number): boolean {
     return this.state?.fragen[i].uebung.typ === 'freitext';
   }
 
   getErgebnis(i: number): boolean | undefined {
     if (!this.state) return undefined;
+    if (!this.isFreitext(i) && this.korrekturenRichtig[i]) return true;
     if (this.isFreitext(i)) return this.freitextBewertung[i];
     return this.state.richtig[i];
   }
@@ -334,7 +373,8 @@ export class PruefungErgebnisComponent implements OnInit {
     switch (detail.typ) {
       case 'multiple-choice': return detail.mcGewaehlterText ?? '–';
       case 'wahr-falsch': return detail.wfGewaehlterWert ? 'Wahr' : 'Falsch';
-      case 'lueckentext': return detail.lueckentextEingabe ?? '–';
+      case 'lueckentext':
+        return detail.lueckentextEingaben?.join(' / ') ?? detail.lueckentextEingabe ?? '–';
       case 'zuordnung':
         return (detail.zuordnungen ?? [])
           .map(z => `${z.begriff} → ${z.definition}`)
@@ -352,7 +392,10 @@ export class PruefungErgebnisComponent implements OnInit {
         return mc.optionen[mc.korrekteAntwort];
       }
       case 'wahr-falsch': return (u as WahrFalschUebung).korrekt ? 'Wahr' : 'Falsch';
-      case 'lueckentext': return (u as LueckentextUebung).antwort;
+      case 'lueckentext': {
+        const lu = u as LueckentextUebung;
+        return lu.antworten ? lu.antworten.join(' / ') : lu.antwort;
+      }
       case 'zuordnung':
         return (u as ZuordnungUebung).paare.map(p => `${p.begriff} → ${p.definition}`).join('\n');
       case 'freitext': return (u as FreitextUebung).musterloesung;

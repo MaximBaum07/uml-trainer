@@ -76,6 +76,7 @@ export interface LueckentextUebung {
   frage: string;
   svgDiagramm?: string;
   antwort: string;
+  antworten?: string[];  // for multi-blank questions; overrides antwort if present
   erklaerung: string;
 }
 
@@ -175,6 +176,7 @@ export interface ExamAntwortDetail {
   mcGewaehlterText?: string;
   wfGewaehlterWert?: boolean;
   lueckentextEingabe?: string;
+  lueckentextEingaben?: string[];  // for multi-blank questions
   zuordnungen?: { begriff: string; definition: string }[];
   freitextEingabe?: string;
 }

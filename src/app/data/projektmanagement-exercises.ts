@@ -111,6 +111,7 @@ Nichtfunktional:
         typ: 'lueckentext',
         frage: 'Das _______heft beschreibt, was gemacht werden soll. Das _______heft beschreibt, wie.',
         antwort: 'Lasten',
+        antworten: ['Lasten', 'Pflichten'],
         erklaerung: 'Lastenheft (AG, WAS) → Pflichtenheft (AN, WIE). Merksatz: „Last kommt vom Last-geber", Pflicht vom Auftrag-nehmer.'
       }
     ]

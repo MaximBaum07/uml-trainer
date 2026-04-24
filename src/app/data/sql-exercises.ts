@@ -240,7 +240,7 @@ GROUP BY kunde_id;`,
       },
       {
         typ: 'freitext',
-        frage: 'Gleiche Tabelle. Zeige nur Kunden, die bereits mehr als 5 Bestellungen haben.',
+        frage: 'Tabelle bestellung(id, kunde_id, betrag). Zeige nur Kunden, die bereits mehr als 5 Bestellungen haben.',
         musterloesung: `SELECT kunde_id, COUNT(*) AS anzahl
 FROM bestellung
 GROUP BY kunde_id
@@ -483,7 +483,7 @@ CREATE TABLE mitarbeiter (
       },
       {
         typ: 'freitext',
-        frage: 'Skizziere das ER-Modell für eine Bibliothek: Leser können Bücher ausleihen (mit Ausleih- und Rückgabedatum). Welche Entitäten, welche Beziehungen, welche Kardinalitäten?',
+        frage: 'Beschreibe das ER-Modell für eine Bibliothek: Leser können Bücher ausleihen (mit Ausleih- und Rückgabedatum). Welche Entitäten gibt es, wie sieht die Beziehung aus und welche Kardinalitäten hat sie?',
         musterloesung: `Entitäten:
 - Buch (buch_id, titel, autor, isbn)
 - Leser (leser_id, name, adresse)
